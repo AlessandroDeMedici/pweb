@@ -1,0 +1,15 @@
+#board {
+    display: grid;
+    grid-template-columns: 80px 60px 60px 60px 60px 60px 60px 60px 60px 60px 80px;
+    grid-template-rows: 80px 60px 60px 60px 60px 60px 60px 60px 60px 60px 80px;
+    justify-content: center;
+}
+
+
+.board-item{
+    border: solid 1px black;
+}
+
+#main{
+    grid-area: 2 / 2 / 11 / 11;
+}
