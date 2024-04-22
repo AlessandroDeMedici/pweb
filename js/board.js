@@ -1,6 +1,8 @@
 let board;
 let boardDIM = 13;                  // dimensione complessiva del tabellone
 let elementi = boardDIM - 4;        // caselle interne al tabellone
+let centro;                         // centro interno al tabellone
+
 
 // funzione per stampare ed inizializzare gli id del tavolo da gioco
 function printBoard(){
@@ -175,9 +177,11 @@ function printBoard(){
 }
 
 
+// inizializzazione
 document.addEventListener('DOMContentLoaded',() => {
     board = document.getElementById('board');
     printBoard();
+    centro = document.getElementById('centro');
 });
 
 
