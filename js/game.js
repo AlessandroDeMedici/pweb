@@ -1,19 +1,19 @@
 let messaggio;
 let boardContainer;
+let menu;
 
 // handler per gestire finestre troppo piccole per poter giocare
 window.onresize = function ridimensionamento()
 {
     let altezza = window.innerHeight;
     let larghezza = window.innerWidth;
-    if (altezza < 600 || larghezza < 600){
+    if (altezza < 800 && larghezza < 800){
         board.style.filter = 'blur(8px)';
         messaggio.style.visibility = 'visible';
     } else {
         board.style.filter = 'none';
         messaggio.style.visibility = 'hidden';
     }
-
 }
 
 // Inizializzazione
@@ -26,6 +26,4 @@ document.addEventListener('DOMContentLoaded',() => {
     messaggio.appendChild(document.createTextNode('per continuare a giocare aumenta la dimensione della finestra...'));
     messaggio.id = "messaggio-informativo";
     boardContainer.appendChild(messaggio);
-    
-
 });

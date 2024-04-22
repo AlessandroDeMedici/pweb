@@ -17,6 +17,7 @@ function printBoard(){
         for (let j = 0; j < boardDIM; j++){
             let td;
             // ci sono dei casi particolari
+            // gli angoli
             if ((i == 0 && j == 0) || (i == 0 && j == boardDIM - 2) || (i == boardDIM -2 && j == 0) || (i == boardDIM - 2 && j == boardDIM -2)){
                 td = document.createElement('td');
                 td.colSpan = 2;
@@ -165,6 +166,11 @@ function printBoard(){
     div.appendChild(imprevisti);
     div.appendChild(probabilita);
 
+    // inserisco le immagini nei 4 angoli
+    inserisciImmagineAngolo(0,'/media/via.svg',-45);
+    inserisciImmagineAngolo(10,'/media/prigione.svg',180);
+    inserisciImmagineAngolo(20,'/media/parcheggio_libero.svg',-45);
+    inserisciImmagineAngolo(30,'/media/vai_in_prigione.svg',45);
 
 }
 
@@ -173,3 +179,23 @@ document.addEventListener('DOMContentLoaded',() => {
     board = document.getElementById('board');
     printBoard();
 });
+
+
+// funzione per inserire le immagini negli angoli
+function inserisciImmagineAngolo(casella,immagine,angolo = 0){
+    let div = document.getElementById('casella-' + casella);
+    let img = document.createElement('img');
+    img.src = immagine;
+    img.style.transform = 'rotate(' + angolo + 'deg)';
+    if (casella == 10){
+        img.style.transform += ' translate(5px,-8px)';
+    }
+    div.appendChild(img);
+}
+
+function rimuoviImmagine(casella){
+    let div = document.getElementById('casella-' + casella);
+    while (div.firstChild){
+        div.removeChild(div.firstChild);
+    }
+}
