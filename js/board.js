@@ -192,7 +192,7 @@ function inserisciImmagineAngolo(casella,immagine,angolo = 0){
     img.src = immagine;
     img.style.transform = 'rotate(' + angolo + 'deg)';
     if (casella == 10){
-        img.style.transform += ' translate(5px,-8px)';
+        img.style.transform += ' translate(5px,-7px)';
     }
     div.appendChild(img);
 }

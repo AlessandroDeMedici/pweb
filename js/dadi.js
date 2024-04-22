@@ -4,6 +4,12 @@ let roll;
 let diceContainer;
 
 
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+    printDadi();
+
+    sparisciDadi();
+})
 
 
 // funzione che aggiunge i dadi allo schermo schermo
@@ -61,10 +67,6 @@ function printDado(){
 }
 
 
-// inizializzazione
-document.addEventListener('DOMContentLoaded', () => {
-    printDadi();
-})
 
 
 // funzione che va in esecuzione quando premo il pulsante per lanciare i dadi

@@ -133,10 +133,11 @@
     padding: 10px;
     transition: 0.5s;
     grid-area: 2/1/3/3;
+    text-align: center;
 }
 
 #roll:hover {
-    color: #fff;
+    color: white;
     background: #b33951;
 }
 

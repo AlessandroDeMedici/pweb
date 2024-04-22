@@ -1,0 +1,67 @@
+
+#contenitore-proprieta {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+}
+
+p {
+    margin: 2px;
+    text-align: center;
+}
+
+.carta {
+    width: 110px;
+    height: fit-content;
+    max-height: 450px; 
+    border: 1px solid #222;
+    box-sizing: border-box;
+    padding: 5px;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+    margin: 10px;
+    box-shadow: 0 0 3px rgba(43,47,62,.1);
+    transition: 1s all ease;
+    background-color: #eeeeee;
+}
+
+.proprieta {
+    border: 2px solid #222;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 3px;
+    font-size: 28px;
+    letter-spacing: 0.5px;
+    font-family: 'Balthazar', serif;
+    font-weight: 400;
+    cursor: pointer;
+    outline: none;
+    transition: 1s all ease;
+}
+
+.proprieta > .titolo {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    border: solid 1px black;
+
+}
+
+.proprieta > .descrizione-contenitore {
+    font-size: 5px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center ;
+    margin: 0 auto;
+}
+
+summary{
+    list-style: none;
+}
+summary::-webkit-details-marker, summary::marker {
+    /* Hides marker on Safari */
+    display: none;
+}
