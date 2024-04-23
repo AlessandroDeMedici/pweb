@@ -5,10 +5,8 @@
     display: grid;
     grid-template-columns: auto auto;
     width: 250px;
-    padding: 60px 0 40px;
+    padding: 40px 0 40px;
     border-radius: 30px;
-    background: #eeeeee;
-    box-shadow: 0 0 20px rgba(0, 0, 0, .1);
     transform: translate(75px,-175px);
     transition-property: opacity;
     transition-duration: 0.5s;

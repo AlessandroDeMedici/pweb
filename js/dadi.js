@@ -8,7 +8,7 @@ let diceContainer;
 document.addEventListener('DOMContentLoaded', () => {
     printDadi();
 
-    sparisciDadi();
+    nascondiDadi();
 })
 
 
@@ -162,11 +162,13 @@ const rollDice = random => {
 }
 
 // funzione per nascondere i dadi
-function sparisciDadi(){
+function nascondiDadi(){
+    diceContainer.style.visibility = 'hidden';
     diceContainer.style.opacity = '0%';
 }
 
 // funzione per far apparire i dadi
-function apparireDadi(){
+function mostraDadi(){
+    diceContainer.style.visibility = 'visible';
     diceContainer.style.opacity = '100%';
 }

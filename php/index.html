@@ -2,23 +2,43 @@
 <html>
     <head>
 
-        <link rel="stylesheet" href="/css/bodystyle.css"/>
+        <!-- Utilita -->
+        <script type="text/JavaScript" src="/js/utility.js"></script>
 
+        <!-- Foglio di stile del body -->
+        <link rel="stylesheet" href="/css/homepage.css"/>
 
+        <!-- Stampa ed inizializzazione della tavola -->
         <link rel="stylesheet" href="/css/boardstyle.css"/>
         <script type="text/JavaScript" src="/js/board.js"></script>
+
+        <!-- Gestione del gioco -->
         <script type="text/JavaScript" src="/js/game.js"></script>
+        <link rel="stylesheet" href="/css/game.css"/>
+
+        <!-- Inclusione del font -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     
     
+        <!-- Gestione dei dadi -->
         <link rel="stylesheet" href="/css/dadi.css"/>
         <script type="text/JavaScript" src="/js/dadi.js"></script>
+
+        <!-- Gestione delle caselle -->
+        <link rel="stylesheet" href="/css/casella.css"/>
+        <script type="text/JavaScript" src="/js/scenario.js"></script>
+
+
 
     
     </head>
     <body>
-        <div id="board-container"><div id="board"></div></div>
+        <div id="game-container">
+            <div id="contenitore-proprieta"></div>
+            <div id="board-container"><div id="board"></div></div>
+            <div id="contenitore-lato"></div>
+        </div>
     </body>
 </html>

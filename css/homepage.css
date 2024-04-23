@@ -3,3 +3,9 @@ body {
     background-color: #d7baaa;
     font-family: 'Josefin Sans';
 }
+
+
+#game-container{
+    display: flex;
+    justify-content: center;
+}

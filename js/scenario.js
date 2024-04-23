@@ -12,8 +12,6 @@
 
 let contenitoreProprieta;
 
-
-
 class Casella{
     constructor(nome, descrizione = null, gruppo = null,colore = null, prezzo = null, pedaggio = null, ipoteca = null, immagine = null){
         if (nome != 'probabilita' && nome != 'imprevisti' && nome != 'default'){
@@ -44,10 +42,17 @@ class Casella{
         return stringa;
     }
 
+    
     stampaProprieta(){
         let casella = document.createElement('div');
         casella.className = 'carta';
         casella.id = this.nome;
+        casella.draggable = true;
+        casella.ondragover = (e) => {
+            e.preventDefault();
+        }
+        casella.ondragend = endDrag;
+
 
         let proprieta = document.createElement('details');
         proprieta.className = 'proprieta';
@@ -75,19 +80,92 @@ class Casella{
         casella.appendChild(proprieta);
         contenitoreProprieta.appendChild(casella);
     }
+
+    inserisiProprieta(i){
+        if (!(i % 10) || i < 0 || i > 39){
+            // questo numero di casella non va bene
+            console.log("tentato inserimento di proprieta in casella non valida: ",casella);
+            return;
+        }
+
+        // ottengo un riferimento alla casella ed alla barra corrispondente
+        let casella = document.getElementById('casella-' + casella);
+        let barra = document.getElementById('barra-' + id);
+        
+    }
 }
 
 
-let casellaProva = new Casella('nome di prova','descrizione di prova',1,'lightblue',[100,150,200],[50,100,200,300,400,600],[50]);
+// GESTIONE DEL DRAG
 
+// scambio l'elemento corrente con quello nel quale il mouse si trova
+function endDrag(e){
+    let dragDiv = e.target;
+    e.preventDefault();
+
+    let parentRect = contenitoreProprieta.getBoundingClientRect();
+    // DEBUG
+    //console.log('Il padre ha posizione: ' + parentRect.left + ' ' + parentRect.top);
+
+    let x = e.clientX;
+    let y = e.clientY;
+
+    // cerco se il puntatore si trova dentro una div
+    for (let c in contenitoreProprieta.children){
+        let div = contenitoreProprieta.children[c];
+
+
+        if (!div.getBoundingClientRect)
+            continue;
+        
+        let dropRect = div.getBoundingClientRect();
+        // devo sistemarlo in base alla dimensione dell'oggetto
+        // dropRect.left -= parentRect.left;
+        // dropRect.top -= parentRect.top;
+
+        // DEBUG
+        //console.log("posizione mouse: " + x + ' ' + y);
+        //console.log('left right top bottom ' + c + ': ' + (Math.floor(dropRect.left)) + ' ' + (Math.floor(dropRect.right)) + ' ' + (Math.floor(dropRect.top)) + ' ' + (Math.floor(dropRect.bottom)));        
+        if ((x >= Math.floor(dropRect.left)) && (x <= Math.floor(dropRect.right)) && (y >= Math.floor(dropRect.top)) && (y <= Math.floor(dropRect.bottom))){
+                //console.log("faccio lo switch con la " + c);
+                // allora posso effettuare lo scambio e fare return
+                if (div == dragDiv){
+                    //console.log("stessa posizione di prima");
+                    return;
+                }
+                else {
+                    // faccio lo switch delle div
+                    let next1 = div.nextSibling;
+                    let next2 = dragDiv.nextSibling;
+                    if (next1){
+                        // esiste una casella dopo
+                        contenitoreProprieta.insertBefore(dragDiv,next1);
+                    } else {
+                        contenitoreProprieta.appendChild(dragDiv);
+                    }
+                    // adesso devo spostare il secondo
+                    contenitoreProprieta.insertBefore(div,next2);
+                }
+                return;
+        }
+    }
+    // a questo punto non ero dentro nessuna
+}
+
+
+
+let casellaProva = new Casella('Ingegneria Polo ','descrizione di prova',1,100,[100,150,200],[50,100,200,300,400,600],[50]);
 
 // INIT
 document.addEventListener('DOMContentLoaded', () => {
     contenitoreProprieta = document.getElementById('contenitore-proprieta');
-    casellaProva.stampaProprieta();
-    casellaProva.stampaProprieta();
-    casellaProva.stampaProprieta();
-    casellaProva.stampaProprieta();
-    casellaProva.stampaProprieta();
-    casellaProva.stampaProprieta();
+    contenitoreProprieta.className = 'container';
+
+    // prova
+    for (let i = 0; i < 10; i++){
+        casellaProva.nome = "Ingegeria Polo " + i;
+        casellaProva.colore = decimalToRgb(((i + 1) * 2000));
+        //console.log(decimalToRgb(i*2000));
+        casellaProva.stampaProprieta();
+    }
 })

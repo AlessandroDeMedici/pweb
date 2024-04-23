@@ -1,5 +1,13 @@
 
 
+#board-container{
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    margin: 10px;
+
+    box-shadow: 10px 10px lightblue;
+}
 
 #board {
     display: table;
@@ -60,30 +68,6 @@
 }
 
 
-#board-container{
-    display: flex;
-    justify-content: center;
-    margin: 100px;
-
-}
 
 
-#messaggio-informativo{
-    width: 400px;
-    display: flex;
-    position: fixed;
-    justify-content: center;
-    align-content: center;
-    flex-direction: row;
-    margin: auto;
-    font-size: 30px;
-    font-weight: bold;
-    color: black;
-    margin: 150px;
-}
-
-#container{
-    display: grid;
-    grid-template-columns: 400 auto 400;
-}
 
