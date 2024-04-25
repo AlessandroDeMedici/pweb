@@ -1,8 +1,5 @@
 
-#contenitore-proprieta {
-    width: 25%;
-    height: 530px;
-
+#property {
     /* disposizione elementi */
     display: flex;
     justify-content: center;
@@ -11,15 +8,6 @@
     flex-wrap: wrap;
     overflow: auto;
     padding: 5px;
-
-
-    background-color: #bfdbae;
-    border: solid 2px black;
-    border-radius: 10px;
-    margin: 10px;
-
-    box-shadow: 10px 10px lightblue;
-
 }
 
 .descrizione {
@@ -88,5 +76,5 @@ details {
 }
 
 details[open]:hover {
-    scale: 1.5;
+    scale: 1.8;
 }

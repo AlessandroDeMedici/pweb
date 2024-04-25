@@ -1,4 +1,3 @@
-let board;
 let boardDIM = 13;                  // dimensione complessiva del tabellone
 let elementi = boardDIM - 4;        // caselle interne al tabellone
 let centro;                         // centro interno al tabellone
@@ -177,23 +176,12 @@ function printBoard(){
 }
 
 
-// inizializzazione
-document.addEventListener('DOMContentLoaded',() => {
-    board = document.getElementById('board');
-    printBoard();
-    centro = document.getElementById('centro');
-});
-
-
 // funzione per inserire le immagini negli angoli
 function inserisciImmagineAngolo(casella,immagine,angolo = 0){
     let div = document.getElementById('casella-' + casella);
     let img = document.createElement('img');
     img.src = immagine;
     img.style.transform = 'rotate(' + angolo + 'deg)';
-    if (casella == 10){
-        img.style.transform += ' translate(5px,-7px)';
-    }
     div.appendChild(img);
 }
 

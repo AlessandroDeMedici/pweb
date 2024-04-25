@@ -1,39 +1,35 @@
 let fistDice;
 let secondDice;
-let roll;
 let diceContainer;
 
-
-// INIT
-document.addEventListener('DOMContentLoaded', () => {
-    printDadi();
-
-    nascondiDadi();
-})
 
 
 // funzione che aggiunge i dadi allo schermo schermo
 function printDadi(){
     diceContainer = document.createElement('div');
     diceContainer.className = 'dice-container';
-
-    roll = document.createElement('button');
-    roll.id = 'roll';
-    let text = document.createTextNode('GIRA I DADI!');
-    roll.appendChild(text);
-    roll.addEventListener('click',randomDice);
+    diceContainer.addEventListener('animationend', () => {
+        diceContainer.style.animation = '';
+    });
 
     firstDice = printDado();
-    firstDice.id = 'firstDice';
+    firstDice.id = 'first-dice';
 
     secondDice = printDado();
-    secondDice.id = 'secondDice';
+    secondDice.id = 'second-dice';
 
     diceContainer.appendChild(firstDice);
     diceContainer.appendChild(secondDice);
-    diceContainer.appendChild(roll);
     let centro = document.getElementById('centro');
     centro.appendChild(diceContainer);
+
+    firstDice.addEventListener('animationend',() => {
+        firstDice.style.animation = '';
+    });
+
+    secondDice.addEventListener('animationend',() => {
+        secondDice.style.animation = '';
+    });
 
 }
 
@@ -72,92 +68,81 @@ function printDado(){
 // funzione che va in esecuzione quando premo il pulsante per lanciare i dadi
 const randomDice = () => {
 
-    // devo modificare il pulsante
-    roll.addEventListener('click', rollDice);
-    let text = roll.firstChild;
-    text.nodeValue = "LANCIA!";
-    firstDice.style.animation = 'rolling 1s infinite linear';
-    secondDice.style.animation = 'rolling 1s infinite linear';
-}
-
-// funzione che gestisce il comportamento dei dadi
-const rollDice = random => {
-
-    roll.removeEventListener('click',rollDice);
-    roll.disabled = true;
-
-    setTimeout(() => {
+    // faccio girare i dadi
+    let random1 = Math.floor(Math.random() * 5) + 1;
+    let random2 = Math.floor(Math.random() * 5) + 1;
 
 
-        let random1 = Math.floor(Math.random() * 6);
-        let random2 = Math.floor(Math.random() * 6);
-        firstDice.style.animation = '';
-        secondDice.style.animation = '';
+    diceContainer.style.animation = 'lancio 1s ease-in 1';
+    switch (random1) {
+        case 1:
+            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.transform = 'rotateX(45deg) rotateZ(45deg)';
+            break;
 
-        switch (random1) {
-            case 1:
-                firstDice.style.transform = 'rotateX(0deg) rotateY(0deg)';
-                break;
+        case 6:
+            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.transform = 'rotateX(-135deg) rotateZ(-45deg)';
+            break;
 
-            case 6:
-                firstDice.style.transform = 'rotateX(180deg) rotateY(0deg)';
-                break;
+        case 2:
+            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.transform = 'rotateX(-45deg) rotateY(-45deg)';
+            break;
 
-            case 2:
-                firstDice.style.transform = 'rotateX(-90deg) rotateY(0deg)';
-                break;
+        case 5:
+            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.transform = 'rotateX(135deg) rotateY(45deg)';
+            break;
 
-            case 5:
-                firstDice.style.transform = 'rotateX(90deg) rotateY(0deg)';
-                break;
+        case 3:
+            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.transform = 'rotateX(-45deg) rotateY(45deg) rotateZ(-90deg)';
+            break;
 
-            case 3:
-                firstDice.style.transform = 'rotateX(0deg) rotateY(90deg)';
-                break;
+        case 4:
+            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.transform = 'rotateX(-45deg) rotateY(-135deg) rotateZ(-90deg)';
+            break;
 
-            case 4:
-                firstDice.style.transform = 'rotateX(0deg) rotateY(-90deg)';
-                break;
+        default:
+            break;
+    }
 
-            default:
-                break;
-        }
+    switch (random2) {
+        case 1:
+            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateX(45deg) rotateZ(45deg)';
+            break;
 
-        switch (random2) {
-            case 1:
-                secondDice.style.transform = 'rotateX(0deg) rotateY(0deg)';
-                break;
+        case 6:
+            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateX(-135deg) rotateZ(-45deg)';
+            break;
 
-            case 6:
-                secondDice.style.transform = 'rotateX(180deg) rotateY(0deg)';
-                break;
+        case 2:
+            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateX(-45deg) rotateY(-45deg)';
+            break;
 
-            case 2:
-                secondDice.style.transform = 'rotateX(-90deg) rotateY(0deg)';
-                break;
+        case 5:
+            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateX(135deg) rotateY(45deg)';
+            break;
 
-            case 5:
-                secondDice.style.transform = 'rotateX(90deg) rotateY(0deg)';
-                break;
+        case 3:
+            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateX(-45deg) rotateY(45deg) rotateZ(-90deg)';
+            break;
 
-            case 3:
-                secondDice.style.transform = 'rotateX(0deg) rotateY(90deg)';
-                break;
+        case 4:
+            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateX(-45deg) rotateY(-135deg) rotateZ(-90deg)';
+            break;
 
-            case 4:
-                secondDice.style.transform = 'rotateX(0deg) rotateY(-90deg)';
-                break;
-
-            default:
-                break;
-        }
-
-        let text = roll.firstChild;
-        text.nodeValue = "Gira i dadi";
-        roll.addEventListener('click',randomDice);
-        roll.disabled = false;
-
-    }, 2000);
+        default:
+            break;
+    }
 
 }
 

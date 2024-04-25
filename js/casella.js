@@ -10,7 +10,6 @@
 // pedaggio     -> array con i costi dei pedaggi (in ordine) {proprieta, 1 casa, 2 case, 3 case, 4 case, albergo}
 // ipoteca      -> valore ipotecario
 
-let contenitoreProprieta;
 
 class Casella{
     constructor(nome, descrizione = null, gruppo = null,colore = null, prezzo = null, pedaggio = null, ipoteca = null, immagine = null){
@@ -78,20 +77,83 @@ class Casella{
         proprieta.appendChild(titolo);
         proprieta.appendChild(descrizione);
         casella.appendChild(proprieta);
-        contenitoreProprieta.appendChild(casella);
+        property.appendChild(casella);
     }
 
     inserisiProprieta(i){
         if (!(i % 10) || i < 0 || i > 39){
             // questo numero di casella non va bene
-            console.log("tentato inserimento di proprieta in casella non valida: ",casella);
-            return;
+            console.log("tentato inserimento di proprieta in casella non valida: ",i);
+            return this;
         }
 
         // ottengo un riferimento alla casella ed alla barra corrispondente
-        let casella = document.getElementById('casella-' + casella);
-        let barra = document.getElementById('barra-' + id);
-        
+        let casella = document.getElementById('casella-' + i);
+        let barra = document.getElementById('barra-' + i);
+
+        // se questa casella e' probabilita o imprevisti allora devo
+        // aggiungerla nel modo corrispondente
+        if (this.nome == 'probabilita' || this.nome == 'imprevisti'){
+            let text = document.createElement('div');
+            text.className = this.nome;
+            text.appendChild(document.createTextNode(this.nome == 'probabilita' ? '?' : '!'));
+
+            // la casella va inserita con l'orientamento corretto
+            if (i > 0 && i < 10){
+                barra.style.display = 'none';
+                casella.rowSpan = 2;
+                text.style.transform = 'rotate(180deg)';
+                casella.appendChild(text);
+            } else if (i > 10 && i < 20) {
+                barra.style.display = 'none';
+                casella.colSpan = 2;
+                text.style.transform = 'rotate(-90deg)';
+                casella.appendChild(text);
+            } else if (i > 20 && i < 30) {
+                casella.style.display = 'none';
+                barra.rowSpan = 2;
+                barra.appendChild(text);
+                barra.style.backgroundColor = '#bfdbae';
+            } else if (i > 30 && i < 40) {
+                barra.style.display = 'none';
+                casella.colSpan = 2;
+                text.style.transform = 'rotate(90deg)';
+                casella.appendChild(text);
+            }
+            return this;
+        }
+
+        // le caselle con immagine hanno un inserimento particolare
+        if (this.immagine){
+            return this;
+        }
+
+        // casella con solo testo
+        barra.style.backgroundColor = this.colore;
+        let text = document.createElement('div');
+        let text1 = document.createElement('p');
+        text1.className = 'nome-casella';
+        text1.appendChild(document.createTextNode(this.nome));
+        let text2 = document.createElement('p');
+        text2.className = 'prezzo-casella';
+        text2.appendChild(document.createTextNode(this.prezzo[0] + '$'));
+        text.appendChild(text1);
+        text.appendChild(text2);
+        text.className = 'testo-casella';
+        // la casella va inserita con l'orientamento corretto
+        if (i > 0 && i < 10){
+            text.style.transform = 'rotate(180deg)';
+            casella.appendChild(text);
+        } else if (i > 10 && i < 20) {
+            text.style.transform = 'rotate(-90deg)';
+            casella.appendChild(text);
+        } else if (i > 20 && i < 30) {
+            casella.appendChild(text);
+        } else if (i > 30 && i < 40) {
+            text.style.transform = 'rotate(90deg)';
+            casella.appendChild(text);
+        }
+        return this;
     }
 }
 
@@ -103,7 +165,7 @@ function endDrag(e){
     let dragDiv = e.target;
     e.preventDefault();
 
-    let parentRect = contenitoreProprieta.getBoundingClientRect();
+    let parentRect = property.getBoundingClientRect();
     // DEBUG
     //console.log('Il padre ha posizione: ' + parentRect.left + ' ' + parentRect.top);
 
@@ -111,8 +173,8 @@ function endDrag(e){
     let y = e.clientY;
 
     // cerco se il puntatore si trova dentro una div
-    for (let c in contenitoreProprieta.children){
-        let div = contenitoreProprieta.children[c];
+    for (let c in property.children){
+        let div = property.children[c];
 
 
         if (!div.getBoundingClientRect)
@@ -139,33 +201,15 @@ function endDrag(e){
                     let next2 = dragDiv.nextSibling;
                     if (next1){
                         // esiste una casella dopo
-                        contenitoreProprieta.insertBefore(dragDiv,next1);
+                        property.insertBefore(dragDiv,next1);
                     } else {
-                        contenitoreProprieta.appendChild(dragDiv);
+                        property.appendChild(dragDiv);
                     }
                     // adesso devo spostare il secondo
-                    contenitoreProprieta.insertBefore(div,next2);
+                    property.insertBefore(div,next2);
                 }
                 return;
         }
     }
     // a questo punto non ero dentro nessuna
 }
-
-
-
-let casellaProva = new Casella('Ingegneria Polo ','descrizione di prova',1,100,[100,150,200],[50,100,200,300,400,600],[50]);
-
-// INIT
-document.addEventListener('DOMContentLoaded', () => {
-    contenitoreProprieta = document.getElementById('contenitore-proprieta');
-    contenitoreProprieta.className = 'container';
-
-    // prova
-    for (let i = 0; i < 10; i++){
-        casellaProva.nome = "Ingegeria Polo " + i;
-        casellaProva.colore = decimalToRgb(((i + 1) * 2000));
-        //console.log(decimalToRgb(i*2000));
-        casellaProva.stampaProprieta();
-    }
-})
