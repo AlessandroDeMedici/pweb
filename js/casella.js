@@ -9,7 +9,9 @@
 // prezzo       -> array con i costi di (in ordine) {proprieta,casa,albergo}
 // pedaggio     -> array con i costi dei pedaggi (in ordine) {proprieta, 1 casa, 2 case, 3 case, 4 case, albergo}
 // ipoteca      -> valore ipotecario
+// immagine     -> immagine della casella
 
+let caselle;
 
 class Casella{
     constructor(nome, descrizione = null, gruppo = null,colore = null, prezzo = null, pedaggio = null, ipoteca = null, immagine = null){
@@ -125,18 +127,64 @@ class Casella{
 
         // le caselle con immagine hanno un inserimento particolare
         if (this.immagine){
+            let text = document.createElement('div');
+            text.className = 'testo-casella';
+
+            let text1 = document.createElement('p');
+            text1.appendChild(document.createTextNode(this.nome));
+            text1.className = 'nome-casella';
+            text.appendChild(text1);
+
+            
+            let text2 = document.createElement('p');
+            text2.appendChild(document.createTextNode(this.prezzo[0] + '$'));
+            text2.className = 'prezzo-casella';
+            text.appendChild(text2);
+            
+            let img = document.createElement('img');
+            img.className = 'immagine-casella';
+            img.src = this.immagine;
+            text.appendChild(img);
+            
+            // la casella va inserita con l'orientamento corretto
+            if (i > 0 && i < 10){
+                barra.style.display = 'none';
+                casella.rowSpan = 2;
+                text.style.transform = 'rotate(180deg)';
+                casella.appendChild(text);
+            } else if (i > 10 && i < 20) {
+                barra.style.display = 'none';
+                casella.colSpan = 2;
+                text.style.transform = 'rotate(-90deg)';
+                casella.appendChild(text);
+                text.className += ' destra';
+            } else if (i > 20 && i < 30) {
+                casella.style.display = 'none';
+                barra.rowSpan = 2;
+                barra.appendChild(text);
+                barra.style.backgroundColor = '#bfdbae';
+            } else if (i > 30 && i < 40) {
+                barra.style.display = 'none';
+                casella.colSpan = 2;
+                text.style.transform = 'rotate(90deg)';
+                casella.appendChild(text);
+                text.className += ' sinistra';
+            }
             return this;
         }
 
         // casella con solo testo
         barra.style.backgroundColor = this.colore;
         let text = document.createElement('div');
+
         let text1 = document.createElement('p');
-        text1.className = 'nome-casella';
         text1.appendChild(document.createTextNode(this.nome));
+        text1.className = 'nome-casella';
+
         let text2 = document.createElement('p');
-        text2.className = 'prezzo-casella';
         text2.appendChild(document.createTextNode(this.prezzo[0] + '$'));
+        text2.className = 'prezzo-casella';
+        
         text.appendChild(text1);
         text.appendChild(text2);
         text.className = 'testo-casella';
@@ -213,3 +261,10 @@ function endDrag(e){
     }
     // a questo punto non ero dentro nessuna
 }
+
+
+function initTabellone(){
+    
+}
+
+
