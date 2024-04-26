@@ -66,8 +66,9 @@
 summary{
     list-style: none;
 }
+
+/* per nasconderlo anche su safari */
 summary::-webkit-details-marker, summary::marker {
-    /* Hides marker on Safari */
     display: none;
 }
 
@@ -78,3 +79,4 @@ details {
 details[open]:hover {
     scale: 1.8;
 }
+

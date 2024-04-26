@@ -34,36 +34,53 @@ document.addEventListener('DOMContentLoaded', () => {
         //console.log(decimalToRgb(i*2000));
         casellaProva.stampaProprieta();
         if (!(i%5)){
-            casellaImmagine.inserisiProprieta(i);
+            casellaImmagine.inserisciProprieta(i);
         }  else if (i == 2 || i == 17 || i == 33) {
-            probabilita.inserisiProprieta(i);
+            probabilita.inserisciProprieta(i);
         } else if (i == 7 || i == 22 || i == 36) {
-            imprevisto.inserisiProprieta(i);
+            imprevisto.inserisciProprieta(i);
         } else if (i == 12) {
-            societaElettrica.inserisiProprieta(i);
+            societaElettrica.inserisciProprieta(i);
         } else if (i == 27) {
-            societaAcquaPotabile.inserisiProprieta(i);
+            societaAcquaPotabile.inserisciProprieta(i);
         } else if (i == 38) {
-            tassaLusso.inserisiProprieta(i);
+            tassaLusso.inserisciProprieta(i);
         } else if (i == 4) {
-            tassaPatrimoniale.inserisiProprieta(i);
+            tassaPatrimoniale.inserisciProprieta(i);
         } else
-            casellaProva.inserisiProprieta(i);
+            casellaProva.inserisciProprieta(i);
     }
 
 
-    //imprevisto.inserisiProprieta(34).inserisiProprieta(24).inserisiProprieta(32).inserisiProprieta(22);
-    //probabilita.inserisiProprieta(31).inserisiProprieta(33).inserisiProprieta(35).inserisiProprieta(26);
+    //imprevisto.inserisciProprieta(34).inserisciProprieta(24).inserisciProprieta(32).inserisciProprieta(22);
+    //probabilita.inserisciProprieta(31).inserisciProprieta(33).inserisciProprieta(35).inserisciProprieta(26);
     
     
     // caselle con testo di prova
-    //casellaProva.inserisiProprieta(3).inserisiProprieta(13).inserisiProprieta(23).inserisiProprieta(33);
-    //casellaTesto.inserisiProprieta(4).inserisiProprieta(14).inserisiProprieta(24).inserisiProprieta(34);
+    //casellaProva.inserisciProprieta(3).inserisciProprieta(13).inserisciProprieta(23).inserisciProprieta(33);
+    //casellaTesto.inserisciProprieta(4).inserisciProprieta(14).inserisciProprieta(24).inserisciProprieta(34);
 
     // casella con poco testo
-    //casellaPocoTesto.inserisiProprieta(5).inserisiProprieta(15).inserisiProprieta(25).inserisiProprieta(35);
+    //casellaPocoTesto.inserisciProprieta(5).inserisciProprieta(15).inserisciProprieta(25).inserisciProprieta(35);
 
     // casella con tanto testo
-    //casellaTantoTesto.inserisiProprieta(6).inserisiProprieta(16).inserisiProprieta(26).inserisiProprieta(36);
+    //casellaTantoTesto.inserisciProprieta(6).inserisciProprieta(16).inserisciProprieta(26).inserisciProprieta(36);
     // tanto testo, per le scelte progettuali fatte, fara' sempre overflow
+
+
+    // prova di inserimento primo giocatore
+    let player1 = new Giocatore();
+    let player2 = new Giocatore();
+    let player3 = new Giocatore();
+    let player4 = new Giocatore();
+    let player5 = new Giocatore();
+
+    // test di movimento della pedina
+    // setInterval(() => {
+    //     player1.muoviGiocatore((player1.posizione + 1)%40);
+    //     player2.muoviGiocatore((player2.posizione + 1)%40);
+    //     player3.muoviGiocatore((player3.posizione + 1)%40);
+    //     player4.muoviGiocatore((player4.posizione + 1)%40);
+    //     player5.muoviGiocatore((player5.posizione + 1)%40);
+    // },100);
 })

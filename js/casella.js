@@ -82,16 +82,20 @@ class Casella{
         property.appendChild(casella);
     }
 
-    inserisiProprieta(i){
-        if (!(i % 10) || i < 0 || i > 39){
-            // questo numero di casella non va bene
-            console.log("tentato inserimento di proprieta in casella non valida: ",i);
-            return this;
-        }
+    inserisciProprieta(i){
+        let playerContainer = document.createElement('div');
+        playerContainer.className = 'contenitore-giocatori';
+        playerContainer.id = 'contenitore-giocatori-' + i;
 
         // ottengo un riferimento alla casella ed alla barra corrispondente
         let casella = document.getElementById('casella-' + i);
         let barra = document.getElementById('barra-' + i);
+
+        if (!(i % 10) || i < 0 || i > 39){
+            // questo numero di casella va bene solo per inserire il contenitore
+            casella.appendChild(playerContainer);
+            return this;
+        }
 
         // se questa casella e' probabilita o imprevisti allora devo
         // aggiungerla nel modo corrispondente
@@ -106,21 +110,25 @@ class Casella{
                 casella.rowSpan = 2;
                 text.style.transform = 'rotate(180deg)';
                 casella.appendChild(text);
+                casella.appendChild(playerContainer);
             } else if (i > 10 && i < 20) {
                 barra.style.display = 'none';
                 casella.colSpan = 2;
                 text.style.transform = 'rotate(-90deg)';
                 casella.appendChild(text);
+                casella.appendChild(playerContainer);
             } else if (i > 20 && i < 30) {
                 casella.style.display = 'none';
                 barra.rowSpan = 2;
                 barra.appendChild(text);
                 barra.style.backgroundColor = '#bfdbae';
+                barra.appendChild(playerContainer);
             } else if (i > 30 && i < 40) {
                 barra.style.display = 'none';
                 casella.colSpan = 2;
                 text.style.transform = 'rotate(90deg)';
                 casella.appendChild(text);
+                casella.appendChild(playerContainer);
             }
             return this;
         }
@@ -152,23 +160,27 @@ class Casella{
                 casella.rowSpan = 2;
                 text.style.transform = 'rotate(180deg)';
                 casella.appendChild(text);
+                casella.appendChild(playerContainer);
             } else if (i > 10 && i < 20) {
                 barra.style.display = 'none';
                 casella.colSpan = 2;
                 text.style.transform = 'rotate(-90deg)';
                 casella.appendChild(text);
                 text.className += ' destra';
+                casella.appendChild(playerContainer);
             } else if (i > 20 && i < 30) {
                 casella.style.display = 'none';
                 barra.rowSpan = 2;
                 barra.appendChild(text);
                 barra.style.backgroundColor = '#bfdbae';
+                barra.appendChild(playerContainer);
             } else if (i > 30 && i < 40) {
                 barra.style.display = 'none';
                 casella.colSpan = 2;
                 text.style.transform = 'rotate(90deg)';
                 casella.appendChild(text);
                 text.className += ' sinistra';
+                casella.appendChild(playerContainer);
             }
             return this;
         }
@@ -192,14 +204,18 @@ class Casella{
         if (i > 0 && i < 10){
             text.style.transform = 'rotate(180deg)';
             casella.appendChild(text);
+            casella.appendChild(playerContainer);
         } else if (i > 10 && i < 20) {
             text.style.transform = 'rotate(-90deg)';
             casella.appendChild(text);
+            casella.appendChild(playerContainer);
         } else if (i > 20 && i < 30) {
             casella.appendChild(text);
+            casella.appendChild(playerContainer);
         } else if (i > 30 && i < 40) {
             text.style.transform = 'rotate(90deg)';
             casella.appendChild(text);
+            casella.appendChild(playerContainer);
         }
         return this;
     }
@@ -260,11 +276,6 @@ function endDrag(e){
         }
     }
     // a questo punto non ero dentro nessuna
-}
-
-
-function initTabellone(){
-    
 }
 
 
