@@ -86,6 +86,11 @@ class Casella{
         let playerContainer = document.createElement('div');
         playerContainer.className = 'contenitore-giocatori';
         playerContainer.id = 'contenitore-giocatori-' + i;
+        playerContainer.onclick = () => {
+            messageBox.style.visibility = 'visible';
+            descrizioneMessageBox.firstChild.nodeValue = this.descrizione;
+            titoloMessageBox.firstChild.nodeValue = this.nome;
+        }
 
         // ottengo un riferimento alla casella ed alla barra corrispondente
         let casella = document.getElementById('casella-' + i);

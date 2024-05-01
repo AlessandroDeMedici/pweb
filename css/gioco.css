@@ -18,9 +18,19 @@
     left: 0;
 }
 
+.contenitore-giocatori:hover{
+    z-index: 1;
+    border: 2px solid yellow;
+    transition: all 0.2s ease;
+}
+
 
 .giocatore{
     width: 13px;
     height: 13px;
+    z-index: 1;
+
+    transition: 0.5s ease;
 }
+
 

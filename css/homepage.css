@@ -1,0 +1,74 @@
+@font-face {
+    font-family: 'Minecraft-8-bit';
+    src: url('/fonts/MinecraftRegular-Bmg3.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@keyframes testo {
+    50%{
+        font-size: 25px;
+    }
+}
+
+#home-container{
+    width: 100%;
+    min-height: 100vh;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+
+
+}
+
+#main-logo{
+    width: 60%;
+    margin-top: 100px;
+    height: fit-content;
+    background-color: black;
+    box-shadow: grey 0px 10px 5px;
+    margin-bottom: 100px;
+}
+
+#scritta-home{
+    position: absolute;
+
+    transform: translateX(calc(80% - 300px)) translateY(220px) rotateZ(-15deg);
+    text-align: center;
+    width: 800px;
+    height: 40px;
+
+    animation: testo 2s linear infinite;
+
+    font-size: 20px;
+    font-family: Minecraft-8-bit;
+    text-shadow: black 3px 3px;
+    color: yellow;
+}
+
+.homepage-button{
+    width: 50%;
+    height: 70px;
+    margin: 20px;
+
+
+
+    font-family: Minecraft-8-bit;
+    font-weight: 500;
+    font-size: 40px;
+    color: white;
+    text-shadow: #555555 3px 3px;
+
+
+    border: solid 5px black;
+    background-color: #AAAAAA;
+    box-shadow: black 5px 5px;
+}
+
+.homepage-button:hover{
+    background-color: #555555;
+}
+

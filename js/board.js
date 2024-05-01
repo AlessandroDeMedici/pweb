@@ -1,7 +1,9 @@
 let boardDIM = 13;                  // dimensione complessiva del tabellone
 let elementi = boardDIM - 4;        // caselle interne al tabellone
 let centro;                         // centro interno al tabellone
-
+let messageBox;
+let descrizioneMessageBox;
+let titoloMessageBox;
 
 // funzione per stampare ed inizializzare gli id del tavolo da gioco
 function printBoard(){
@@ -30,12 +32,49 @@ function printBoard(){
             } else if ((i < 2 && j < 2) || (i > boardDIM - 3 && j > boardDIM - 3) || (i > boardDIM - 3 && j < 2) || (i < 2 && j > boardDIM -3)){
                 continue;
             } else if (i == 2 && j == 2){
+                // aggiunge il centro
                 td = document.createElement('td');
                 td.colSpan = 9;
                 td.rowSpan = 9;
                 td.id = 'centro';
                 td.className = 'casella';
                 tr.appendChild(td);
+
+                // aggiunge una casella informativa
+                let div = document.createElement('div');
+                div.id = 'message-box';
+                messageBox = div;
+                messageBox.style.visibility = 'hidden';
+                
+                let exit = document.createElement('button');
+                exit.className = 'exit';
+                exit.id = 'exit-message-box';
+                messageBox.appendChild(exit);
+                exit.appendChild(document.createTextNode('X'));
+                exit.onclick = () => {
+                    messageBox.style.visibility = 'hidden';
+                }
+                
+                let descrizione = document.createElement('div');
+                descrizione.id = 'descrizione-message-box';
+                descrizione.appendChild(document.createTextNode(''));
+                descrizioneMessageBox = descrizione;
+                messageBox.appendChild(descrizione);
+                
+                let titolo = document.createElement('div');
+                titolo.id = 'titolo-message-box';
+                titolo.appendChild(document.createTextNode(''));
+                titoloMessageBox = titolo;
+                messageBox.appendChild(titolo);
+                
+                // si chiude quando premi esc
+                document.addEventListener('keydown', (e)=>{
+                    if (e.code == 'Escape'){
+                        messageBox.style.visibility = 'hidden';
+                    }
+                });
+
+                td.appendChild(div);
                 continue;
             } else if (i >= 2 && i <= boardDIM - 3 && j >= 2 && j <= boardDIM - 3){
                 continue;
@@ -174,7 +213,6 @@ function printBoard(){
     inserisciImmagineAngolo(30,'/media/vai_in_prigione.svg',45);
 
 }
-
 
 // funzione per inserire le immagini negli angoli
 function inserisciImmagineAngolo(casella,immagine,angolo = 0){

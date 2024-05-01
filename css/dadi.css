@@ -12,11 +12,6 @@
 
     display: flex;
     justify-content: center;
-    
-
-    border-radius: 30px;
-    transition-property: opacity;
-    transition-duration: 0.5s;
 }
 
 /* DADI */
@@ -36,9 +31,15 @@
     }
 }
 
+@keyframes rollingLeft {
+    100% {
+        transform: rotateX(-360deg) rotateY(-720deg) rotateZ(18deg);
+    }
+}
+
 @keyframes lancio {
     50% {
-        transform: translate(0,-30px);
+        transform: translate(0,-40px);
     }
 }
 

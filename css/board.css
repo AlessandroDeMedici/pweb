@@ -136,6 +136,72 @@
     text-align: center;
 }
 
+/* message-box */
+#message-box{
+    position: absolute;
+    width: 700px;
+    height: 400px;
+
+    top: calc(50% - 200px);
+    left: calc(50% - 350px);
+
+    background-color: white;
+    border: 5px solid lightgrey;
+    border-radius: 30px;
+    
+    box-shadow: grey 5px 5px;
+    z-index: 1;
+
+    transition-property: top left 0.5s ease-in-out;
+}
+
+#exit-message-box{
+    color: grey;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif;
+    
+    position: absolute;
+    right: 30px;
+    top: 20px;
+
+}
+
+.exit{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border: solid 2px lightgrey;
+    background-color: white;
+    border-radius: 6px;
+}
+
+#descrizione-message-box{
+    color: grey;
+    font-weight: 500;
+    font-size: 30px;
+
+    position: absolute;
+    left: 10%;
+    top: 200px;
+    
+    width: 80%;
+    height: 150px;
+    text-align: center;
+}
+
+#titolo-message-box{
+    color: grey;
+    font-weight: 800;
+    font-size: 50px;
+    
+    position: absolute;
+    left: 10%;
+    top: 70px;
+
+    width: 80%;
+    height: 50px;
+    text-align: center;
+}
 
 
 

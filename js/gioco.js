@@ -1,5 +1,6 @@
 let player = 0;
 
+
 class Giocatore{
     constructor(){
         // sistemo la pedina
@@ -26,13 +27,9 @@ class Giocatore{
         }
 
         let div = document.getElementById('contenitore-giocatori-' + this.posizione);
-        div.removeChild(this.pedina);
-
         let newdiv = document.getElementById('contenitore-giocatori-' + i);
         newdiv.appendChild(this.pedina);
 
         this.posizione = i;
     }
-
-
 }

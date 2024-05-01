@@ -73,35 +73,35 @@ const randomDice = () => {
     let random2 = Math.floor(Math.random() * 5) + 1;
 
 
-    diceContainer.style.animation = 'lancio 1s ease-in 1';
+    diceContainer.style.animation = 'lancio 0.8s ease-in 1';
     switch (random1) {
         case 1:
-            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
             firstDice.style.transform = 'rotateX(45deg) rotateZ(45deg)';
             break;
 
         case 6:
-            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
             firstDice.style.transform = 'rotateX(-135deg) rotateZ(-45deg)';
             break;
 
         case 2:
-            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
             firstDice.style.transform = 'rotateX(-45deg) rotateY(-45deg)';
             break;
 
         case 5:
-            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
             firstDice.style.transform = 'rotateX(135deg) rotateY(45deg)';
             break;
 
         case 3:
-            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
             firstDice.style.transform = 'rotateX(-45deg) rotateY(45deg) rotateZ(-90deg)';
             break;
 
         case 4:
-            firstDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
             firstDice.style.transform = 'rotateX(-45deg) rotateY(-135deg) rotateZ(-90deg)';
             break;
 
@@ -111,32 +111,32 @@ const randomDice = () => {
 
     switch (random2) {
         case 1:
-            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
             secondDice.style.transform = 'rotateX(45deg) rotateZ(45deg)';
             break;
 
         case 6:
-            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
             secondDice.style.transform = 'rotateX(-135deg) rotateZ(-45deg)';
             break;
 
         case 2:
-            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
             secondDice.style.transform = 'rotateX(-45deg) rotateY(-45deg)';
             break;
 
         case 5:
-            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
             secondDice.style.transform = 'rotateX(135deg) rotateY(45deg)';
             break;
 
         case 3:
-            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
             secondDice.style.transform = 'rotateX(-45deg) rotateY(45deg) rotateZ(-90deg)';
             break;
 
         case 4:
-            secondDice.style.animation = 'rolling 1s ease-in 1 reverse';
+            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
             secondDice.style.transform = 'rotateX(-45deg) rotateY(-135deg) rotateZ(-90deg)';
             break;
 

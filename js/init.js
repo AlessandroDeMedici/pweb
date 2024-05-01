@@ -1,17 +1,24 @@
 
 let probabilita;
 let imprevisto;
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // inizializzo il layout
+
+    // inizializzo la home
+    printHome();
+
+    // inizializzo il layout di gioco
     initLayout();
 
     // stampo la board
     printBoard();
 
-
     // stampo i dadi
     printDadi();
+
+    // nascondo il gioco
+    gameContainer.style.display = 'none';
 
     // PROVA CASELLE
     let casellaProva = new Casella('Ingegneria Polo ','descrizione di prova',1,100,[100,150,200],[50,100,200,300,400,600],[50]);
@@ -29,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // prova
     for (let i = 0; i < 40; i++){
         casellaProva.nome = "Ingegneria Polo " + i;
+        casellaProva.descrizione = 'descrizione di prova numero ' + i;
         let a = (i + 150) * 255;
         casellaProva.colore = '#' + '0' + a.toString(16) + '0';
         //console.log(decimalToRgb(i*2000));
@@ -76,11 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let player5 = new Giocatore();
 
     // test di movimento della pedina
-    // setInterval(() => {
-    //     player1.muoviGiocatore((player1.posizione + 1)%40);
-    //     player2.muoviGiocatore((player2.posizione + 1)%40);
-    //     player3.muoviGiocatore((player3.posizione + 1)%40);
-    //     player4.muoviGiocatore((player4.posizione + 1)%40);
-    //     player5.muoviGiocatore((player5.posizione + 1)%40);
-    // },100);
+    setTimeout(() => {
+         player1.muoviGiocatore((player1.posizione + 1)%40);
+         player2.muoviGiocatore((player2.posizione + 1)%40);
+         player3.muoviGiocatore((player3.posizione + 1)%40);
+         player4.muoviGiocatore((player4.posizione + 1)%40);
+         player5.muoviGiocatore((player5.posizione + 1)%40);
+     },1000);
 })
