@@ -11,6 +11,9 @@
     }
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+
 #home-container{
     width: 100%;
     min-height: 100vh;
@@ -20,8 +23,6 @@
     align-items: center;
     align-content: center;
     flex-direction: column;
-
-
 }
 
 #main-logo{
@@ -68,7 +69,99 @@
     box-shadow: black 5px 5px;
 }
 
-.homepage-button:hover{
+.homepage-button:hover, .form-button:hover{
     background-color: #555555;
 }
 
+
+.account{
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    z-index: 1;
+    
+    
+    font-family: Minecraft-8-bit;
+    font-size: 30px;
+    color: white;
+    text-shadow: #555555 3px 3px;
+    
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 3px solid black;
+    box-shadow: black 2px 2px;
+    background-color: #AAAAAA;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.form{
+    height: fit-content;
+    width: 230px;
+    z-index: 1;
+    
+    display: flex;
+    flex-direction: column;
+    
+    position: absolute;
+    top: 80px;
+    right: 10px;
+
+    padding: 20px;
+    
+    
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    text-shadow: black 2px 2px;
+    font-family: Minecraft-8-bit;
+}
+
+
+
+.form-button{
+    display: block;
+    width: 200px;
+    height: 40px;
+    margin: 15px;
+
+
+
+    font-family: Minecraft-8-bit;
+    font-weight: 500;
+    font-size: 20px;
+    color: white;
+    text-shadow: #555555 2px 2px;
+
+
+    border: solid 5px black;
+    background-color: #AAAAAA;
+    box-shadow: black 5px 5px;
+}
+
+fieldset{
+    border: 0px;
+}
+
+
+/* stili generici */
+body {
+    background-color: #d7baaa;
+    font-family: 'Josefin Sans';
+}
+
+.element {
+    background-color: #bfdbae;
+    border: solid 2px black;
+    border-radius: 20px;
+    box-shadow: 10px 10px lightblue;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}

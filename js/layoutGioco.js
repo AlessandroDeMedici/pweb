@@ -57,8 +57,6 @@ function initMenu(){
 
 function initLayout(){
     // layout principale
-    gameContainer = document.getElementById('game-container');
-    gameContainer.className = 'container';
 
     boardContainer = document.createElement('div');
     boardContainer.id = 'board-container';

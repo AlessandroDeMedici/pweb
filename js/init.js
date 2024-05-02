@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // inizializzo la home
     printHome();
 
+    gameContainer = document.getElementById('game-container');
+
     // inizializzo il layout di gioco
     initLayout();
 

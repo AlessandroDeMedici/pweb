@@ -1,5 +1,5 @@
 <?php 
 
-    header('Location: /php/index.html');
+    header('Location: /html/index.php');
 
 ?>
