@@ -14,7 +14,7 @@ $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
         if (strlen($input['username']) < 5){
             throw new Exception('Username non valido...');
         }
-        if (strlen($input['password'])){
+        if (strlen($input['password']) < 5){
             throw new Exception('Password non valida...');
         }
         foreach ($notValidCharacter as $c){
