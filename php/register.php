@@ -92,8 +92,8 @@ $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
 
     } catch (PDOException | Exception $e) {
         $result = [
-            'register'  => false,
-            'message'     => $e->getMessage()
+            'logged'    => false,
+            'message'   => $e->getMessage()
         ];
     }
 

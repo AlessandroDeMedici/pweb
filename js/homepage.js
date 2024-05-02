@@ -254,6 +254,9 @@ function success(data, register = false){
         errore = erroreLogin;
 
     if (data['logged'] == false){
+        let string = new String(data['message']);
+        if (string.includes('SQLSTATE[23000]'))
+            data['message'] = 'Username gia in uso...';
         errore.firstChild.nodeValue = data['message'];
         errore.hidden = false;
         return;
