@@ -18,9 +18,12 @@ let erroreLogin;
 let erroreRegistrazione;
 
 
-let frasi = ["ingegneria deve essere difficile!","Oggi sciopero dei treni!",
-            "Hanno avvistato il Prof. Corsini con delle forbici in mano!","18 a tutti!","Le cose sono o non sono!",
-            "Buongiorno a tutti!","Polo F allagato, riprendiamo domani..."];
+let frasi = [
+            "ingegneria deve essere difficile!","Oggi sciopero dei treni!",
+            "18 a tutti!","Le cose sono o non sono!",
+            "Buongiorno a tutti!","Polo F allagato, riprendiamo domani...",
+            "Alta impedenza non e' un valore logico...","...e come tale non si propaga",
+        ];
 
 function printHome(){
     // devo creare la homepage
@@ -35,7 +38,7 @@ function printHome(){
     // scritta che cambia contenuto ogni minuto
     scritta = document.createElement('div');
     scritta.id = 'scritta-home'
-    scritta.appendChild(document.createTextNode('Hanno avvistato il Prof. Corsini con delle forbici in mano!'));
+    scritta.appendChild(document.createTextNode('Benvenuto su MonopolING'));
     setInterval(()=>{
         scritta.firstChild.nodeValue = frasi[Math.floor(Math.random() * frasi.length)];
     },10000);
