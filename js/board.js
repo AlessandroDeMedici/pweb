@@ -5,6 +5,7 @@ let messageBox;
 let descrizioneMessageBox;
 let titoloMessageBox;
 
+
 // funzione per stampare ed inizializzare gli id del tavolo da gioco
 function printBoard(){
 
@@ -100,6 +101,9 @@ function printBoard(){
     div = document.getElementById('casella-0-11');
     //div.appendChild(document.createTextNode('10'));
     div.id = 'casella-10';
+    let prigione = document.createElement('div');
+    prigione.id = 'prigione';
+    div.appendChild(prigione);
 
     div = document.getElementById('casella-11-0');
     //div.appendChild(document.createTextNode('30'));

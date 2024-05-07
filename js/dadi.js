@@ -1,7 +1,6 @@
-let fistDice;
+let firstDice;
 let secondDice;
 let diceContainer;
-
 
 
 // funzione che aggiunge i dadi allo schermo schermo

@@ -1,0 +1,68 @@
+IMPREVISTI:
+    - Avanzate fino alla Stazione San Rossore, se passate dal via ritirate $200, MOVE
+    - Avanzate fino fino al Polo F, se passate del via ritirate $200, MOVE
+    - Arretrate di 3 caselle, MOVE
+    - Avete preso una multa per aver dimenticato di mettere il parcheggio, pagate $15, PAY
+    - Chiudetevi in aula studio e senza passare dal via, non ritirate $200, PRISON
+    - Uscite ora dall'aula studio. questa carta puo essere conservata quando ne avrete bisogno, oppure puo' essere scambiata o venduta, JOLLY
+    - Trovate $50 dentro la macchinetta, caffe' gratis, GIFT
+    - Avanzate fino a Piazza Dei Miracoli, MOVE
+    - Avanzate fino al Polo PN, se passate dal via ritirate $200, MOVE
+    - Siete stati eletti al consiglio di corso, pagate a ciascun giocatore $50, GIVE
+    - Avanzate fino alla prossima stazione. Se e' ancora libera potete comprarla dalla banca. Se e' gia' stata acquistata pagate il biglietto al proprietario il doppio che gli spetterebbe normalmente, MOVE
+    - Avanzate fino alla prossima stazione. Se e' ancora libera potete comprarla dalla banca. Se e' gia' stata acquistata pagate il biglietto al proprietario il doppio che gli spetterebbe normalmente, MOVE
+    - Eseguite lavori di manutenzione su tutte le vostre proprieta', per ogni casa pagate $25, per ogni albergo pagate $100, MANTEINANCE
+    - Avanzate fino alla societa' piu vicina. Se e' gia' acquistata lanciate i dadi e pagate al proprietario 10 volte il numero uscito, MOVE
+    - Avanzate fino al Via! Ritirate $200, MOVE
+    - Matura il vostro investimento sulla chiavetta delle macchinette, ritirate $150 di resto non restituito, GIFT
+PROBABILITA:
+    - USCITE ORA DALL'AULA STUDIO. questa carta puo essere conservata quando ne avrete bisogno, oppure puo' essere scambiata o venduta, JOLLY
+    - Ereditate una chiavetta del caffe' da un collega appena laureato, ritirate $100, GIFT
+    - Avanzate fino al Via! Ritirate $200, MOVE
+    - Avete vinto una borsa di studio! ritirate $100, GIFT
+    - Ricevete il conto della copisteria, pagate $100, PAY
+    - La mensa riconosce un errore nel vostro conto, ritirate $200, GIFT
+    - Maturano gli investimenti sulla chiavetta delle macchinette, ritirate $100 di resto non restituito, GIFT
+    - Buon compleanno! Incassate $10 da ogni giocatore, TAKE
+    - Versate il rimanente delle rette universitarie, pagate $200, PAY
+    - Ricevete la parcella del dottore, pagate $50, PAY
+    - Ricevete una borsa di studio, ritirate $50, GIFT
+    - Maturano gli interessi della vostra assicurazione sulla vita. Ritirate $100, GIFT
+    - Chiudetevi in aula studio e senza passare dal via, non ritirate $200, PRISON
+PROPRIETA:
+    - societa' acqua potabile, 'Mensa Cammeo',
+    - societa' elettrica = 'Mensa Martiri'
+    - Stazione sud = 'Stazione Livorno Centrale'
+    - Stazione nord = 'Stazione Pisa Centrale'
+    - Stazione est = 'Stazione di Pontedera'
+    - Stazione ovest = 'Stazione Pisa San Rossore'
+    
+    - Vicolo corto = 'Via Cimabue',,1,'brown'
+    - Vicolo stretto = 'Polo F',,1,'brown'
+
+    - Bastioni Gran Sasso = 'Via Giunta Pisano',,2,'lightblue'
+    - Viale Monterosa = 'Via Bonanno Pisano',,2,'lightblue'
+    - Viale Vesuvio = 'Polo B',,2,'lightblue'
+
+    - Via Accademia = 'Borgo Stretto',,3,'pink'
+    - Corso Ateneo = 'Piazza Santa Caterina',,3,'pink'
+    - Piazza Universita = "Sant'Anna",,3,'pink'
+
+    - Via Verdi = 'Piazza dei Cavalieri',,4,'orange'
+    - Corso Raffaello = 'Scuola Normale',,4,'orange'
+    - Piazza Dante = 'Piazza Dante',,4,'orange'
+
+    - Via Marco Polo = 'Via Contessa Matilde',,5,'red'
+    - Corso Magellano = 'Via Marinello Nelli',,5,'red'
+    - Largo Colombo = 'Polo PN',,5,'red'
+    
+    - Viale Costantino = 'Via Santa Maria',,6,'yellow'
+    - Viale Traiano = 'Lungarni',,6,'yellow'
+    - Piazza Giulio Cesare = 'CNUCE',,6,'yellow'
+
+    - Via Roma = 'Via Diotisalvi',,7,'green'
+    - Corso Impero = 'Polo C',,7,'green'
+    - Largo Augusto = 'Polo A',,7,'green'
+
+    - Viale dei Giardini = 'Piazza dei Miracoli',,8,'blue'
+    - Parco della Vittoria = 'Torre Di Pisa',,8,'blue'
