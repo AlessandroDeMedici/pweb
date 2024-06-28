@@ -192,5 +192,65 @@
 /* parte relativa a view offer */
 
 
+.view-offer-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
+.view-offer-player-container img{
+    width: 50px;
+    height: 50px;
+}
+
+.view-offer-player-container{
+    width: 250px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+}
+
+.view-offer-button{
+    margin: 20px;
+    font-size: 20px;
+    font-family: 'Josefin Sans';
+    width: 100px;
+    height: fit-content;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    box-shadow: gray 5px 5px;
+}
+
+.view-offer-title{
+    text-align: center;
+    margin: 30px;
+}
+
+#accetta{
+    background-color: #27ae60;
+}
+
+#rifiuta{
+    background-color: #c0392b;
+}
+
+.view-offer-properties{
+    width: 90%;
+    height: 150px;
+    padding: 10px;
+    overflow: auto;
+}
+
+.view-offer-money{
+    margin: 50px;
+}
 

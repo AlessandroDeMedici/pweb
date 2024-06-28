@@ -10,7 +10,7 @@ class Giocatore{
         // sistemo la pedina
         this.pedina = document.createElement('img');
         this.pedina.className = 'giocatore';
-        this.pedina.src = '/media/player/pedina.svg';
+        this.pedina.src = '/media/player/pedina_' + giocatori.length + '.svg';
 
         // do un id al giocatore
         this.id = 'giocatore-' + giocatori.length;
@@ -191,77 +191,6 @@ probabilita.push(new Carta('Probabilita','Ricevete la parcella del dottore, paga
 probabilita.push(new Carta('Probabilita','Maturano gli interessi della vostra assicurazione sulla vita. Ritirate $100', 'GIFT', 100));
 probabilita.push(new Carta('Probabilita','Andate in prigione senza passare dal via, non ritirate $200', 'PRISON'));
 
-
-// classe per le offerte
-class Offer{
-    static id = 0;
-    static offerte = new Array();
-    
-    constructor(player1,player2,properties1,money1,properties2,money2){
-        if (player1 == player2)
-            return;
-        // player1 -> giocatore che fa l'offerta
-        // player2 -> giocatore che riceve l'offerta
-        // properties1, money1 -> soldi e proprieta che il giocatore 1 offre
-        // properties2, money2 -> soldi e proprieta che il giocatore 2 offre
-        this.player1 = player1;
-        this.player2 = player2;
-        this.properties1 = properties1;
-        this.properties2 = properties2;
-        this.id = Offer.id++;
-
-        this.element;
-
-        // aggiungo l'offerta all'array delle offerte
-        Offer.offerte.push(this);
-
-        // aggiungo l'offerta a video
-        this.createListElement();
-    }
-
-    // funzione per aggiugnere l'offerta alla lista delle offerte
-    createListElement(){
-        let div = document.createElement('div');
-        div.id = 'offerta-' + this.id;
-        div.className = 'offer';
-        
-        let offerDisplay = document.getElementById('offer-display');
-        offerDisplay.appendChild(div);
-
-        let img1 = document.createElement('img');
-        img1.className = 'offer-image';
-        img1.src = this.player1.pedina.src;
-        div.appendChild(img1);
-
-        let img2 = document.createElement('img');
-        img2.className = 'offer-image';
-        img2.src = this.player2.pedina.src;
-        div.appendChild(img2);
-
-        // bottone per visualizzare l'immagine
-        let bottone = document.createElement('button');
-        bottone.className = 'offer-button';
-        bottone.innerHTML = 'VIEW';
-        bottone.onclick = visualizzaOfferta;
-        bottone.dataset.id = this.id;
-        div.appendChild()
-    }
-}
-
-// funzione per visualizzare l'offerta corrente nella finestra view offer
-function visualizzaOfferta(e){
-    e.preventDefault();
-
-    // ottengo l'id dell'offerta
-    let bottone = e.target;
-
-    let id = Number(bottone.dataset.id);
-
-    // ottengo i dati relativi all'offerta
-    let offerta = Offer.offerte[id];
-}
-
-
 // funzione per inizializzare player e offer display
 // di fatto soltanto player display
 function initChat(){
@@ -316,6 +245,7 @@ function initChat(){
 
 
 // funzione per inizializzare le finestre di view offer e make offer
+// ed i relativi bottoni
 function initMessageBox(){
     let messageBox = document.getElementById('message-box');
     let makeOffer = document.createElement('form');
@@ -476,11 +406,12 @@ function initMessageBox(){
         firstPlayer.appendChild(sliderContainer);
     }
 
-
-    // aggiungo una riga verticale
-    let div = document.createElement('div');
-    container.appendChild(div);
-    div.className = 'vertical-line';
+    {
+        // aggiungo una riga verticale
+        let div = document.createElement('div');
+        container.appendChild(div);
+        div.className = 'vertical-line';
+    }
 
 
     {
@@ -544,6 +475,108 @@ function initMessageBox(){
     sendOffer.onclick = inviaOfferta;
     sendOffer.innerHTML = 'Invia';
     makeOffer.appendChild(sendOffer);
+
+
+    // inizializzo il layout di viewoffer
+    // titolo
+    let titleViewOffer = document.createElement('h1');
+    titleViewOffer.innerHTML = 'View Offer';
+    viewOffer.appendChild(titleViewOffer);
+    titleViewOffer.className = 'view-offer-title';
+
+    let containerViewOffer = document.createElement('div');
+    containerViewOffer.className = 'view-offer-container';
+    viewOffer.appendChild(containerViewOffer);
+
+    {
+        // casella del giocatore 1
+        let container = document.createElement('div');
+        container.className = 'view-offer-player-container';
+
+        // immagine che devo inizializzare quando premo il bottone view offer
+        let img = document.createElement('img');
+        container.appendChild(img);
+        img.id = 'view-offer-img-1';
+
+        // nome
+        let name = document.createElement('h2');
+        container.appendChild(name);
+        name.id = 'view-offer-name-1';
+
+        // lista delle proprieta
+        let propContainer = document.createElement('div');
+        propContainer.id = 'view-offer-properties-1';
+        container.appendChild(propContainer);
+        propContainer.className = 'view-offer-properties';
+
+        // dollari
+        let money = document.createElement('h2');
+        money.id = 'view-offer-money-1';
+        container.appendChild(money);
+        money.className = 'view-offer-money';
+
+        containerViewOffer.appendChild(container);
+    }
+
+    let vl = document.createElement('div');
+    vl.className = 'vertical-line';
+    containerViewOffer.appendChild(vl);
+
+    {
+        // casella del giocatore 2
+        let container = document.createElement('div');
+        container.className = 'view-offer-player-container';
+
+        // immagine che devo inizializzare quando premo il bottone view offer
+        let img = document.createElement('img');
+        container.appendChild(img);
+        img.id = 'view-offer-img-2';
+
+        // nome
+        let name = document.createElement('h2');
+        container.appendChild(name);
+        name.id = 'view-offer-name-2';
+
+        // lista delle proprieta
+        let propContainer = document.createElement('div');
+        propContainer.id = 'view-offer-properties-2';
+        container.appendChild(propContainer);
+        propContainer.className = 'view-offer-properties';
+
+        // dollari
+        let money = document.createElement('h2');
+        money.id = 'view-offer-money-2';
+        container.appendChild(money);
+        money.className = 'view-offer-money';
+
+        containerViewOffer.appendChild(container);
+    }
+
+    // inserisco i bottoni in view offer che sono accetta e rifiuta
+    {
+        let buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+
+        let button1 = document.createElement('button');
+        buttonContainer.appendChild(button1);
+        button1.innerHTML = 'Accetta';
+        button1.id = 'accetta';
+        button1.className = 'view-offer-button';
+
+        let button2 = document.createElement('button');
+        buttonContainer.appendChild(button2);
+        button2.innerHTML = 'Rifiuta';
+        button2.id = 'rifiuta';
+        button2.className = 'view-offer-button';
+
+        viewOffer.appendChild(buttonContainer);
+
+    }
+
+    // inizializzo il bottone
+    let bottone2 = document.getElementById('nuova-offerta');
+    bottone2.disabled = 0;
+    bottone2.onclick = mostraMakeOffer;
 }
 
 // funzione che manda un offerta da un giocatore ad un altro giocatore
@@ -596,6 +629,44 @@ class Offerta{
     static id = 0;
 
     constructor(id1,id2,proprieta1,proprieta2,soldi1,soldi2){
+        
+        // controllo che l'offerta non venga fatta a se stessi
+        if (id1 == id2)
+            return;
+
+        // controllo che non vengano fatte offerte duplicate
+        for (let o in offerte){
+            let offer = offerte[o];
+
+            if (offer.id1 == id1 && offer.id2 == id2 && 
+                offer.soldi1 == soldi1 && offer.soldi2 == soldi2 && id1 == 0
+            ){
+                alert('E\' gia\' stata fatta un\'offerta identica');
+                return;
+            }
+
+        }
+
+        // controllo che le proprieta siano effettivamente dei due giocatori
+        // L'importante e' che i soldi ci siano al momento in cui l'offerta viene accettata
+        {
+            for (let p in proprieta1){
+                let proprieta = proprieta1[p];
+                if (!giocatori[id1].proprieta.includes(proprieta)){
+                    alert('Proprieta\' non valide per l\'offerta');
+                    return;
+                }
+            }
+
+            for (let p in proprieta2){
+                let proprieta = proprieta2[p];
+                if (!giocatori[id2].proprieta.includes(proprieta)){
+                    alert('Proprieta\' non valide per l\'offerta');
+                    return;
+                }
+            }
+        }
+
         this.id1 = id1;
         this.id2 = id2;
         this.proprieta1 = proprieta1;
@@ -624,16 +695,25 @@ class Offerta{
 
         // infine un bottone per vedere i dettagli dell'offerta
         let button = document.createElement('button');
-        button.onclick = mostraOfferta;
+        button.onclick = mostraViewOffer;
         this.container.appendChild(button);
         button.innerHTML = 'View';
         button.dataset.id = this.id;
 
         offerDisplay.appendChild(this.container);
     }
+
+    acceptOffer(){
+        // funzione per accettare l'offerta
+
+        // a questo punto viene fatto il controllo della validita' dell'offerta
+        // soldi e proprieta primo giocatore
+        // soldi e proprieta secondo giocatore
+
+    }
 }
 
-function creaOfferta(e){
+function mostraMakeOffer(e){
     e.preventDefault();
 
     let messageContainer = document.getElementById('message-container');
@@ -645,11 +725,40 @@ function creaOfferta(e){
     makeOffer.style.display = 'block';
 
     // ogni volta che viene chiamato crea offerta mostra le mie proprieta aggiornate
+    let c = document.getElementById('offer-checklist-1');
+    c.innerHTML = '';
+
+    let player = giocatori[0];
+
+    let id = 0;
+    for (let p in player.proprieta){
+        let a = player.proprieta[p];
+
+        let check = document.createElement('input');
+        check.type = 'checkbox';
+        check.name = 'proprieta-1-' + id;
+        check.id = 'checkbox-1-' + id;
+
+        let label = document.createElement('label');
+        label.htmlFor = 'checkbox-1-' + id++;
+        label.innerHTML = a;
+
+        c.appendChild(check);
+        c.appendChild(label);
+        c.appendChild(document.createElement('br'));
+    }
+
+    // mostro anche il saldo aggiornato
+    let slider = document.getElementById('slider-1');
+    slider.max = giocatori[0].saldo;
+
+    let messageBox = document.getElementById('message-box');
+    messageBox.style.visibility = 'visible';
 
 }
 
 
-function mostraOfferta(e){
+function mostraViewOffer(e){
     e.preventDefault();
 
     let messageContainer = document.getElementById('message-container');
@@ -660,13 +769,76 @@ function mostraOfferta(e){
     viewOffer.style.display = 'block';
     makeOffer.style.display = 'none';
 
+    let messageBox = document.getElementById('message-box');
+    messageBox.style.visibility = 'visible';
+
     // mostra i dettagli dell'offerta
     // se e' un'offerta gia' conclusa allora mostra il bottone disabilitato
     // se e' un'offerta di altri giocatori allora mostra il bottone disabilitato
     // se e' un'offerta che posso accettare allora mostra il bottone abilitato
 
-}
+    // ottengo id offerta
+    let id = Number(e.target.dataset.id);
 
+    // ottengo i dati dell'offerta
+    let offerta = offerte[id];
+
+    // inizializzo i campi di view offer
+    let player1 = giocatori[offerta.id1];
+    let player2 = giocatori[offerta.id2];
+
+    {
+        // inizializzo i campi del primo player
+        //immagine
+        let img = document.getElementById('view-offer-img-1');
+        img.src = player1.pedina.src;
+
+        let name = document.getElementById('view-offer-name-1');
+        name.innerHTML = player1.username;
+
+        //proprieta
+        let prop = document.getElementById('view-offer-properties-1');
+        proprieta1 = ['via luigia','via contessa matilde','ole ole','ola ola','ma che ma che','ole osi','ola ola','ma che ma che','ole osi'];
+        for (let p in proprieta1){
+            let proprieta = proprieta1[p];
+            
+            let c = document.createElement('p');
+            c.innerHTML = proprieta;
+
+            prop.appendChild(c);
+        }
+
+        // soldi
+        let soldi = document.getElementById('view-offer-money-1');
+        soldi.innerHTML = '$' + offerta.soldi1;
+    }
+
+    {
+        // inizializzo i campi del secondo player
+        //immagine
+        let img = document.getElementById('view-offer-img-2');
+        img.src = player2.pedina.src;
+
+        let name = document.getElementById('view-offer-name-2');
+        name.innerHTML = player2.username;
+
+        //proprieta
+        let prop = document.getElementById('view-offer-properties-2');
+        for (let p in offerta.proprieta2){
+            let proprieta = offerta.proprieta2[p];
+            
+            let c = document.createElement('p');
+            c.innerHTML = proprieta;
+
+            prop.appendChild(c);
+        }
+
+        // soldi
+        let soldi = document.getElementById('view-offer-money-2');
+        soldi.innerHTML = '$' + offerta.soldi2;
+    }
+
+}
 
 
 class Gioco{
@@ -683,13 +855,20 @@ class Gioco{
         this.round = 0;
 
         // inizializzo il gioco
-        // 1. inizializzo playerdisplay
+        // 1. inizializzo il menu
         initChat()
 
         // 2. inizializzo il layout della finestra
         initMessageBox()
     }
-
-    // facciamo un turno del giocatore
+    
+    update(){
+        // aggiorno i soldi mostrati a video
+        for (p in giocatori){
+            let saldo = document.getElementById('saldo-giocatore-' + p);
+            if (p)
+                p.innerHTML = giocatori[p].saldo;
+        }
+    }
 }
 

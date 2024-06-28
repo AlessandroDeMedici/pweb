@@ -56,51 +56,48 @@
 
             <form id="form" style="display: none">
                 <fieldset>
-                    <button id="login-button" class="form-button" >Login</button>
-                    <button id="register-button" class="form-button" >Register</button>
-                    <button id="logout-button" class="form-button" >Logout</button>
+                    <button id="login-button" type="button" class="form-button">Login</button>
+                    <button id="register-button" type="button" class="form-button">Register</button>
+                    <button id="logout-button" type="button" class="form-button">Logout</button>
                 </fieldset>
             </form>
-
 
             <form id="login-form" style="display: none">
                 <fieldset>
                     <legend>Login</legend>
                     <p>
-                        <label for="username">Username</label>
-                        <input type="text" name="username" required/>
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" name="username" required/>
                     </p>
                     <p>
-                        <label for="password">Password</label>
-                        <input type="password" name="password" required />
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required />
                     </p>
                     <p class="submit">
                         <input id="confirm-login" type="submit" value="Login" class="form-button" />
                     </p>
-
                     <p id="errore-login" class="errore" hidden>errore-login</p>
                 </fieldset>
             </form>
-
 
             <form id="register-form" style="display: none">
                 <fieldset>
                     <legend>Register</legend>
                     <p>
-                        <label for="username">Username</label>
-                        <input type="text" name="username" required pattern="[a-zA-Z]+"/>
+                        <label for="register-username">Username</label>
+                        <input type="text" id="register-username" name="username" required pattern="[a-zA-Z]+"/>
                     </p>
                     <p>
-                        <label for="password">Password</label>
-                        <input type="password" name="password" required minlength="5"/>
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" name="password" required minlength="5"/>
                     </p>
                     <p>
-                        <label for="confirm">Confirm Password</label>
-                        <input type="password" name="confirm" required minlength="5"/>
+                        <label for="register-confirm">Confirm Password</label>
+                        <input type="password" id="register-confirm" name="confirm" required minlength="5"/>
                     </p>
                     <p>
-                        <label for="question">Domanda di recupero</label>
-                        <input type="text" list="choices" name="domanda" required/>
+                        <label for="register-question">Domanda di recupero</label>
+                        <input type="text" id="register-question" list="choices" name="domanda" required/>
                         <datalist id="choices">
                             <option value="Qual è il nome del tuo animale domestico?"></option>
                             <option value="Qual è il cognome di tua madre nubile?"></option>
@@ -109,12 +106,10 @@
                         </datalist>
                     </p>
                     <p>
-                        <label for="risposta">Risposta</label>
-                        <input type="text" name="risposta" required minlength="3"/>
+                        <label for="register-risposta">Risposta</label>
+                        <input type="text" id="register-risposta" name="risposta" required minlength="3"/>
                     </p>
-
                     <p id="errore-registrazione" class="errore" hidden>errore-registrazione</p>
-
                     <p class="submit">
                         <input id="confirm-register" type="submit" value="Register" class="form-button" />
                     </p>

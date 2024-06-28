@@ -61,7 +61,7 @@ class Casella{
             stringa += "Con 2 società $10*lancio\n";
             return stringa;
         }
-        else if (this.nome.includes('Via')){
+        else if (this.nome.includes('Via!')){
             return "Ogni volta che passi dal via ritira $200";
         }
         else if (this.nome.includes('In prigione!')){
@@ -211,6 +211,20 @@ class Casella{
         playerContainer.className = 'contenitore-giocatori';
         playerContainer.id = 'contenitore-giocatori-' + i;
         playerContainer.onclick = () => {
+
+            let a = document.getElementById('make-offer');
+            let b = document.getElementById('view-offer');
+            let c = document.getElementById('message-container');
+
+            if (a)
+                a.style.display = 'none';
+
+            if (b)
+                b.style.display = 'none';
+
+            if (c)
+                c.style.display = 'grid';
+
             Casella.messageBox.style.visibility = 'visible';
             Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
             Casella.titoloMessageBox.firstChild.nodeValue = this.nome;
