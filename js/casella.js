@@ -10,33 +10,69 @@
 // pedaggio     -> array con i costi dei pedaggi (in ordine) {proprieta, 1 casa, 2 case, 3 case, 4 case, albergo}
 // ipoteca      -> valore ipotecario
 // immagine     -> immagine della casella
+let tabellone;
+
 class Casella{
+
+    // contenitore delle proprieta
+    static property;
+    static messageBox;
+    static descrizioneMessageBox;
+
+    static init(property){
+        Casella.property = property;
+        [Casella.messageBox,Casella.descrizioneMessageBox,Casella.titoloMessageBox] = tabellone.getMessageBox();
+    }
+
     constructor(nome, descrizione = null, gruppo = null,colore = null, prezzo = null, pedaggio = null, ipoteca = null, immagine = null){
-        if (nome != 'probabilita' && nome != 'imprevisti' && nome != 'default'){
-            this.nome = nome;
-            this.descrizione = descrizione;
-            this.gruppo = gruppo;
-            this.colore = colore;
-            this.prezzo = prezzo;
-            this.pedaggio = pedaggio;
-            this.ipoteca = ipoteca;
-            this.immagine = immagine;
-            
-            // la proprieta e' inizialmente priva di case e di alberghi
-            this.casa = [];
-            this.albergo = null;
-           
-
-            this.casella = null;    // riferimento alla casella
-        }
-
-
-        // proprieta che una casella ha sempre
         this.nome = nome;
+        this.descrizione = descrizione;
+        this.gruppo = gruppo;
+        this.colore = colore;
+        this.prezzo = prezzo;
+        this.pedaggio = pedaggio;
+        this.ipoteca = ipoteca;
+        this.immagine = immagine;
+        
+        // la proprieta e' inizialmente priva di case e di alberghi
+        this.casa = [];
+        this.albergo = null;
+        this.casella = null;
     }
 
     // funzione che ritorna la stringa da inserire nella descrizione delle proprieta
     makeStringa(){
+        if (this.nome == 'probabilita')
+            return null
+        else if (this.nome == 'imprevisti')
+            return null
+        else if (this.nome.includes('Stazione')){
+            let stringa = "AFFITTO $" + this.pedaggio[0] + "\n";
+            stringa += 'Con 2 stazioni $' + this.pedaggio[1] + '\n';
+            stringa += 'Con 3 stazioni $' + this.pedaggio[2] + '\n';
+            stringa += 'Con 4 stazioni $' + this.pedaggio[3] + '\n';
+            return stringa;
+        }
+        else if (this.nome.includes('Tassa')){
+            return this.nome;
+        }
+        else if (this.nome.includes('Società')){
+            let stringa = "Con 1 società $2*lancio\n";
+            stringa += "Con 2 società $10*lancio\n";
+            return stringa;
+        }
+        else if (this.nome.includes('Via')){
+            return "Ogni volta che passi dal via ritira $200";
+        }
+        else if (this.nome.includes('In prigione!')){
+            return "Quando passi da questa casella vai in prigione senza passare dal via!";
+        }
+        else if (this.nome.includes('Prigione')){
+            return "Quando passi da questa casella non sei in prigione. Se invece sei finito in prigione, all'inizio del turno lancia i dadi, se fai doppio allora esci di prigione altrimenti salta il turno. Rimani in prigione per un massimo di 3 turni, se non fai doppio entro 3 turni paga $50. Puoi sempre pagare $50 all'inizio del turno per uscire di prigione"
+        }
+        else if (this.nome.includes('parcheggio gratuito')){
+            return "Riposati, parcheggio gratuito";
+        }
         let stringa = "AFFITTO $" + this.pedaggio[0] + '\n';
         stringa += "Con 1 casa $" + this.pedaggio[1] + '\n';
         for (let i = 2; i <= 4; i++){
@@ -46,7 +82,6 @@ class Casella{
         stringa += 'Valore ipotecario $' + this.ipoteca + '\n';
         stringa += "Le case costano $" + this.prezzo[1] + '\n';
         stringa += "L'albergo costa $" + this.prezzo[2] + '\n';
-
         return stringa;
     }
 
@@ -57,7 +92,7 @@ class Casella{
             return;
         }
 
-        property.removeChild(this.casella);
+        Casella.property.removeChild(this.casella);
         this.casella = null;
     }
 
@@ -93,7 +128,7 @@ class Casella{
             let dragDiv = e.target;
             e.preventDefault();
         
-            let parentRect = property.getBoundingClientRect();
+            let parentRect = Casella.property.getBoundingClientRect();
             // DEBUG
             //console.log('Il padre ha posizione: ' + parentRect.left + ' ' + parentRect.top);
         
@@ -101,8 +136,8 @@ class Casella{
             let y = e.clientY;
         
             // cerco se il puntatore si trova dentro una div
-            for (let c in property.children){
-                let div = property.children[c];
+            for (let c in Casella.property.children){
+                let div = Casella.property.children[c];
         
         
                 if (!div.getBoundingClientRect)
@@ -129,12 +164,12 @@ class Casella{
                             let next2 = dragDiv.nextSibling;
                             if (next1){
                                 // esiste una casella dopo
-                                property.insertBefore(dragDiv,next1);
+                                Casella.property.insertBefore(dragDiv,next1);
                             } else {
-                                property.appendChild(dragDiv);
+                                Casella.property.appendChild(dragDiv);
                             }
                             // adesso devo spostare il secondo
-                            property.insertBefore(div,next2);
+                            Casella.property.insertBefore(div,next2);
                         }
                         return;
                 }
@@ -167,17 +202,18 @@ class Casella{
         proprieta.appendChild(titolo);
         proprieta.appendChild(descrizione);
         casella.appendChild(proprieta);
-        property.appendChild(casella);
+        Casella.property.appendChild(casella);
     }
 
+    // funzione per inserire la proprieta nel tabellone
     inserisciProprieta(i){
         let playerContainer = document.createElement('div');
         playerContainer.className = 'contenitore-giocatori';
         playerContainer.id = 'contenitore-giocatori-' + i;
         playerContainer.onclick = () => {
-            messageBox.style.visibility = 'visible';
-            descrizioneMessageBox.firstChild.nodeValue = this.descrizione;
-            titoloMessageBox.firstChild.nodeValue = this.nome;
+            Casella.messageBox.style.visibility = 'visible';
+            Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
+            Casella.titoloMessageBox.firstChild.nodeValue = this.nome;
         }
 
         // ottengo un riferimento alla casella ed alla barra corrispondente
@@ -255,6 +291,8 @@ class Casella{
                 text.style.transform = 'rotate(180deg)';
                 casella.appendChild(text);
                 casella.appendChild(playerContainer);
+                text.style.height = '60px';
+                text.style.width = '40px';
             } else if (i > 10 && i < 20) {
                 barra.style.display = 'none';
                 casella.colSpan = 2;
@@ -264,6 +302,10 @@ class Casella{
                 casella.appendChild(playerContainer);
             } else if (i > 20 && i < 30) {
                 casella.style.display = 'none';
+                barra.id = casella.id;
+                casella.id = '';
+                text.style.width = '40px';
+                text.style.height = '60px';
                 barra.rowSpan = 2;
                 barra.appendChild(text);
                 barra.style.backgroundColor = '#bfdbae';
@@ -314,6 +356,23 @@ class Casella{
         return this;
     }
 
+    // funzione che stampa la descrizione
+    makeDescrizione(){
+        if (this.nome == 'probabilita')
+            return "Se passi da questa casella pesca una carta probabilità";
+        else if (this.nome == 'imprevisti')
+            return "Se passi da questa casella pesca una carta imprevisti";
+        else {
+            let stringa = this.makeStringa();
+            stringa = stringa.split('\n');
+            let temp = "";
+            for (let line in stringa){
+                temp += '<p>' + stringa[line] + '</p>';
+            }
+            return temp;
+        }
+    }
+
 
     // funzione che ritorna il numero di case sulla proprieta
     case(){
@@ -327,6 +386,78 @@ class Casella{
         else
             return 0;
     }
-    
 }
 
+
+// array delle caselle sul tabellone
+let scenario = []
+
+// funzione per inizializzare lo scenario di gioco
+function initTabellone(){
+    // prima di aggiungere le caselle devo inizializzare le caselle
+    Casella.init(property);
+
+    // inizializzazione scenario
+    scenario.push(new Casella('Via!','Ogni volta che passi dal via ritira $200 dalla banca'));
+    scenario.push(new Casella('Vicolo Corto',null,1,'brown',[60,50,50],[2,10,30,90,160,250],30));
+    scenario.push(new Casella('probabilita'));
+    scenario.push(new Casella('Vicolo Stretto',null,1,'brown',[60,50,50],[4,20,60,180,320,450],30));
+    scenario.push(new Casella('Tassa patrimoniale',null,null,null,null,[200],[100],'/media/patrimoniale.svg'));
+    scenario.push(new Casella('Stazione Sud',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
+    
+    scenario.push(new Casella('Bastioni Gran Sasso',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50));
+    scenario.push(new Casella('imprevisti'));
+    scenario.push(new Casella('Viale Monterosa',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50));
+    scenario.push(new Casella('Viale Vesuvio',null,2,'lightblue',[120,50,50],[8,40,100,300,450,600],60));
+    
+    scenario.push(new Casella('Prigione'));
+    scenario.push(new Casella('Via Accademia',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70));
+    scenario.push(new Casella('Società elettrica',null,10,null,[150],[4,10],75,'/media/lampadina.svg'));
+    scenario.push(new Casella('Corso Ateneo',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70));
+    scenario.push(new Casella('Piazza Università',null,3,'pink',[160,100,100],[12,60,180,500,700,900],80));
+    
+    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
+    scenario.push(new Casella('Via Verdi',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90));
+    scenario.push(new Casella('probabilita'));
+    scenario.push(new Casella('Corso Raffaello',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90));
+    scenario.push(new Casella('Piazza Dante',null,4,'orange',[200,100,100],[16,80,220,600,800,1000],100));
+
+    scenario.push(new Casella('parcheggio gratuito'));
+    scenario.push(new Casella('Via Marco Polo',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110));
+    scenario.push(new Casella('imprevisti'));
+    scenario.push(new Casella('Corso Magellano',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110));
+    scenario.push(new Casella('Largo Colombo',null,5,'red',[240,150,150],[20,100,300,750,925,1100],120));
+
+    scenario.push(new Casella('Stazione Nord',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
+    scenario.push(new Casella('Viale Costantino',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130));
+    scenario.push(new Casella('Viale Traiano',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130));
+    scenario.push(new Casella('Società acqua potabile',null,10,null,[150],[4,10],75,'/media/rubinetto.svg'));
+    scenario.push(new Casella('Piazza Giulio Cesare',null,6,'yellow',[280,150,150],[24,120,360,850,1025,1200],140));
+    
+    scenario.push(new Casella('In prigione!'));
+    scenario.push(new Casella('Via Roma',null,7,'green',[300,200,200],[26,130,390,900,1100,1275],150));
+    scenario.push(new Casella('Corso Impero',null,7,'green',[300,200,200],[26,130,390,900,1100,1275],150));
+    scenario.push(new Casella('probabilita'));
+    scenario.push(new Casella('Largo Augusto',null,7,'green',[320,200,200],[28,150,450,1000,1200,1400],160));
+
+    scenario.push(new Casella('Stazione Est',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
+    scenario.push(new Casella('imprevisti'));
+    scenario.push(new Casella('Viale dei Giardini',null,8,'blue',[350,200,200],[35,175,500,1100,1300,1500],175));
+    scenario.push(new Casella('Tassa di lusso',null,null,null,null,[100],[100],'/media/anello.svg'));
+    scenario.push(new Casella('Parco della Vittoria',null,8,'blue',[400,200,200],[50,100,200,600,1400,1700,2000],200));
+
+    for (let i in scenario){
+        scenario[i].inserisciProprieta(i);
+    }
+}
+
+
+
+function getCasella(nome){
+    // funzione che ritorna un riferimento alla casella soltanto dal nome
+    for (let p in scenario){
+        let casella = scenario[p];
+        if (casella.nome == nome)
+            return casella;
+    }
+}

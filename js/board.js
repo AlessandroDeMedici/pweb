@@ -1,235 +1,270 @@
 let boardDIM = 13;                  // dimensione complessiva del tabellone
-let elementi = boardDIM - 4;        // caselle interne al tabellone
-let centro;                         // centro interno al tabellone
-let messageBox;
-let descrizioneMessageBox;
-let titoloMessageBox;
 
 
-// funzione per stampare ed inizializzare gli id del tavolo da gioco
-function printBoard(){
+class Board{
 
-    // identificarore univoco della tabella
-    let id = 0;
+    static boardDIM = 13;
+    static tavole = 0;
+    static printed = 0;
 
-    let tbody = document.createElement('tbody');
+    constructor(board){
 
-    for (let i = 0; i < boardDIM; i++){
-        let tr = document.createElement('tr');
-        tr.id = 'riga-' + i;
-        tr.className = 'riga';
-        for (let j = 0; j < boardDIM; j++){
-            let td;
-            // ci sono dei casi particolari
-            // gli angoli
-            if ((i == 0 && j == 0) || (i == 0 && j == boardDIM - 2) || (i == boardDIM -2 && j == 0) || (i == boardDIM - 2 && j == boardDIM -2)){
+        if (Board.tavole > 0){
+            console.log("errore: non e' possibile creare un'ulteriore tabellone di gioco");
+            return;
+        }
+        Board.tavole++;
+
+        this.board = board;
+
+        // l'interfaccia fornita e' quella di un array di 40 caselle
+        // con la rispettiva barra
+        this.caselle = [];
+        this.barre = [];
+
+        // un box per i messaggi
+        this.messageBox = null;
+        this.descrizioneMessageBox = null;
+        this.titoloMessageBox = null;
+
+        // una casella centrale
+        this.centro = null;
+
+        // la prigione
+        this.prigione = null;
+
+        // probabilita e imprevisti
+        this.probabilita = null;
+        this.imprevisti = null;
+    }
+
+    getMessageBox(){
+        return [this.messageBox,this.descrizioneMessageBox,this.titoloMessageBox];
+    }
+
+    printBoard(){
+        // controllo che la printboard non sia gia avvenuta
+        if (Board.printed){
+            console.log("impossibile stampare: tabellone gia' presente");
+            return;
+        }
+        Board.printed = 1;
+    
+        // identificatore di riga
+        let id = 0;
+    
+        // stampo il corpo della tabella
+        let tbody = document.createElement('tbody');
+
+        // riempio le righe della tabella
+        for (let i = 0; i < boardDIM; i++){
+            let tr = document.createElement('tr');
+            tr.id = 'riga-' + i;
+            tr.className = 'riga';
+            for (let j = 0; j < boardDIM; j++){
+                let td;
+                // ci sono dei casi particolari:
+                // gli angoli
+                if ((i == 0 && j == 0) || (i == 0 && j == boardDIM - 2) || (i == boardDIM -2 && j == 0) || (i == boardDIM - 2 && j == boardDIM -2)){
+                    td = document.createElement('td');
+                    td.colSpan = 2;
+                    td.rowSpan = 2;
+                    td.id = 'casella-' + i + '-' + j;
+                    td.className = 'casella';
+                    tr.appendChild(td);
+                    continue;
+                } else if ((i < 2 && j < 2) || (i > boardDIM - 3 && j > boardDIM - 3) || (i > boardDIM - 3 && j < 2) || (i < 2 && j > boardDIM -3)){
+                    continue;
+                } else if (i == 2 && j == 2){
+                    // aggiunge il centro
+                    td = document.createElement('td');
+                    td.colSpan = 9;
+                    td.rowSpan = 9;
+                    td.id = 'centro';
+                    td.className = 'casella';
+                    tr.appendChild(td);
+                    this.centro = td;
+    
+                    // aggiunge una casella informativa
+                    let div = document.createElement('div');
+                    div.id = 'message-box';
+                    div.style.visibility = 'hidden';
+                    this.messageBox = div;
+                    let messageContainer = document.createElement('div');
+                    div.appendChild(messageContainer);
+                    messageContainer.id = 'message-container';
+                    
+                    let exit = document.createElement('button');
+                    exit.className = 'exit';
+                    exit.id = 'exit-message-box';
+                    this.messageBox.appendChild(exit);
+                    exit.appendChild(document.createTextNode('X'));
+                    exit.onclick = () => {
+                        this.messageBox.style.visibility = 'hidden';
+                    }
+                    
+                    let descrizione = document.createElement('div');
+                    descrizione.id = 'descrizione-message-box';
+                    descrizione.appendChild(document.createTextNode(''));
+                    this.descrizioneMessageBox = descrizione;
+                    messageContainer.appendChild(descrizione);
+                    
+                    let titolo = document.createElement('div');
+                    titolo.id = 'titolo-message-box';
+                    titolo.appendChild(document.createTextNode(''));
+                    this.titoloMessageBox = titolo;
+                    messageContainer.appendChild(titolo);
+                    
+                    // si chiude quando premi esc
+                    document.addEventListener('keydown', (e)=>{
+                        if (e.code == 'Escape'){
+                            this.messageBox.style.visibility = 'hidden';
+                        }
+                    });
+    
+                    td.appendChild(div);
+                    continue;
+                } else if (i >= 2 && i <= boardDIM - 3 && j >= 2 && j <= boardDIM - 3){
+                    continue;
+                }
                 td = document.createElement('td');
-                td.colSpan = 2;
-                td.rowSpan = 2;
                 td.id = 'casella-' + i + '-' + j;
                 td.className = 'casella';
                 tr.appendChild(td);
-                continue;
-            } else if ((i < 2 && j < 2) || (i > boardDIM - 3 && j > boardDIM - 3) || (i > boardDIM - 3 && j < 2) || (i < 2 && j > boardDIM -3)){
-                continue;
-            } else if (i == 2 && j == 2){
-                // aggiunge il centro
-                td = document.createElement('td');
-                td.colSpan = 9;
-                td.rowSpan = 9;
-                td.id = 'centro';
-                td.className = 'casella';
-                tr.appendChild(td);
-
-                // aggiunge una casella informativa
-                let div = document.createElement('div');
-                div.id = 'message-box';
-                messageBox = div;
-                messageBox.style.visibility = 'hidden';
-                
-                let exit = document.createElement('button');
-                exit.className = 'exit';
-                exit.id = 'exit-message-box';
-                messageBox.appendChild(exit);
-                exit.appendChild(document.createTextNode('X'));
-                exit.onclick = () => {
-                    messageBox.style.visibility = 'hidden';
-                }
-                
-                let descrizione = document.createElement('div');
-                descrizione.id = 'descrizione-message-box';
-                descrizione.appendChild(document.createTextNode(''));
-                descrizioneMessageBox = descrizione;
-                messageBox.appendChild(descrizione);
-                
-                let titolo = document.createElement('div');
-                titolo.id = 'titolo-message-box';
-                titolo.appendChild(document.createTextNode(''));
-                titoloMessageBox = titolo;
-                messageBox.appendChild(titolo);
-                
-                // si chiude quando premi esc
-                document.addEventListener('keydown', (e)=>{
-                    if (e.code == 'Escape'){
-                        messageBox.style.visibility = 'hidden';
-                    }
-                });
-
-                td.appendChild(div);
-                continue;
-            } else if (i >= 2 && i <= boardDIM - 3 && j >= 2 && j <= boardDIM - 3){
-                continue;
             }
-            td = document.createElement('td');
-            td.id = 'casella-' + i + '-' + j;
-            td.className = 'casella';
-            tr.appendChild(td);
+            tbody.appendChild(tr);
         }
-        tbody.appendChild(tr);
-    }
-    board.appendChild(tbody);
+        this.board.appendChild(tbody);
+    
+        
+    
+        // adesso invece sistemiamo gli id del tabellone
+        let barra;
+        let div = document.getElementById('casella-0-0');
+        // debug
+        //div.appendChild(document.createTextNode('0'));
+        div.id = 'casella-0';
+        this.caselle[0] = div;
+    
+        div = document.getElementById('casella-0-11');
+        //div.appendChild(document.createTextNode('10'));
+        div.id = 'casella-10';
+        let prigione = document.createElement('div');
+        prigione.id = 'prigione';
+        div.appendChild(prigione);
+        this.prigione = prigione;
+        this.caselle[10] = div;
 
     
-
-    // adesso invece sistemiamo gli id del tabellone
-    let barra;
-    let div = document.getElementById('casella-0-0');
-    // debug
-    //div.appendChild(document.createTextNode('0'));
-    div.id = 'casella-0';
-
-    div = document.getElementById('casella-0-11');
-    //div.appendChild(document.createTextNode('10'));
-    div.id = 'casella-10';
-    let prigione = document.createElement('div');
-    prigione.id = 'prigione';
-    div.appendChild(prigione);
-
-    div = document.getElementById('casella-11-0');
-    //div.appendChild(document.createTextNode('30'));
-    div.id = 'casella-30';
-
-    div = document.getElementById('casella-11-11');
-    //div.appendChild(document.createTextNode('20'));
-    div.id = 'casella-20';
-
-    let ii = 0;
-    let jj = 2;
-    id = 1;
-    for (let i = 0; i < elementi; i++){
-        // debug
-        //console.log('casella-' + ii + '-' + (jj + i) + ' / ' + id);
-
-
-        // sistemo indice di barra e casella
-        div = document.getElementById('casella-' + ii + '-' + (jj + i));
-        barra = document.getElementById('casella-' + (ii + 1) + '-' + (jj + i))
-        div.id = 'casella-' + id;
-        barra.id = 'barra-' + id;
-        barra.className = 'barra';
-
-        //debug
-        //div.appendChild(document.createTextNode(id));
-        
-        id++;
-    }
-
+        div = document.getElementById('casella-11-0');
+        //div.appendChild(document.createTextNode('30'));
+        div.id = 'casella-30';
+        this.caselle[30] = div;
     
-    ii = 2;
-    jj = boardDIM - 1;
-    id = 11;
-    for (let i = 0; i < elementi; i++){
-        // debug
-        //console.log('casella-' + ii + '-' + (jj + i) + ' / ' + id);
-
-
-
-        // sistemo indice di barra e casella
-        div = document.getElementById('casella-' + (ii + i) + '-' + (jj));
-        barra = document.getElementById('casella-' + (ii + i) + '-' + (jj - 1))
-        div.id = 'casella-' + id;
-        barra.id = 'barra-' + id;
-        barra.className = 'barra';
-
-        //debug
-        //div.appendChild(document.createTextNode(id));
-        id++;
-    }
-
-    ii = boardDIM - 1;
-    jj = boardDIM - 3;
-    id = 21;
-    for (let i = 0; i < elementi; i++){
-        // debug
-        //console.log('casella-' + ii + '-' + (jj + i) + ' / ' + id);
-
-
-        // sistemo indice di barra e casella
-        div = document.getElementById('casella-' + (ii) + '-' + (jj - i));
-        barra = document.getElementById('casella-' + (ii - 1) + '-' + (jj - i))
-        div.id = 'casella-' + id;
-        barra.id = 'barra-' + id;
-        barra.className = 'barra';
-
-        //debug
-        //div.appendChild(document.createTextNode(id));
-
-        id++;
-    }
-
-    ii = boardDIM - 3;
-    jj = 0;
-    id = 31;
-    for (let i = 0; i < elementi; i++){
-        // debug
-        //console.log('casella-' + ii + '-' + (jj + i) + ' / ' + id);
-
-        // sistemo indice di barra e casella
-        div = document.getElementById('casella-' + (ii - i) + '-' + (jj));
-        barra = document.getElementById('casella-' + (ii - i) + '-' + (jj + 1))
-        div.id = 'casella-' + id;
-        barra.id = 'barra-' + id;
-        barra.className = 'barra';
-
-        //debug
-        //div.appendChild(document.createTextNode(id));
+        div = document.getElementById('casella-11-11');
+        //div.appendChild(document.createTextNode('20'));
+        div.id = 'casella-20';
+        this.caselle[20] = div;
+    
+        let ii = 0;
+        let jj = 2;
+        id = 1;
+        for (let i = 0; i < 9; i++){
+            // sistemo indice di barra e casella
+            div = document.getElementById('casella-' + ii + '-' + (jj + i));
+            barra = document.getElementById('casella-' + (ii + 1) + '-' + (jj + i))
+            div.id = 'casella-' + id;
+            barra.id = 'barra-' + id;
+            barra.className = 'barra';
+            this.caselle[id] = div;
+            this.barre[id] = barra;
+            
+            id++;
+        }
+    
         
-        id++;
-    }
-
-
-
-    // spazio per imprevisti e probabilita
-    div = document.getElementById('centro');
-    let probabilita = document.createElement('div');
-    probabilita.appendChild(document.createTextNode('?'));
-    let imprevisti = document.createElement('div');
-    imprevisti.appendChild(document.createTextNode('!'));
-    probabilita.id = 'probabilita';
-    imprevisti.id = 'imprevisti';
-    div.appendChild(imprevisti);
-    div.appendChild(probabilita);
-
-    // inserisco le immagini nei 4 angoli
-    inserisciImmagineAngolo(0,'/media/via.svg',-45);
-    inserisciImmagineAngolo(10,'/media/prigione.svg',180);
-    inserisciImmagineAngolo(20,'/media/parcheggio_libero.svg',-45);
-    inserisciImmagineAngolo(30,'/media/vai_in_prigione.svg',45);
-
-}
-
-// funzione per inserire le immagini negli angoli
-function inserisciImmagineAngolo(casella,immagine,angolo = 0){
-    let div = document.getElementById('casella-' + casella);
-    let img = document.createElement('img');
-    img.src = immagine;
-    img.style.transform = 'rotate(' + angolo + 'deg)';
-    div.appendChild(img);
-}
-
-function rimuoviImmagine(casella){
-    let div = document.getElementById('casella-' + casella);
-    while (div.firstChild){
-        div.removeChild(div.firstChild);
+        ii = 2;
+        jj = boardDIM - 1;
+        id = 11;
+        for (let i = 0; i < 9; i++){
+            // debug
+            //console.log('casella-' + ii + '-' + (jj + i) + ' / ' + id);
+    
+    
+    
+            // sistemo indice di barra e casella
+            div = document.getElementById('casella-' + (ii + i) + '-' + (jj));
+            barra = document.getElementById('casella-' + (ii + i) + '-' + (jj - 1))
+            div.id = 'casella-' + id;
+            barra.id = 'barra-' + id;
+            barra.className = 'barra';
+            this.caselle[id] = div;
+            this.barre[id] = barra;
+    
+            //debug
+            //div.appendChild(document.createTextNode(id));
+            id++;
+        }
+    
+        ii = boardDIM - 1;
+        jj = boardDIM - 3;
+        id = 21;
+        for (let i = 0; i < 9; i++){
+            // debug
+            //console.log('casella-' + ii + '-' + (jj + i) + ' / ' + id);
+    
+    
+            // sistemo indice di barra e casella
+            div = document.getElementById('casella-' + (ii) + '-' + (jj - i));
+            barra = document.getElementById('casella-' + (ii - 1) + '-' + (jj - i))
+            div.id = 'casella-' + id;
+            barra.id = 'barra-' + id;
+            barra.className = 'barra';
+            this.caselle[id] = div;
+            this.barre[id] = barra;
+    
+            //debug
+            //div.appendChild(document.createTextNode(id));
+    
+            id++;
+        }
+    
+        ii = boardDIM - 3;
+        jj = 0;
+        id = 31;
+        for (let i = 0; i < 9; i++){
+    
+            // sistemo indice di barra e casella
+            div = document.getElementById('casella-' + (ii - i) + '-' + (jj));
+            barra = document.getElementById('casella-' + (ii - i) + '-' + (jj + 1))
+            div.id = 'casella-' + id;
+            barra.id = 'barra-' + id;
+            barra.className = 'barra';
+            this.caselle[id] = div;
+            this.barre[id] = barra;
+            
+            id++;
+        }
+    
+    
+    
+        // spazio per imprevisti e probabilita
+        div = document.getElementById('centro');
+        let probabilita = document.createElement('div');
+        probabilita.appendChild(document.createTextNode('?'));
+        let imprevisti = document.createElement('div');
+        imprevisti.appendChild(document.createTextNode('!'));
+        probabilita.id = 'probabilita';
+        imprevisti.id = 'imprevisti';
+        div.appendChild(imprevisti);
+        div.appendChild(probabilita);
+        this.imprevisti = imprevisti;
+        this.probabilita = probabilita;
+    
+        // inserisco le immagini nei 4 angoli
+        inserisciImmagineAngolo(0,'/media/via.svg',-45);
+        inserisciImmagineAngolo(10,'/media/prigione.svg',180);
+        inserisciImmagineAngolo(20,'/media/parcheggio_libero.svg',-45);
+        inserisciImmagineAngolo(30,'/media/vai_in_prigione.svg',45);
     }
 }

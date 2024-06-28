@@ -108,7 +108,7 @@
         $account = $statement->fetch();
         if (!strcmp(md5($password),$account['password'])){
 
-            $_SESSION['login'] = true;
+            $_SESSION['logged'] = true;
             $_SESSION['username'] = $username;
 
             $risultato = [

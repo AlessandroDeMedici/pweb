@@ -1,6 +1,7 @@
 let firstDice;
 let secondDice;
 let diceContainer;
+let roll;
 
 
 // funzione che aggiunge i dadi allo schermo schermo
@@ -29,6 +30,14 @@ function printDadi(){
     secondDice.addEventListener('animationend',() => {
         secondDice.style.animation = '';
     });
+
+    roll = document.createElement('button');
+    roll.id = 'roll';
+    let text = document.createTextNode('Lancia i dadi!');
+    roll.appendChild(text);
+    roll.addEventListener('click',randomDice);
+    centro.appendChild(roll);
+    roll.disabled = 0;
 
 }
 

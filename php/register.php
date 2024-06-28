@@ -80,7 +80,7 @@ $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
         $statement->execute();
 
         // Login
-        $_SESSION['login'] = true;
+        $_SESSION['logged'] = true;
         $_SESSION['username'] = $input['username'];
 
         $result = [

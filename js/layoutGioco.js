@@ -10,63 +10,92 @@ let property;
 let menuHeader;
 let menu;
 
+// display delle offerte e della lista dei giocatori
+let playerDisplay;
+let offerDisplay;
+
 // messaggio informativo
 let messaggio;
 
 // menu di gioco
 let chat;
 let bottone;
-let roll;
 
+// dimensione troppo piccola della finestra non si puo' continuare a giocare
+window.onresize = resize;
 
 // handler per gestire finestre troppo piccole per poter giocare
-window.onresize = () =>{
+function resize(e){
+    e.preventDefault();
+    let gameContainer = document.getElementById('game-container')
     let altezza = window.innerHeight;
     let larghezza = window.innerWidth;
+    let messaggio = document.getElementById('messaggio-informativo')
     if (altezza < 800 && larghezza < 800){
         gameContainer.style.filter = 'blur(8px)';
         messaggio.style.visibility = 'visible';
+        window.onclick = (e) => {
+            e.preventDefault();
+        }
     } else {
         gameContainer.style.filter = 'none';
         messaggio.style.visibility = 'hidden';
+        window.onclick = null;
     }
 }
 
-function initMenu(){
-    chat = document.createElement('div');
+
+// funzione per inizializzare il menu
+function initMenu(menu){
+    let chat = document.createElement('div');
     chat.id = 'chat';
     chat.className = 'element';
     menu.appendChild(chat);
 
-    // bottone per lanciare i dadi
-    roll = document.createElement('button');
-    roll.id = 'roll';
-    roll.className = 'bottone element';
-    let text = document.createTextNode('Lancia i dadi!');
-    roll.appendChild(text);
-    roll.addEventListener('click',randomDice);              // devo aggiungere dopo l'handler
-    menu.appendChild(roll);
+    // menu interno all'elemento chat
+
+    // lista dei giocatori
+    playerDisplay = document.createElement('div');
+    playerDisplay.id = 'player-display';
+
+    // lista delle offerte
+    offerDisplay = document.createElement('div');
+    offerDisplay.id = 'offer-display';
+
+    chat.appendChild(playerDisplay);
+    chat.appendChild(offerDisplay);
 
     // bottone laterale
-    bottone = document.createElement('button');
-    bottone.id = 'tasto-funzione';
+    let bottone = document.createElement('button');
+    bottone.id = 'gestisci-case';
     bottone.className = 'bottone element';
     menu.appendChild(bottone);
+    bottone.innerHTML = 'Gestisci le tue case';
+    bottone.disabled = 1;
+
+    // bottone laterale
+    let bottone1 = document.createElement('button');
+    bottone1.id = 'nuova-offerta';
+    bottone1.className = 'bottone element';
+    menu.appendChild(bottone1);
+    bottone1.innerHTML = 'Fai un\'offerta';
+    bottone1.disabled = 1;
 }
 
 
-function initLayout(){
-    // layout principale
+// funzione per inizializzare il layout principale
+function initLayout(gameContainer){
 
-    boardContainer = document.createElement('div');
+    // layout principale
+    let boardContainer = document.createElement('div');
     boardContainer.id = 'board-container';
     boardContainer.className = 'sub-container';
 
-    propertyContainer = document.createElement('div');
+    let propertyContainer = document.createElement('div');
     propertyContainer.id = 'property-container';
     propertyContainer.className = 'sub-container';
 
-    menuContainer = document.createElement('div');
+    let menuContainer = document.createElement('div');
     menuContainer.id = 'menu-container';
     menuContainer.className = 'sub-container';
     
@@ -76,10 +105,10 @@ function initLayout(){
 
     // layout singole colonne
     //board
-    board = document.createElement('div');
+    let board = document.createElement('div');
     board.id = 'board';
     board.className = 'element';
-    boardHeader = document.createElement('div');
+    let boardHeader = document.createElement('div');
     boardHeader.id = 'board-header';
     boardHeader.className = 'header';
     let img = document.createElement('img');
@@ -91,10 +120,10 @@ function initLayout(){
     boardContainer.appendChild(board);
 
     //menu
-    menu = document.createElement('div');
+    let menu = document.createElement('div');
     menu.id = 'menu';
     menu.className = 'sub-sub-container';
-    menuHeader = document.createElement('div');
+    let menuHeader = document.createElement('div');
     menuHeader.id = 'menu-header';
     menuHeader.className = 'header';
     img = document.createElement('img');
@@ -109,7 +138,7 @@ function initLayout(){
     property = document.createElement('div');
     property.id = 'property';
     property.className = 'element sub-sub-container';
-    propertyHeader = document.createElement('div');
+    let propertyHeader = document.createElement('div');
     propertyHeader.id = 'property-header';
     propertyHeader.className = 'header';
     img = document.createElement('img');
@@ -128,5 +157,9 @@ function initLayout(){
     document.body.appendChild(messaggio);
 
     // menu laterale
-    initMenu();
+    initMenu(menu);
+
+    return board;
 }
+
+

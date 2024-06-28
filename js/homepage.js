@@ -1,22 +1,19 @@
-let homeContainer;
-let mainLogo;
-let scritta;
-let singlePlayer;
-let multiPlayer;
-let account;
+let logged = 0;
+let username = '';
 let loginForm;
 let registerForm;
 let form;
-let logoutButton;
+let mainLogo;
+let singlePlayer;
+let multiPlayer;
+let homeConatiner;
 let loginButton;
 let registerButton;
-let confirmLogin;
-let confirmRegister;
-let logged = 0;
-let username = '';
+let logoutButton;
 let erroreLogin;
 let erroreRegistrazione;
-
+let confirmLogin;
+let confirmRegister;
 
 let frasi = [
             "ingegneria deve essere difficile!","Oggi sciopero dei treni!",
@@ -26,78 +23,58 @@ let frasi = [
         ];
 
 function printHome(){
-    // devo creare la homepage
-    homeContainer = document.getElementById('home-container');
 
-    // creo l'immagine principale con la scritta
-    mainLogo = document.createElement('img');
-    mainLogo.id = 'main-logo';
-    mainLogo.src = '/media/logo.svg';
-    homeContainer.appendChild(mainLogo);
+    // inizializzo le variabili
+    homeContainer = document.getElementById('home-container');
+    loginForm = document.getElementById('login-form');
+    registerForm = document.getElementById('register-form');
+    form = document.getElementById('form');
+    loginButton = document.getElementById('login-button');
+    registerButton = document.getElementById('register-button');
+    logoutButton = document.getElementById('logout-button');
+    erroreLogin = document.getElementById('errore-login');
+    erroreRegistrazione = document.getElementById('errore-registrazione');
+    confirmLogin = document.getElementById('confirm-login')
+    confirmRegister = document.getElementById('confirm-register')
 
     // scritta che cambia contenuto ogni minuto
-    scritta = document.createElement('div');
-    scritta.id = 'scritta-home'
+    let scritta = document.getElementById('scritta-home')
     scritta.appendChild(document.createTextNode('Benvenuto su MonopolING'));
     setInterval(()=>{
         scritta.firstChild.nodeValue = frasi[Math.floor(Math.random() * frasi.length)];
     },10000);
-    homeContainer.appendChild(scritta);
 
-    
     // creo l'icona dell'account
-    account = document.getElementById('account');
+    let account = document.getElementById('account');
     account.onclick = showForm;
-    
-    // inizializzo i form
-    form = document.getElementById('form');
-    form.className = 'form';
-    loginForm = document.getElementById('login-form');
-    loginForm.className = 'form';
-    registerForm = document.getElementById('register-form');
-    registerForm.className = 'form';
-    loginButton = document.getElementById('login-button');
-    registerButton = document.getElementById('register-button');
-    loginButton.onclick = showLogin;
-    registerButton.onclick = showRegister;
-    logoutButton = document.getElementById('logout-button');
-    erroreLogin = document.getElementById('errore-login');
-    erroreLogin.appendChild(document.createTextNode(''));
-    erroreRegistrazione = document.getElementById('errore-registrazione');
-    erroreRegistrazione.appendChild(document.createTextNode(''));
 
     // devo inizializzare il form se l'utente ha gia fatto login oppure no
-    if (account.firstChild.nodeValue == '?'){
+    if (account.innerHTML == '?'){
         // utente non logged
+        logged = 0;
         logoutButton.style.display = 'none';
     } else {
         // utente logged
+        logged = 1;
         loginButton.style.display = 'none';
         registerButton.style.display = 'none';
     }
-
-
-    confirmLogin = document.getElementById('confirm-login');
-    confirmRegister = document.getElementById('confirm-register');
-    loginForm.onsubmit = login;
-    registerForm.onsubmit = register;
-    logoutButton.onclick = logout;
     
-    
-    // creo i due bottoni
-    singlePlayer = document.createElement('button');
-    singlePlayer.id = 'single-player-button';
-    singlePlayer.className = 'homepage-button';
-    singlePlayer.appendChild(document.createTextNode('Nuova partita'));
+    // inizializzo i bottoni
+    singlePlayer = document.getElementById('single-player-button');
     singlePlayer.onclick = logged ? showGame : avviso;
     
-    multiPlayer = document.createElement('button');
-    multiPlayer.id = 'multi-player-button';
-    multiPlayer.className = 'homepage-button';
-    multiPlayer.appendChild(document.createTextNode('Continua'));
+    multiPlayer = document.getElementById('multi-player-button')
     multiPlayer.onclick = logged ? showGame : avviso;
-    homeContainer.appendChild(singlePlayer);
-    homeContainer.appendChild(multiPlayer);
+
+    loginButton.onclick = showLogin;
+    registerButton.onclick = showRegister;
+
+    confirmLogin.onclick = login;
+    confirmRegister.onclick = register;
+    logoutButton.onclick = logout;
+
+    mainLogo = document.getElementById('main-logo')
 }
 
 // funzione per mostrare il form
@@ -135,9 +112,11 @@ function showRegister(e){
     }
 }
 
-// Login Handler
+// handler login
 function login(e) {
     e.preventDefault();
+
+    message = ''
 
     const data = new FormData(loginForm);
     let array = {};
@@ -154,16 +133,14 @@ function login(e) {
     })
     .then(result => result.json())
     .then(data => {
-        console.log(data);
         success(data);
     })
     .catch (error => {
-        console.log(error);
-        console.log('Errore durante la comunizazione con il server');
+        console.log("errore in fase di login");
     });
 }
 
-// Register Handler
+// handler register
 function register(event) {
     event.preventDefault();
 
@@ -189,7 +166,6 @@ function register(event) {
     })
     .then(result => result.json())
     .then(data => {
-        console.log(data);
         success(data,true);
     })
     .catch (error => {
@@ -198,11 +174,14 @@ function register(event) {
     });
 }
 
+// Logout Handler
 function logout(e){
     if (e)
         e.preventDefault();
 
-    account.firstChild.nodeValue = '?';
+    account = document.getElementById('account')
+
+    account.innerHTML = '?';
     account.style.backgroundColor = '';
 
     logoutButton.style.display = 'none';
@@ -215,15 +194,7 @@ function logout(e){
     array = {'username':username};
 
     fetch('/php/logout.php',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(array)
-    })
-    .then(result => result.json())
-    .then(data => {
-        console.log(data);
+        method: 'POST'
     })
     .catch(error => {
         console.log('errore in fase di logout');
@@ -238,6 +209,7 @@ function avviso(){
 
 // funzione lanciata dai bottoni dopo il login
 function showGame(){
+    let gameContainer = document.getElementById('game-container')
     gameContainer.style.display = 'flex';
     gameContainer.scrollIntoView({behavior: "smooth"});
     setTimeout(()=>{
@@ -245,7 +217,7 @@ function showGame(){
     },1000);
 }
 
-// funzione lanciata in caso di login avvenuto con successo
+// funzione lanciata dopo aver ricevuto la risposta php
 function success(data, register = false){
 
     let errore;
@@ -256,12 +228,13 @@ function success(data, register = false){
     else
         errore = erroreLogin;
 
-    if (data['logged'] == false){
+    if (!data['logged']){
+        console.log(data)
         let string = new String(data['message']);
         if (string.includes('SQLSTATE[23000]'))
             data['message'] = 'Username gia in uso...';
         errore.firstChild.nodeValue = data['message'];
-        errore.hidden = false;
+        errore.hidden = 0;
         return;
     }
 

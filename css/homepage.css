@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
 @font-face {
     font-family: 'Minecraft-8-bit';
     src: url('/fonts/MinecraftRegular-Bmg3.otf') format('opentype');
@@ -10,9 +12,6 @@
         font-size: 25px;
     }
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
-
 
 #home-container{
     width: 100%;
@@ -99,7 +98,7 @@
 }
 
 
-.form{
+#form, #register-form, #login-form {
     height: fit-content;
     width: 230px;
     z-index: 1;
@@ -164,4 +163,8 @@ body {
 .container {
     display: flex;
     justify-content: center;
+}
+
+input:invalid {
+    background-color: darksalmon;
 }
