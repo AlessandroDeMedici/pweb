@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     giocatori.push(new Giocatore(npc[2]));
     giocatori.push(new Giocatore(npc[3]));
 
+    
+
     // viene fatto partire il gioco
     let game = new Gioco();
+    game.start();
 })

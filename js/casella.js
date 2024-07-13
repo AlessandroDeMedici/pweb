@@ -24,7 +24,7 @@ class Casella{
         [Casella.messageBox,Casella.descrizioneMessageBox,Casella.titoloMessageBox] = tabellone.getMessageBox();
     }
 
-    constructor(nome, descrizione = null, gruppo = null,colore = null, prezzo = null, pedaggio = null, ipoteca = null, immagine = null){
+    constructor(nome, descrizione = null, gruppo = null,colore = null, prezzo = null, pedaggio = null, ipoteca = null, immagine = null, acquistabile = 0){
         this.nome = nome;
         this.descrizione = descrizione;
         this.gruppo = gruppo;
@@ -33,11 +33,13 @@ class Casella{
         this.pedaggio = pedaggio;
         this.ipoteca = ipoteca;
         this.immagine = immagine;
+        this.acquistabie = acquistabile;
         
         // la proprieta e' inizialmente priva di case e di alberghi
-        this.casa = [];
-        this.albergo = null;
+        this.case = 0;
+        this.albergo = 0;
         this.casella = null;
+        this.owner = null;
     }
 
     // funzione che ritorna la stringa da inserire nella descrizione delle proprieta
@@ -205,29 +207,168 @@ class Casella{
         Casella.property.appendChild(casella);
     }
 
+    
+
+    // funzione che stampa la descrizione
+    makeDescrizione(){
+        if (this.nome == 'probabilita')
+            return "Se passi da questa casella pesca una carta probabilità";
+        else if (this.nome == 'imprevisti')
+            return "Se passi da questa casella pesca una carta imprevisti";
+        else {
+            let stringa = this.makeStringa();
+            stringa = stringa.split('\n');
+            let temp = "";
+            for (let line in stringa){
+                temp += '<p>' + stringa[line] + '</p>';
+            }
+            return temp;
+        }
+    }
+
+
+    // funzione che ritorna il numero di case sulla proprieta
+    case(){
+        return this.case.length;
+    }
+
+    // funzione che ritorna l'albergo se presente
+    albergo(){
+        if (albergo)
+            return 1;
+        else
+            return 0;
+    }
+
+    
+
+    // funzione chiamata per stampare a video le case
+    stampaCase(){
+        const houseContainer = document.getElementById('house-container');
+
+        // pulisco il container
+        houseContainer.innerHTML = '';
+
+
+        // aggiungo le case o l'albergo
+        if (this.case){
+            for (let i = 0; i < this.case; i++){
+                let img = document.createElement('img');
+                img.className = 'casa';
+                img.src = '/media/casa.svg';
+                houseContainer.appendChild(img);
+            }
+        }
+
+        if (this.albergo){
+            let img = document.createElement('img');
+            img.className = 'casa';
+            img.src = 'media/albergo.svg';
+            houseContainer.appendChild(img);
+        }
+    }
+
+    // funzione per stampare su owner l'owner
+    stampaOwner(){
+        // pulisco il 
+        const owner = document.getElementById('owner');
+        owner.innerHTML = '';
+
+        if (this.owner){
+            owner.innerHTML = 'owner: ' + this.owner;
+        }
+    }
+
+    // funzione per mostrare la message box quando clicchiamo sopra una casella
+    mostraMessageBox(){
+        let a = document.getElementById('make-offer');
+        let b = document.getElementById('view-offer');
+        let c = document.getElementById('message-container');
+
+        if (a)
+            a.style.display = 'none';
+
+        if (b)
+            b.style.display = 'none';
+
+        if (c)
+            c.style.display = 'grid';
+
+        Casella.messageBox.style.visibility = 'visible';
+        Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
+        Casella.titoloMessageBox.firstChild.nodeValue = this.nome;
+
+        const vendi = document.getElementById('vendi');
+        const compraCasa = document.getElementById('compra-casa');
+        const vendiCasa = document.getElementById('vendi-casa');
+        const compra = document.getElementById('compra');
+
+        vendi.style.display = 'block';
+        compraCasa.style.display = 'block';
+        vendiCasa.style.display = 'block';
+        compra.style.display = 'none';
+
+
+        this.stampaOwner();
+        this.stampaCase();
+
+        // preparo i bottoni
+        compra.dataset.nome = this.nome;
+        vendi.dataset.nome = this.nome;
+        compraCasa.dataset.nome = this.nome;
+        vendiCasa.dataset.nome = this.nome;
+    }
+
+
+
+    // funzione per mostrare la casella per acquistarla
+    mostraAcquisto(){
+        let a = document.getElementById('make-offer');
+        let b = document.getElementById('view-offer');
+        let c = document.getElementById('message-container');
+
+        if (a)
+            a.style.display = 'none';
+
+        if (b)
+            b.style.display = 'none';
+
+        if (c)
+            c.style.display = 'grid';
+
+        Casella.messageBox.style.visibility = 'visible';
+        Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
+        Casella.titoloMessageBox.innerHTML = this.nome;
+
+        const vendi = document.getElementById('vendi');
+        const compraCasa = document.getElementById('compra-casa');
+        const vendiCasa = document.getElementById('vendi-casa');
+        const compra = document.getElementById('compra');
+
+        vendi.style.display = 'none';
+        compraCasa.style.display = 'none';
+        vendiCasa.style.display = 'none';
+        compra.style.display = '';
+
+        // preparo i bottoni
+        compra.dataset.nome = this.nome;
+        vendi.dataset.nome = this.nome;
+        compraCasa.dataset.nome = this.nome;
+        vendiCasa.dataset.nome = this.nome;
+
+    }
+
+
     // funzione per inserire la proprieta nel tabellone
     inserisciProprieta(i){
         let playerContainer = document.createElement('div');
         playerContainer.className = 'contenitore-giocatori';
         playerContainer.id = 'contenitore-giocatori-' + i;
-        playerContainer.onclick = () => {
+        playerContainer.onclick = (e) => {
+            e.preventDefault();
 
-            let a = document.getElementById('make-offer');
-            let b = document.getElementById('view-offer');
-            let c = document.getElementById('message-container');
-
-            if (a)
-                a.style.display = 'none';
-
-            if (b)
-                b.style.display = 'none';
-
-            if (c)
-                c.style.display = 'grid';
-
-            Casella.messageBox.style.visibility = 'visible';
-            Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
-            Casella.titoloMessageBox.firstChild.nodeValue = this.nome;
+            // devo stampare a video la casella;
+            this.mostraMessageBox();
         }
 
         // ottengo un riferimento alla casella ed alla barra corrispondente
@@ -369,37 +510,6 @@ class Casella{
         }
         return this;
     }
-
-    // funzione che stampa la descrizione
-    makeDescrizione(){
-        if (this.nome == 'probabilita')
-            return "Se passi da questa casella pesca una carta probabilità";
-        else if (this.nome == 'imprevisti')
-            return "Se passi da questa casella pesca una carta imprevisti";
-        else {
-            let stringa = this.makeStringa();
-            stringa = stringa.split('\n');
-            let temp = "";
-            for (let line in stringa){
-                temp += '<p>' + stringa[line] + '</p>';
-            }
-            return temp;
-        }
-    }
-
-
-    // funzione che ritorna il numero di case sulla proprieta
-    case(){
-        return this.case.length;
-    }
-
-    // funzione che ritorna l'albergo se presente
-    albergo(){
-        if (albergo)
-            return 1;
-        else
-            return 0;
-    }
 }
 
 
@@ -413,52 +523,52 @@ function initTabellone(){
 
     // inizializzazione scenario
     scenario.push(new Casella('Via!','Ogni volta che passi dal via ritira $200 dalla banca'));
-    scenario.push(new Casella('Vicolo Corto',null,1,'brown',[60,50,50],[2,10,30,90,160,250],30));
+    scenario.push(new Casella('Vicolo Corto',null,1,'brown',[60,50,50],[2,10,30,90,160,250],30,null,1));
     scenario.push(new Casella('probabilita'));
-    scenario.push(new Casella('Vicolo Stretto',null,1,'brown',[60,50,50],[4,20,60,180,320,450],30));
+    scenario.push(new Casella('Vicolo Stretto',null,1,'brown',[60,50,50],[4,20,60,180,320,450],30,null,1));
     scenario.push(new Casella('Tassa patrimoniale',null,null,null,null,[200],[100],'/media/patrimoniale.svg'));
-    scenario.push(new Casella('Stazione Sud',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
+    scenario.push(new Casella('Stazione Sud',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
     
-    scenario.push(new Casella('Bastioni Gran Sasso',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50));
+    scenario.push(new Casella('Bastioni Gran Sasso',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50,null,1));
     scenario.push(new Casella('imprevisti'));
-    scenario.push(new Casella('Viale Monterosa',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50));
-    scenario.push(new Casella('Viale Vesuvio',null,2,'lightblue',[120,50,50],[8,40,100,300,450,600],60));
+    scenario.push(new Casella('Viale Monterosa',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50,null,1));
+    scenario.push(new Casella('Viale Vesuvio',null,2,'lightblue',[120,50,50],[8,40,100,300,450,600],60,null,1));
     
     scenario.push(new Casella('Prigione'));
-    scenario.push(new Casella('Via Accademia',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70));
-    scenario.push(new Casella('Società elettrica',null,10,null,[150],[4,10],75,'/media/lampadina.svg'));
-    scenario.push(new Casella('Corso Ateneo',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70));
-    scenario.push(new Casella('Piazza Università',null,3,'pink',[160,100,100],[12,60,180,500,700,900],80));
+    scenario.push(new Casella('Via Accademia',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));
+    scenario.push(new Casella('Società elettrica',null,10,null,[150],[4,10],75,'/media/lampadina.svg',1));
+    scenario.push(new Casella('Corso Ateneo',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));
+    scenario.push(new Casella('Piazza Università',null,3,'pink',[160,100,100],[12,60,180,500,700,900],80,null,1));
     
-    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
-    scenario.push(new Casella('Via Verdi',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90));
+    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',null,1));
+    scenario.push(new Casella('Via Verdi',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90,null,1));
     scenario.push(new Casella('probabilita'));
-    scenario.push(new Casella('Corso Raffaello',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90));
-    scenario.push(new Casella('Piazza Dante',null,4,'orange',[200,100,100],[16,80,220,600,800,1000],100));
+    scenario.push(new Casella('Corso Raffaello',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90,null,1));
+    scenario.push(new Casella('Piazza Dante',null,4,'orange',[200,100,100],[16,80,220,600,800,1000],100,null,1));
 
     scenario.push(new Casella('parcheggio gratuito'));
-    scenario.push(new Casella('Via Marco Polo',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110));
+    scenario.push(new Casella('Via Marco Polo',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110,null,1));
     scenario.push(new Casella('imprevisti'));
-    scenario.push(new Casella('Corso Magellano',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110));
-    scenario.push(new Casella('Largo Colombo',null,5,'red',[240,150,150],[20,100,300,750,925,1100],120));
+    scenario.push(new Casella('Corso Magellano',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110,null,1));
+    scenario.push(new Casella('Largo Colombo',null,5,'red',[240,150,150],[20,100,300,750,925,1100],120,null,1));
 
-    scenario.push(new Casella('Stazione Nord',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
-    scenario.push(new Casella('Viale Costantino',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130));
-    scenario.push(new Casella('Viale Traiano',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130));
-    scenario.push(new Casella('Società acqua potabile',null,10,null,[150],[4,10],75,'/media/rubinetto.svg'));
-    scenario.push(new Casella('Piazza Giulio Cesare',null,6,'yellow',[280,150,150],[24,120,360,850,1025,1200],140));
+    scenario.push(new Casella('Stazione Nord',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
+    scenario.push(new Casella('Viale Costantino',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130,null,1));
+    scenario.push(new Casella('Viale Traiano',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130,null,1));
+    scenario.push(new Casella('Società acqua potabile',null,10,null,[150],[4,10],75,'/media/rubinetto.svg',1));
+    scenario.push(new Casella('Piazza Giulio Cesare',null,6,'yellow',[280,150,150],[24,120,360,850,1025,1200],140,null,1));
     
     scenario.push(new Casella('In prigione!'));
-    scenario.push(new Casella('Via Roma',null,7,'green',[300,200,200],[26,130,390,900,1100,1275],150));
-    scenario.push(new Casella('Corso Impero',null,7,'green',[300,200,200],[26,130,390,900,1100,1275],150));
+    scenario.push(new Casella('Via Roma',null,7,'green',[300,200,200],[26,130,390,900,1100,1275],150,null,1));
+    scenario.push(new Casella('Corso Impero',null,7,'green',[300,200,200],[26,130,390,900,1100,1275],150,null,1));
     scenario.push(new Casella('probabilita'));
-    scenario.push(new Casella('Largo Augusto',null,7,'green',[320,200,200],[28,150,450,1000,1200,1400],160));
+    scenario.push(new Casella('Largo Augusto',null,7,'green',[320,200,200],[28,150,450,1000,1200,1400],160,null,1));
 
-    scenario.push(new Casella('Stazione Est',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg'));
+    scenario.push(new Casella('Stazione Est',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
     scenario.push(new Casella('imprevisti'));
-    scenario.push(new Casella('Viale dei Giardini',null,8,'blue',[350,200,200],[35,175,500,1100,1300,1500],175));
+    scenario.push(new Casella('Viale dei Giardini',null,8,'blue',[350,200,200],[35,175,500,1100,1300,1500],175,null,1));
     scenario.push(new Casella('Tassa di lusso',null,null,null,null,[100],[100],'/media/anello.svg'));
-    scenario.push(new Casella('Parco della Vittoria',null,8,'blue',[400,200,200],[50,100,200,600,1400,1700,2000],200));
+    scenario.push(new Casella('Parco della Vittoria',null,8,'blue',[400,200,200],[50,100,200,600,1400,1700,2000],200,null,1));
 
     for (let i in scenario){
         scenario[i].inserisciProprieta(i);

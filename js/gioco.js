@@ -33,19 +33,29 @@ class Giocatore{
 
         // username casuale
         this.username = username;
+
+        // vettore di offerte
+        this.offerte = [];
+
+        this.bancarotta = 0;
+
     }
 
-    // sposto il giocatore nella casella i-esima
+    // sposto il giocatore nella casella i caselle avanti e ritorniamo l'indice della casella
     muoviGiocatore(i){
-        if (i >= 40 || i < 0){
+        if (i > 12){
             console.log('movimento errato');
             return;
         }
+
+        i = (i + this.posizione) % 40;
 
         let newdiv = document.getElementById('contenitore-giocatori-' + i);
         newdiv.appendChild(this.pedina);
 
         this.posizione = i;
+
+        return i;
     }
 
     // funzione per pagare alla banca
@@ -562,12 +572,14 @@ function initMessageBox(){
         button1.innerHTML = 'Accetta';
         button1.id = 'accetta';
         button1.className = 'view-offer-button';
+        button1.onclick = accettaOfferta;
 
         let button2 = document.createElement('button');
         buttonContainer.appendChild(button2);
         button2.innerHTML = 'Rifiuta';
         button2.id = 'rifiuta';
         button2.className = 'view-offer-button';
+        button2.onclick = rifiutaOfferta;
 
         viewOffer.appendChild(buttonContainer);
 
@@ -577,6 +589,24 @@ function initMessageBox(){
     let bottone2 = document.getElementById('nuova-offerta');
     bottone2.disabled = 0;
     bottone2.onclick = mostraMakeOffer;
+
+
+    // inizializzo i bottoni per comprare/vendere proprieta/case
+    {
+        const compra = document.getElementById('compra');
+        const vendi = document.getElementById('vendi');
+        const compraC = document.getElementById('compra-casa');
+        const vendiC = document.getElementById('vendi-casa');
+
+
+        compra.onclick = compraProprieta;
+        vendi.onclick = vendiProprieta;
+        compraC.onclick = compraCasa;
+        vendiC.onclick = vendiCasa;
+    }
+
+
+
 }
 
 // funzione che manda un offerta da un giocatore ad un altro giocatore
@@ -671,8 +701,8 @@ class Offerta{
         this.id2 = id2;
         this.proprieta1 = proprieta1;
         this.proprieta2 = proprieta2;
-        this.soldi1 = soldi1;
-        this.soldi2 = soldi2;
+        this.soldi1 = Number(soldi1);
+        this.soldi2 = Number(soldi2);
         this.id = Offerta.id++;
         this.status = 1;                // lo status di un'offerta vale 1 se attiva 0 se non attiva
 
@@ -704,16 +734,400 @@ class Offerta{
         offerDisplay.appendChild(this.container);
     }
 
+    // bisogna aggiungere il controllo che a chiamare sia il player che deve accettare l'offerta
     acceptOffer(){
         // funzione per accettare l'offerta
+        // controllo che l'offerta sia ancora attiva
+        if (!this.status){
+            alert("Offerta gia' gestita, impossibile accettarla");
+            return;
+        }
 
         // a questo punto viene fatto il controllo della validita' dell'offerta
         // soldi e proprieta primo giocatore
         // soldi e proprieta secondo giocatore
         let player1 = giocatori[this.id1];
         let player2 = giocatori[this.id2];
-        
 
+        if (player1.saldo < this.soldi1 || player2.saldo < this.soldi2){
+            alert("L'offerta non puo' essere accettata per saldo insufficiente...");
+            this.status = 0;
+            return;
+        }
+
+        // controllo che tutte le proprieta del primo giocatore siano presenti
+        // e che non abbiano case o alberghi
+        for (let p of this.proprieta1){
+            if (!player1.proprieta.includes(p)){
+                // se anche solo una proprieta non e' contenuta l'offerta cade
+                alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
+                this.status = 0;
+                return;
+            }
+            if (p.case > 0 || p.albergo > 0){
+                alert("Non si possono vendere proprieta con case...");
+                this.status = 0;
+                return;
+            }
+        }
+
+        // controllo che tutte le proprieta del secondo giocatore siano presenti
+        for (let p of this.proprieta2){
+            if (!player2.proprieta.includes(p)){
+                // se anche solo una proprieta non e' contenuta l'offerta cade
+                alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
+                this.status = 0;
+                return;
+            }
+            if (p.case > 0 || p.albergo > 0){
+                alert("Non si possono vendere proprieta con case...");
+                this.status = 0;
+                return;
+            }
+        }
+
+        // allora rimuoviamo le proprieta ed i soldi
+        player1.saldo -= Number(this.soldi1);
+        player1.saldo += Number(this.soldi2);
+
+        player2.saldo -= Number(this.soldi2);
+        player2.saldo += Number(this.soldi1);
+
+        // aggiorno a video il saldo dei giocatori
+        const saldo1 = document.getElementById('saldo-giocatore-' + this.id1);
+        const saldo2 = document.getElementById('saldo-giocatore-' + this.id2);
+        saldo1.innerHTML = player1.saldo;
+        saldo2.innerHTML = player2.saldo;
+
+        // rimuovo al primo aggiungo al secondo
+        for (let p of this.proprieta1){
+            let indice = player1.proprieta.indexOf(p);
+            // rimuovo la proprieta dal primo giocatore
+            player1.proprieta.splice(indice,1)[0];
+
+            // la aggiungo al secondo giocatore
+            player2.proprieta.push(p);
+            p.owner = this.id2;
+        }
+
+        // rimuovo al secondo aggiungo al primo
+        for (let p of this.proprieta2){
+            let indice = player2.proprieta.indexOf(p);
+            // rimuovo la proprieta dal primo giocatore
+            player2.proprieta.splice(indice,1)[0];
+
+            // la aggiungo al secondo giocatore
+            player1.proprieta.push(p);
+            p.owner = this.id1;
+        }
+
+        // nel caso in cui sia coinvolto il giocatore 0 modifichiamo anche le proprieta che sono presenti sul tabellone
+        if (this.id1 == 0){
+            // allora devo eliminare le 1 ed aggiungere le 2
+            for (let p of this.proprieta1){
+                p.rimuoviProprieta();
+            }
+
+            for (let p of this.proprieta2){
+                p.stampaProprieta();
+            }
+        } else if (this.id2 == 0){
+            // allora devo eliminare le 2 ed aggiungere le 1
+            for (let p of this.proprieta1){
+                p.stampaProprieta();
+            }
+
+            for (let p of this.proprieta2){
+                p.rimuoviProprieta();
+            }
+        }
+
+
+        // disabilito i bottoni
+        const accetta = document.getElementById('accetta');
+        const rifiuta = document.getElementById('rifiuta');
+        accetta.disabled = 1;
+        rifiuta.disabled = 1;
+
+        // aggiorno lo status
+        this.status = 0;
+    }
+
+    // bisogna aggiungere il controllo che a chiamare sia il player che deve accettare l'offerta
+    rifiutaOffer(){
+        // disabilito i bottoni
+        const accetta = document.getElementById('accetta');
+        const rifiuta = document.getElementById('rifiuta');
+        accetta.disabled = 1;
+        rifiuta.disabled = 1;
+        
+        // aggiorno lo status
+        this.status = 0;
+    }
+}
+
+// funzione chiamata dal bottone per comprare una proprieta
+function compraProprieta(e){
+    e.preventDefault();
+    
+    let nome = e;
+
+    let bottone = e.target;
+    nome = bottone.dataset.nome;
+
+    // ottengo un riferimento alla casella
+    let casella = null;
+    casella = getCasella(nome);
+
+    if (!casella){
+        console.log('compraProprieta - nesssuna casella con questo nome');
+        return;
+    }
+
+    // ottengo un riferimento al giocatore
+    let player = giocatori[0];
+
+    // controllo che la casella sia acquistabile
+    if (!casella.acquistabile){
+        return;
+    }
+
+    // controllo che il giocatore si trovi sopra questa casella
+    let indice = scenario.indexOf(casella);
+    if (player.posizione != indice){
+        return;
+    }
+
+    // controllo che la casella non abbia owner
+    if (casella.owner){
+        return;
+    }
+
+    // controllo che il giocatore abbia abbastanza saldo
+    if (player.saldo < casella.prezzo[0]){
+        alert('Non hai abbastanza soldi per comprare questa casella');
+        return;
+    }
+
+    // a questo punto il giocatore ha acquistato la proprieta
+    player.proprieta.push(casella);
+    
+    // aggiorno il saldo ed aggiorno il saldo a video
+    player.saldo -= Number(casella.prezzo[0]);
+    const saldo = document.getElementById('saldo-giocatore-0');
+    saldo.innerHTML = player.saldo;
+
+    // se ad acquistare e' stato il giocatore allora stampa anche la proprieta a video
+    casella.stampaProprieta();
+}
+
+// funzione chiamata per vendere una proprieta
+function vendiProprieta(e){
+    e.preventDefault();
+
+    let nome = e.target.dataset.nome;
+
+    let casella = null;
+    casella = getCasella(nome);
+
+    if (!casella){
+        console.log('vendiProprieta - nessuna casella con questo nome');
+        return;
+    }
+
+    // controllo che l'owner sia il giocatore
+    if (!casella.owner){
+        return;
+    }
+
+    // procedo a venderla
+    casella.owner = null;
+    let player = giocatori[0];
+    player.saldo += Number(casella.prezzo[0]);
+
+    // aggiorno il saldo a video
+    const saldo = document.getElementById('saldo-giocatore-0');
+    saldo.innerHTML = player.saldo;
+
+    // rimuovo la proprieta a video
+    casella.rimuoviProprieta();
+}
+
+// funzione chiamata per comprare una casa
+function compraCasa(e){
+    e.preventDefault();
+
+    // ottengo riferimento alla proprieta
+    let nome = e;
+    let bottone = e.target;
+    nome = bottone.dataset.nome;
+
+    // ottengo riferimento al giocatore
+    let player = giocatori[0];
+
+
+    if (!casella){
+        console.log('compraCasa - nessuna casella con questo nome');
+        return;
+    }
+
+    // controllo che l'owner sia il giocatore
+    if (casella.owner != 0){
+        return;
+    }
+
+    // controllo che il giocatore possieda l'intera serie
+    for (let p of scenario){
+        if (p.gruppo == casella.gruppo && p.owner != 0){
+            alert("per comprare una casa devi prima possedere l'intera serie");
+            return;
+        }
+    }
+
+    // controllo che si possano acquistare case
+    if (casella.case == 4 && casella.albergo == 0){
+        // acquisto albergo
+
+        // 1. controllo di avere il saldo disponibile per farlo
+        if (player.saldo < casella.prezzo[2]){
+            alert("non hai abbastanza soldi per acquistare una l'albergo");
+            return;
+        }
+
+        // 2. aggiorno il saldo ed aggiungo l'albergo
+        casella.case = 0;
+        casella.albergo = 1;
+        player.saldo -= casella.prezzo[2];
+
+        casella.stampaCase();
+        
+    } else if (casella.case < 4){
+
+        // 1. controllo saldo
+        if (player.saldo < casella.prezzo[1]){
+            alert("non hai abbastanza soldi per acquistare una casa");
+            return;
+        }
+
+        // 2. aggiorno saldo ed aggiungo la casa
+        casella.case++;
+        player.saldo -= casella.prezzo[1];
+
+
+    } else {
+        alert("non puoi acquistare altre case per questa proprieta'");
+        return;
+    }
+
+    // aggiorno il saldo a video
+    const saldo = document.getElementById('saldo-giocatore-0');
+    saldo.innerHTML = player.saldo;
+
+    // aggiorno le case a video
+    casella.stampaCase();
+}
+
+// funzione chiamata per vendere una casa
+function vendiCasa(e){
+    e.preventDefault();
+
+    let casella = null;
+    casella = getCasella(nome);
+
+    let player = giocatori[0];
+
+    if (!casella){
+        console.log('vendiCasa - nessuna casella con questo nome');
+        return;
+    }
+
+
+    // controllo che il giocatore sia owner della casa
+    if (casella.owner != 0){
+        alert("non possiedi questa proprieta");
+        return;
+    }
+
+    // controllo che la proprieta abbia delle case
+    if (casella.case == 0 && casella.albergo == 0){
+        alert("non possiedi case su questa proprieta");
+        return;
+    }
+
+    // se vendo l'albergo viene rimpiazzato da 4 case
+    if (casella.albergo){
+        casella.albergo = 0;
+        casella.case = 4;
+        player.saldo += casella.prezzo[2];
+    } else {
+        casella.case--;
+        player.saldo += casella.prezzo[1];
+    }
+
+    // aggiorno le case a video
+    // aggiorno il saldo a video
+    const saldo = document.getElementById('saldo-giocatore-0');
+    saldo.innerHTML = player.saldo;
+}
+
+
+// funzione associata al bottone per accettare le offerte
+function accettaOfferta(e){
+    let id = e;
+    if (e instanceof Event){
+        // funzione chiamata premendo il bottone
+        e.preventDefault();
+
+        // dobbiamo recuperare l'id dell'offerta
+        let bottone = e.target;
+        id = Number(bottone.dataset.id);
+    }
+    // funzione chiamata staticamente da un npc
+
+    // adesso dobbiamo semplicemente accettare o rifiutare l'offerta
+    let offerta = null;
+    for (let o of offerte){
+        if (o.id == id){
+            offerta = o;
+            break;
+        }
+    }
+
+    if (offerta){
+        offerta.acceptOffer();
+    } else {
+        // situazione che non dovrebbe capitare
+        console.log("L'utente ha tentato di accettare un'offerta inesistente")
+    }
+}
+
+// funzione associata al bottone per rifiutare le offerte
+function rifiutaOfferta(e){
+    let id = e;
+    if (e instanceof Event){
+        // funzione chiamata premendo il bottone
+        e.preventDefault();
+
+        // dobbiamo recuperare l'id dell'offerta
+        let bottone = e.target;
+        id = Number(bottone.dataset.id);
+    }
+    // funzione chiamata staticamente da un npc
+
+    // adesso dobbiamo semplicemente accettare o rifiutare l'offerta
+    let offerta = null;
+    for (let o of offerte){
+        if (o.id == id){
+            offerta = o;
+            break;
+        }
+    }
+
+    if (offerta){
+        offerta.rifiutaOffer();
+    } else {
+        // situazione che non dovrebbe capitare
+        console.log("L'utente ha tentato di accettare un'offerta inesistente")
     }
 }
 
@@ -781,9 +1195,17 @@ function mostraViewOffer(e){
 
     // ottengo i dati dell'offerta
     let offerta = offerte[id];
+
+    
     const accetta = document.getElementById('accetta');
     const rifiuta = document.getElementById('rifiuta');
+    
+    // inizializzo i bottoni
+    accetta.dataset.id = id;
+    rifiuta.dataset.id = id;
 
+    // RIMOSSO PER DEBUG
+    /*
     // offerta rivolta al giocatore ed ancora attiva
     if (offerta.status && offerta.id2 == 0){
         // allora mostro i bottoni abilitati
@@ -794,6 +1216,7 @@ function mostraViewOffer(e){
         accetta.disabled = true;
         rifiuta.disabled = true;
     }
+    */
 
     // inizializzo i campi di view offer
     let player1 = giocatori[offerta.id1];
@@ -853,6 +1276,34 @@ function mostraViewOffer(e){
 }
 
 
+// funzione per attendere che il giocatore avvii la partita
+function waitStart(){
+    return new Promise((resolve) => {
+        const roll = document.getElementById('roll');
+        roll.innerHTML = 'Avvia il Gioco!';
+        roll.addEventListener('click',() => { roll.disabled = true; roll.innerHTML = 'lancia i dadi!'; resolve(); }, {once: true});
+    });
+}
+
+
+// funzione per attendere che un player prema i dadi
+function waitForDice(){
+    return new Promise((resolve) => {
+        const roll = document.getElementById('roll');
+        roll.disabled = false;
+        roll.addEventListener('click', () => { roll.disabled = true; resolve(randomDice());}, {once: true});
+    })
+}
+
+
+function waitASec(a){
+    return new Promise((resolve) => {
+        setTimeout( () => { resolve(); }, a );
+    })
+}
+
+
+
 class Gioco{
 
     static quanti = 0;
@@ -868,18 +1319,47 @@ class Gioco{
 
         // inizializzo il gioco
         // 1. inizializzo il menu
-        initChat()
+        initChat();
 
         // 2. inizializzo il layout della finestra
-        initMessageBox()
+        initMessageBox();
+
+        this.turno = 0;
     }
-    
-    update(){
-        // aggiorno i soldi mostrati a video
-        for (p in giocatori){
-            let saldo = document.getElementById('saldo-giocatore-' + p);
-            if (p)
-                p.innerHTML = giocatori[p].saldo;
+
+
+    async start(){
+
+        // mi metto in attesa che il giocatore prema su avvia gioco
+        await waitStart();
+
+        while (1){
+
+            // ottengo un riferimento al player che deve giocare
+            let id = this.turno%numPlayer;
+            
+            let player = giocatori[id];
+
+            let dice1, dice2;
+
+            // se si tratta del giocatore attendo che questo prema i dadi
+            // magari aggiungere una funzione che evidenzia i dadi se non preme per troppo tempo
+            if (id == 0){
+                [dice1, dice2] = await waitForDice();
+                player.muoviGiocatore(dice1 + dice2);
+
+
+            } else {
+                [dice1, dice2] = randomDice();
+                player.muoviGiocatore(dice1 + dice2);
+                // attendiamo un secondo
+                await waitASec(1000);
+
+            }
+
+
+
+            this.turno++;
         }
     }
 }

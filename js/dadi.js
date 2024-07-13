@@ -35,7 +35,6 @@ function printDadi(){
     roll.id = 'roll';
     let text = document.createTextNode('Lancia i dadi!');
     roll.appendChild(text);
-    roll.addEventListener('click',randomDice);
     centro.appendChild(roll);
     roll.disabled = 0;
 
@@ -77,8 +76,8 @@ function printDado(){
 const randomDice = () => {
 
     // faccio girare i dadi
-    let random1 = Math.floor(Math.random() * 5) + 1;
-    let random2 = Math.floor(Math.random() * 5) + 1;
+    let random1 = Math.floor(Math.random() * 6) + 1;
+    let random2 = Math.floor(Math.random() * 6) + 1;
 
 
     diceContainer.style.animation = 'lancio 0.8s ease-in 1';
@@ -105,7 +104,7 @@ const randomDice = () => {
 
         case 3:
             firstDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
-            firstDice.style.transform = 'rotateX(-45deg) rotateY(45deg) rotateZ(-90deg)';
+            firstDice.style.transform = 'rotateY(90deg) rotateZ(45deg) rotateX(-315deg)';
             break;
 
         case 4:
@@ -139,8 +138,8 @@ const randomDice = () => {
             break;
 
         case 3:
-            secondDice.style.animation = 'rollingLeft 0.8s ease-in 1 reverse';
-            secondDice.style.transform = 'rotateX(-45deg) rotateY(45deg) rotateZ(-90deg)';
+            secondDice.style.animation = 'rolling 0.8s ease-in 1 reverse';
+            secondDice.style.transform = 'rotateY(90deg) rotateZ(45deg) rotateX(405deg)';
             break;
 
         case 4:
@@ -151,6 +150,8 @@ const randomDice = () => {
         default:
             break;
     }
+
+    return [random1,random2];
 
 }
 

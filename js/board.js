@@ -90,9 +90,61 @@ class Board{
                     div.id = 'message-box';
                     div.style.visibility = 'hidden';
                     this.messageBox = div;
+                    td.appendChild(this.messageBox);
+
+
                     let messageContainer = document.createElement('div');
                     div.appendChild(messageContainer);
                     messageContainer.id = 'message-container';
+
+                    // creo il layout della casella informativa
+                    let messageSubContainer = document.createElement('div');
+                    messageSubContainer.id = 'message-sub-container';
+                    messageContainer.appendChild(messageSubContainer);
+
+                    let buttonContainer = document.createElement('div');
+                    buttonContainer.className = 'message-button-container';
+                    messageContainer.appendChild(buttonContainer);
+
+                    // aggiungo i bottoni
+                    {
+
+                        // scritta per l'owner della proprieta
+                        let owner = document.createElement('div');
+                        owner.id = 'owner';
+                        buttonContainer.appendChild(owner);
+
+                        // creazione elementi
+                        let compra = document.createElement('button');
+                        let vendi = document.createElement('button');
+                        let compraCasa = document.createElement('button');
+                        let vendiCasa = document.createElement('button');
+
+                        // testo a video
+                        compra.innerHTML = "Compra proprieta'";
+                        vendi.innerHTML = "Vendi proprieta'";
+                        compraCasa.innerHTML = "Acquista casa";
+                        vendiCasa.innerHTML = "Vendi casa";
+
+                        // id
+                        compra.id = 'compra';
+                        vendi.id = 'vendi';
+                        compraCasa.id = 'compra-casa';
+                        vendiCasa.id = 'vendi-casa';
+
+                        // aggiungi
+                        buttonContainer.appendChild(compra);
+                        buttonContainer.appendChild(vendi);
+                        buttonContainer.appendChild(compraCasa);
+                        buttonContainer.appendChild(vendiCasa);
+
+                        // contenitore per stampare le case
+                        let houseContainer = document.createElement('div');
+                        houseContainer.id = 'house-container';
+                        buttonContainer.appendChild(houseContainer);
+                    }
+
+
                     
                     let exit = document.createElement('button');
                     exit.className = 'exit';
@@ -107,13 +159,13 @@ class Board{
                     descrizione.id = 'descrizione-message-box';
                     descrizione.appendChild(document.createTextNode(''));
                     this.descrizioneMessageBox = descrizione;
-                    messageContainer.appendChild(descrizione);
+                    messageSubContainer.appendChild(descrizione);
                     
                     let titolo = document.createElement('div');
                     titolo.id = 'titolo-message-box';
                     titolo.appendChild(document.createTextNode(''));
                     this.titoloMessageBox = titolo;
-                    messageContainer.appendChild(titolo);
+                    messageSubContainer.appendChild(titolo);
                     
                     // si chiude quando premi esc
                     document.addEventListener('keydown', (e)=>{
