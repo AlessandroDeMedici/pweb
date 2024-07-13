@@ -1,13 +1,9 @@
 <?php 
-
-    // procedo a chiudere la sessione
-    session_destroy();
-
     // riapro la sessione
-    session_start();
-
+    if (session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
     $_SESSION['logged'] = false;
-
-    $_SESSION['username'] = null;
+    $_SESSION['username'] = '';
 
 ?>

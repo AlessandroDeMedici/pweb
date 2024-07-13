@@ -674,6 +674,7 @@ class Offerta{
         this.soldi1 = soldi1;
         this.soldi2 = soldi2;
         this.id = Offerta.id++;
+        this.status = 1;                // lo status di un'offerta vale 1 se attiva 0 se non attiva
 
         // aggiungo all'array delle offerte
         offerte.push(this);
@@ -709,6 +710,9 @@ class Offerta{
         // a questo punto viene fatto il controllo della validita' dell'offerta
         // soldi e proprieta primo giocatore
         // soldi e proprieta secondo giocatore
+        let player1 = giocatori[this.id1];
+        let player2 = giocatori[this.id2];
+        
 
     }
 }
@@ -757,7 +761,7 @@ function mostraMakeOffer(e){
 
 }
 
-
+// funzione per visualizzare un'offerta
 function mostraViewOffer(e){
     e.preventDefault();
 
@@ -772,16 +776,24 @@ function mostraViewOffer(e){
     let messageBox = document.getElementById('message-box');
     messageBox.style.visibility = 'visible';
 
-    // mostra i dettagli dell'offerta
-    // se e' un'offerta gia' conclusa allora mostra il bottone disabilitato
-    // se e' un'offerta di altri giocatori allora mostra il bottone disabilitato
-    // se e' un'offerta che posso accettare allora mostra il bottone abilitato
-
     // ottengo id offerta
     let id = Number(e.target.dataset.id);
 
     // ottengo i dati dell'offerta
     let offerta = offerte[id];
+    const accetta = document.getElementById('accetta');
+    const rifiuta = document.getElementById('rifiuta');
+
+    // offerta rivolta al giocatore ed ancora attiva
+    if (offerta.status && offerta.id2 == 0){
+        // allora mostro i bottoni abilitati
+        accetta.disabled = false;
+        rifiuta.disabled = false;
+    } else {
+        // altrimenti mostro i bottoni disabilitati
+        accetta.disabled = true;
+        rifiuta.disabled = true;
+    }
 
     // inizializzo i campi di view offer
     let player1 = giocatori[offerta.id1];

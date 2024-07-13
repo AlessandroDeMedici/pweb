@@ -18,9 +18,6 @@
     }
 
     try {
-
-
-
         // validazione degli input
         // 1. lunghezza username e password
         if (strlen($username) < 5){
@@ -33,7 +30,7 @@
         // 2. presenza di caratteri non validi
         foreach ($notValidCharacter as $c){
             if (strstr($username,$c)){
-                throw new Exception('Caratteri non validi...');
+                throw new Exception('Caratteri non alidi...');
             }
         }
         foreach ($notValidCharacter as $c){
@@ -55,13 +52,12 @@
             throw new Exception('Le password non coincidono');
         }
 
-
+        
     } catch (Exception $e){
-        $result = [
-            'logged'    => false,
+        $risultato = [
             'message'     => $e->getMessage()
         ];
-        echo json_encode($result);
+        echo json_encode($risultato);
         die();
     }
 
@@ -79,7 +75,6 @@
     $pdo;
     $result;
 
-
     try {
         // inizializzo il PDO
         $pdo = new PDO($string, $user, $pass);
@@ -88,41 +83,63 @@
     } catch (PDOException $e) {
         
         $result = [
-            'logged'    => false,
             'message'    => $e->getMessage()
         ];
-        echo json_encode($result);
+        echo json_encode($risultato);
         die();
 
     }
 
     try {
         
-        $query =    "INSERT 
-                    INTO Account 
-                    VALUES (:username,:password,:domanda,:risposta)";
+        $query =    "SELECT * 
+                    FROM Account
+                    WHERE username=:username
+                    LIMIT 1";
 
         $statement = $pdo->prepare($query);
         $statement->bindValue('username', $username);
-        $statement->bindValue('password', md5($password));
-        $statement->bindValue('domanda', $domanda);
-        $statement->bindValue('risposta', $risposta);
         $statement->execute();
 
-        // Login
-        $_SESSION['logged'] = true;
-        $_SESSION['username'] = $username;
+        $account = $statement->fetch();
+
+        // controllo che la domanda sia corretta
+        if (strcmp($account['domanda'],$domanda) || strcmp($account['risposta'],$risposta)){
+            $result = [
+                'message' => 'Domanda o risposta non corretta'
+            ];
+            echo json_encode($result);
+            die();
+        }
+
+
+        // account non trovato
+        if (!$account){
+            $result = [
+                'message' => 'Account non trovato'
+            ];
+            echo json_encode($result);
+            die();
+        }
+
+        // account trovato
+        // procedo a modificare il record
+        $query =    "UPDATE account
+                    SET password = :pass
+                    WHERE username = :username";
+        $statement = $pdo->prepare($query);
+        $statement->bindValue('pass',md5($password));
+        $statement->bindValue('username',$username);
+        $statement->execute();
+        
 
         $result = [
-            'logged'    => true,
-            'user'      => $username,
-            'message'   => 'Register avvenuto con successo'
+            'message' => "Password modificata con successo!"
         ];
 
 
     } catch (PDOException | Exception $e) {
         $result = [
-            'logged'    => false,
             'message'   => $e->getMessage()
         ];
     }

@@ -2,14 +2,28 @@
 
     header('Content-Type: application/json');
 
-
-    $input = file_get_contents('php://input');
-    $input = json_decode($input,true);
-
-    $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
-
+    // controllo se la sessione era attiva altrimenti la attivo
+    if (session_status() == PHP_SESSION_NONE){
+        session_start();
+        $_SESSION['logged'] = false;
+        $_SESSION['username'] = '';
+    }
+    
     // validazione degli input
     try {
+        
+        $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
+
+        $input['username'] = $_POST['username'];
+        $input['password'] = $_POST['password'];
+
+
+        // validazione degli input
+
+        if (!$input['username'] || !$input['password']){
+            throw new Exception('Inseriti valori nulli...');
+        }
+        
         if (strlen($input['username']) < 5){
             throw new Exception('Username non valido...');
         }
@@ -22,10 +36,12 @@
             }
         }
         foreach ($notValidCharacter as $c){
-            if (strstr($input['passowrd'],$c)){
+            if (strstr($input['password'],$c)){
                 throw new Exception('Caratteri non validi...');
             }
         }
+
+
     } catch (Exception $e){
         $risultato = [
             'logged'    => false,
@@ -36,42 +52,14 @@
     }
 
 
-    // se la sessione era attiva e posso restituire immediatamente il login lo faccio
-    // ovvero se utente loggato e richiede di loggarsi con stesso utente
-    if (isset($_SESSION['logged']) && ($_SESSION['logged'] == true && isset($_SESSION['username']) && $_SESSION['username'] == $input['username'])){
-        $risultato = [
-            'logged'    => true,
-            'user'    => $input['username'],
-            'message'  => 'sessione ripristinata'
-        ];
-        echo json_encode($risultato);
-        die();
-    }
-
-    // controllo se la sessione era attiva altrimenti la attivo
-    if (session_status() == PHP_SESSION_NONE)
-    session_start();
-
-    // se l'utente era loggato e sta facendo nuovamente login ma con un altro account e' da considerarsi errore
-    if (isset($_SESSION['logged']) && $_SESSION['logged'] == true && isset($_SESSION['username']) && $_SESSION['username'] != $input['username']){
-        $risultato = [
-            'logged'    => false,
-            'user'      => $input['username'],
-            'message'   => 'login senza logout'
-        ];
-        echo json_encode($risultato);
-        die();
-    }
-
-
     // a questo punto posso procedere a verificare il login
-    $string = "mysql:host=127.0.0.1;dbname=Main";
+    $string = "mysql:host=127.0.0.1;dbname=pweb";
     $user = "root";
     $pass = "";
     $pdo;
-    $ritorno;
-    $password;
-    $username;
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
     try {
         // inizializzo il PDO
@@ -89,37 +77,58 @@
 
     }
 
-    try {
-
-        // eseguo la query
-        $username = $input['username'];
-        $password = $input['password'];
+    try  {
 
         // preparazione della query
         $query = "  SELECT * 
                     FROM Account
-                    WHERE Username = :username 
-                    LIMIT 1 ";
+                    WHERE Username = :username
+                    LIMIT 1";
 
         $statement = $pdo->prepare($query);
         $statement->bindValue('username', $username);
         $statement->execute();
 
+
         $account = $statement->fetch();
-        if (!strcmp(md5($password),$account['password'])){
+
+        // account non trovato
+        if (!$account){
+            $result = [
+                'logged' => false,
+                'user' => '',
+                'message' => 'Username non trovato...'
+            ];
+            echo json_encode($result);
+            die();
+        }
+
+        // password errata
+        if (strcmp($account['password'],md5($password))){
+            $result = [
+                'logged' => false,
+                'message' => 'Password errata...'
+            ];
+        } else {
 
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $username;
-
-            $risultato = [
-                'logged'   => true,
-                'user'      => $username,
-                'message'   => 'login avvenuto con successo'
+            $result = [
+                'logged' => true,
+                'user' => $username,
+                'message' => '',
+                'sessione' => $_SESSION['logged']
             ];
-
-        } else {
-            throw new Exception("Password non valida...");
         }
+
+
+
+        $pdo = null;
+
+        echo json_encode($result);
+        die();
+
+
     } catch (PDOException | Exception $e){
         $risultato = [
             'logged'    => false,

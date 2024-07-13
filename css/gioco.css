@@ -254,3 +254,7 @@
     margin: 50px;
 }
 
+button:disabled{
+    opacity: 50%;
+}
+
