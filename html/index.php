@@ -58,17 +58,27 @@
     
     </head>
 
-    <body> 
+    <body>
+
+        <!-- Contenitore homepage -->
         <div id="home-container">
+            
+            <!-- Login -->
             <?php include './login.php' ?>
 
             <img id="main-logo" src="/media/logo.svg"></img>
             <div id="scritta-home"></div>
 
-            <button id="single-player-button" class="homepage-button">Nuova partita</button>
-            <button id="multi-player-button" class="homepage-button">Continua</button>
+            <button id="bottone-nuova-partita" class="homepage-button">Nuova partita</button>
+            <button id="bottone-classifica" class="homepage-button">Classifica</button>
+
+            <!-- Classifica -->
+            <?php include './classifica.php' ?>
 
         </div>
+        
+        <!-- Contenitore gioco -->
         <div id="game-container"></div>
+
     </body>
 </html>

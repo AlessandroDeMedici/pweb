@@ -1,7 +1,7 @@
 // id del giocatore principale
 let mainPlayer = 0;
 let numPlayer = 5;
-let npc = ['marco','giovanni','sandro','aldo'];
+let npc = ['marco','giovanni','sandro','aldo','luca', 'silvia', 'giulia','eleonora','giacomo'];
 
 class Giocatore{
 
@@ -16,35 +16,42 @@ class Giocatore{
         this.id = 'giocatore-' + giocatori.length;
         this.numId = giocatori.length;
 
+        // username casuale
+        this.username = username;
+
+        // saldo
+        this.saldo = 1500;
+
+        // campo significativo solo per gli npc
+        if (this.numId){
+            this.ai = new IA(this);
+        }
+
+    }
+
+    // inizializzazione giocatore
+    init(){
         // inseririsco il giocatore nella prima casella
         let casella = document.getElementById('contenitore-giocatori-0');
         casella.appendChild(this.pedina);
 
-        // tengo traccia della posizione
+        // inizializzo posizione
         this.posizione = 0;
 
-        // saldo del giocatore
+        // inizializzo saldo
         this.saldo = 1500;
+        this.updateSaldo();
 
-        // caselle possedute dal giocatore
+        // inizializzo proprieta
         this.proprieta = [];
 
-        // tengo traccia se il giocatore si trova in prigione se si da quanti turni
+        // prigione
         this.prigione = 0;
 
-        // username casuale
-        this.username = username;
-
-        // vettore di offerte
+        // inizializzo le offerte
         this.offerte = [];
 
         this.bancarotta = 0;
-
-        // campo significativo solo per gli npc
-        if (this.numId){
-            this.ai = new IA();
-        }
-
     }
 
     // sposto il giocatore nella casella i caselle avanti e ritorniamo l'indice della casella
@@ -55,7 +62,6 @@ class Giocatore{
         }
 
         i = (i + this.posizione) % 40;
-        console.log('contenitore-giocatori-' + i);
         let newdiv = document.getElementById('contenitore-giocatori-' + i);
         newdiv.appendChild(this.pedina);
 
@@ -139,11 +145,33 @@ class Giocatore{
         const saldo = document.getElementById('saldo-giocatore-' + this.numId);
         saldo.innerHTML = this.saldo;
     }
+
+
+    dichiaraBancarotta(){
+        console.log(this.username + ' ha dichiarato bancarotta');
+        this.bancarotta = 1;
+        const saldo = document.getElementById('saldo-giocatore-' + this.numId);
+        saldo.innerHTML = "BANCAROTTA";
+
+
+        // quando un giocatore dichiara bancarotta tutte le sue proprieta vengono liberate
+        for (let p of this.proprieta)
+            p.free();
+
+        this.proprieta = [];
+    }
 }
 
 // inizializzo l'array dei giocatori
 giocatori = [];
-
+function initGiocatori(){
+    // inizializzo l'array dei giocatori
+    giocatori.push(new Giocatore(username));
+    giocatori.push(new Giocatore(npc[0]));
+    giocatori.push(new Giocatore(npc[1]));
+    giocatori.push(new Giocatore(npc[2]));
+    giocatori.push(new Giocatore(npc[3]));
+}
 
 class Carta{
     constructor(nome,descrizione,effetto,valore, valore2 = null){
@@ -270,6 +298,7 @@ function initChat(){
 
         let name = document.createElement('div');
         name.className = 'player-list-name';
+        name.id = 'player-name-' + ind;
 
         if (player.id == 'giocatore-0'){
             name.innerHTML = 'You';
@@ -354,25 +383,23 @@ function initMessageBox(){
             checkList.innerHTML = '';
 
             let prop_id = 0;
-            for (let prop in player.proprieta){
-                let p = player.proprieta[prop];
-
+            for (let prop of player.proprieta){
                 let check = document.createElement('input');
                 check.type = 'checkbox';
                 check.name = 'proprieta-2-' + prop_id;
                 check.id = 'checkbox-2-' + prop_id;
-                check.value = p;
+                check.value = prop.nome;
+
 
                 let label = document.createElement('label');
                 label.htmlFor = 'checkbox-2-' + prop_id++;
-                label.appendChild(document.createTextNode(p));
+                label.innerHTML = prop.nome;
 
-                checkList.appendChild(check);
                 checkList.appendChild(label);
+                label.appendChild(check);
                 checkList.appendChild(document.createElement('br'));
             }
-
-        })
+        });
 
         if (player.id == 'giocatore-1')
             radio.checked = 1;
@@ -408,27 +435,6 @@ function initMessageBox(){
         firstPlayer.appendChild(checkList);
         checkList.id = 'offer-checklist-1';
         checkList.className = 'make-offer-checklist';
-
-        // soltanto per debug ci aggiungo delle proprieta' casuali
-        let proprieta1 = ['via luigia','via contessa matilde','ole ole','ola ola','ma che ma che','ole osi','ola ola','ma che ma che','ole osi'];
-        let id = 0;
-        for (let prop in proprieta1){
-            let p = proprieta1[prop];
-
-            let check = document.createElement('input');
-            check.type = 'checkbox';
-            check.name = 'proprieta-1-' + id;
-            check.id = 'checkbox-1-' + id;
-            check.value = p;
-
-            let label = document.createElement('label');
-            label.htmlFor = 'checkbox-1-' + id++;
-            label.appendChild(document.createTextNode(p));
-
-            checkList.appendChild(check);
-            checkList.appendChild(label);
-            checkList.appendChild(document.createElement('br'));
-        }
 
         let sliderContainer = document.createElement('p');
 
@@ -482,11 +488,11 @@ function initMessageBox(){
             check.type = 'checkbox';
             check.name = 'proprieta-2-' + id;
             check.id = 'checkbox-1-' + id;
-            check.value = p;
+            check.value = p.nome;
 
             let label = document.createElement('label');
             label.htmlFor = 'checkbox-1-' + id++;
-            label.appendChild(document.createTextNode(p));
+            label.appendChild(document.createTextNode(p.nome));
 
             checkList.appendChild(check);
             checkList.appendChild(label);
@@ -624,7 +630,6 @@ function initMessageBox(){
 
     // inizializzo il bottone
     let bottone2 = document.getElementById('nuova-offerta');
-    bottone2.disabled = 0;
     bottone2.onclick = mostraMakeOffer;
 
 
@@ -662,17 +667,15 @@ function inviaOfferta(id1, id2, proprieta1, proprieta2, soldi1, soldi2){
         proprieta1 = [];
         let checkboxes1 = document.querySelectorAll('input[type="checkbox"][name^="proprieta-1-"]:checked');
 
-        for (let p in checkboxes1){
-            if (checkboxes1[p].value)
-                proprieta1.push(checkboxes1[p].value)
+        for (let p of checkboxes1){
+            proprieta1.push(getCasella(p.value));
         }
 
         proprieta2 = [];
         let checkboxes2 = document.querySelectorAll('input[type="checkbox"][name^="proprieta-2-"]:checked');
 
-        for (let p in checkboxes2){
-            if (checkboxes2[p].value)
-                proprieta2.push(checkboxes2[p].value)
+        for (let p of checkboxes2){
+            proprieta2.push(getCasella(p.value));
         }
 
         soldi1 = document.querySelector('#slider-1');
@@ -684,13 +687,31 @@ function inviaOfferta(id1, id2, proprieta1, proprieta2, soldi1, soldi2){
     // altrimenti si tratta di una normale chiamata a funzione, in questo caso
     // un bot ha mandato un'offerta
 
-    new Offerta(id1,id2,proprieta1,proprieta2,soldi1,soldi2);
+    // DEBUG
+    let stringa1 = '';
+    for (let p of proprieta1){
+        stringa1 += ' ' + p.nome;
+    }
+
+    let stringa2 = '';
+    for (let p of proprieta2){
+        stringa2 += ' ' + p.nome;
+    }
+
+    console.log(giocatori[id1].username + " sta inviando un'offerta a " + giocatori[id2].username + '; p1 = ' + stringa1 + '; p2 = ' + stringa2);
+
+    let offerta = new Offerta(id1,id2,proprieta1,proprieta2,soldi1,soldi2);
+
+    if (id1 == 0){
+        giocatori[id2].offerte.push(offerta);
+    }
 
 }
 
 
 // array delle offerte per tenere traccia
 let offerte = [];
+
 class Offerta{
 
     static id = 0;
@@ -706,38 +727,24 @@ class Offerta{
             let offer = offerte[o];
 
             if (offer.id1 == id1 && offer.id2 == id2 && 
-                offer.soldi1 == soldi1 && offer.soldi2 == soldi2 && id1 == 0
+                offer.soldi1 == soldi1 && offer.soldi2 == soldi2
             ){
-                alert('E\' gia\' stata fatta un\'offerta identica');
+                if (!id1)
+                    alert('E\' gia\' stata fatta un\'offerta identica');
                 return;
             }
 
-        }
-
-        // controllo che le proprieta siano effettivamente dei due giocatori
-        // L'importante e' che i soldi ci siano al momento in cui l'offerta viene accettata
-        {
-            for (let p in proprieta1){
-                let proprieta = proprieta1[p];
-                if (!giocatori[id1].proprieta.includes(proprieta)){
-                    alert('Proprieta\' non valide per l\'offerta');
-                    return;
-                }
-            }
-
-            for (let p in proprieta2){
-                let proprieta = proprieta2[p];
-                if (!giocatori[id2].proprieta.includes(proprieta)){
-                    alert('Proprieta\' non valide per l\'offerta');
-                    return;
-                }
-            }
         }
 
         this.id1 = id1;
         this.id2 = id2;
         this.proprieta1 = proprieta1;
         this.proprieta2 = proprieta2;
+        if (!proprieta1)
+            proprieta1 = [];
+        if (!proprieta2)
+            proprieta2 = [];
+        
         this.soldi1 = Number(soldi1);
         this.soldi2 = Number(soldi2);
         this.id = Offerta.id++;
@@ -776,7 +783,8 @@ class Offerta{
         // funzione per accettare l'offerta
         // controllo che l'offerta sia ancora attiva
         if (!this.status){
-            alert("Offerta gia' gestita, impossibile accettarla");
+            if (this.id2 == 0)
+                alert("Offerta gia' gestita, impossibile accettarla");
             return;
         }
 
@@ -787,7 +795,8 @@ class Offerta{
         let player2 = giocatori[this.id2];
 
         if (player1.saldo < this.soldi1 || player2.saldo < this.soldi2){
-            alert("L'offerta non puo' essere accettata per saldo insufficiente...");
+            if (!this.id1)
+                alert("L'offerta non puo' essere accettata per saldo insufficiente...");
             this.status = 0;
             return;
         }
@@ -797,12 +806,14 @@ class Offerta{
         for (let p of this.proprieta1){
             if (!player1.proprieta.includes(p)){
                 // se anche solo una proprieta non e' contenuta l'offerta cade
-                alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
+                if (!this.id1)
+                    alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
                 this.status = 0;
                 return;
             }
             if (p.case > 0 || p.albergo > 0){
-                alert("Non si possono vendere proprieta con case...");
+                if (!this.id1)
+                    alert("Non si possono vendere proprieta con case...");
                 this.status = 0;
                 return;
             }
@@ -839,6 +850,9 @@ class Offerta{
         // rimuovo al primo aggiungo al secondo
         for (let p of this.proprieta1){
             let indice = player1.proprieta.indexOf(p);
+            if (indice < 0)
+                continue;
+            
             // rimuovo la proprieta dal primo giocatore
             player1.proprieta.splice(indice,1)[0];
 
@@ -850,6 +864,10 @@ class Offerta{
         // rimuovo al secondo aggiungo al primo
         for (let p of this.proprieta2){
             let indice = player2.proprieta.indexOf(p);
+
+            if (indice < 0)
+                continue;
+
             // rimuovo la proprieta dal primo giocatore
             player2.proprieta.splice(indice,1)[0];
 
@@ -967,9 +985,15 @@ function vendiProprieta(e){
         return;
     }
 
+
     // controllo che l'owner sia il giocatore
     if (casella.owner != 0){
         alert("Non possiedi questa casella!");
+        return;
+    }
+
+    if (casella.case || casella.albergo){
+        alert("Non puoi vendere proprieta con case");
         return;
     }
 
@@ -983,6 +1007,10 @@ function vendiProprieta(e){
     let player = giocatori[0];
     player.ricevi(casella.prezzo[0]);
     player.updateSaldo();
+
+    // rimuovo la proprieta dall'array delle proprieta
+    let indice = player.proprieta.indexOf(casella);
+    player.proprieta.splice(indice,1);
 
     // rimuovo la proprieta a video
     casella.rimuoviProprieta();
@@ -1121,16 +1149,8 @@ function accettaOfferta(e){
         let bottone = e.target;
         id = Number(bottone.dataset.id);
     }
-    // funzione chiamata staticamente da un npc
 
-    // adesso dobbiamo semplicemente accettare o rifiutare l'offerta
-    let offerta = null;
-    for (let o of offerte){
-        if (o.id == id){
-            offerta = o;
-            break;
-        }
-    }
+    let offerta = offerte[id];
 
     if (offerta){
         offerta.acceptOffer();
@@ -1151,16 +1171,8 @@ function rifiutaOfferta(e){
         let bottone = e.target;
         id = Number(bottone.dataset.id);
     }
-    // funzione chiamata staticamente da un npc
-
-    // adesso dobbiamo semplicemente accettare o rifiutare l'offerta
-    let offerta = null;
-    for (let o of offerte){
-        if (o.id == id){
-            offerta = o;
-            break;
-        }
-    }
+    
+    let offerta = offerte[id];
 
     if (offerta){
         offerta.rifiutaOffer();
@@ -1184,6 +1196,8 @@ function mostraMakeOffer(e){
     // ogni volta che viene chiamato crea offerta mostra le mie proprieta aggiornate
     let c = document.getElementById('offer-checklist-1');
     c.innerHTML = '';
+    let clean = document.getElementById('offer-checklist-2');
+    clean.innerHTML = '';
 
     let player = giocatori[0];
 
@@ -1195,13 +1209,14 @@ function mostraMakeOffer(e){
         check.type = 'checkbox';
         check.name = 'proprieta-1-' + id;
         check.id = 'checkbox-1-' + id;
+        check.value = a.nome;
 
         let label = document.createElement('label');
         label.htmlFor = 'checkbox-1-' + id++;
-        label.innerHTML = a;
+        label.innerHTML = a.nome;
 
-        c.appendChild(check);
         c.appendChild(label);
+        label.appendChild(check);
         c.appendChild(document.createElement('br'));
     }
 
@@ -1243,8 +1258,6 @@ function mostraViewOffer(e){
     accetta.dataset.id = id;
     rifiuta.dataset.id = id;
 
-    // RIMOSSO PER DEBUG
-    /*
     // offerta rivolta al giocatore ed ancora attiva
     if (offerta.status && offerta.id2 == 0){
         // allora mostro i bottoni abilitati
@@ -1255,7 +1268,6 @@ function mostraViewOffer(e){
         accetta.disabled = true;
         rifiuta.disabled = true;
     }
-    */
 
     // inizializzo i campi di view offer
     let player1 = giocatori[offerta.id1];
@@ -1272,12 +1284,12 @@ function mostraViewOffer(e){
 
         //proprieta
         let prop = document.getElementById('view-offer-properties-1');
-        proprieta1 = ['via luigia','via contessa matilde','ole ole','ola ola','ma che ma che','ole osi','ola ola','ma che ma che','ole osi'];
-        for (let p in proprieta1){
-            let proprieta = proprieta1[p];
+        prop.innerHTML = '';
+        for (let p in offerta.proprieta1){
+            let proprieta = offerta.proprieta1[p];
             
             let c = document.createElement('p');
-            c.innerHTML = proprieta;
+            c.innerHTML = proprieta.nome;
 
             prop.appendChild(c);
         }
@@ -1298,11 +1310,12 @@ function mostraViewOffer(e){
 
         //proprieta
         let prop = document.getElementById('view-offer-properties-2');
+        prop.innerHTML = '';
         for (let p in offerta.proprieta2){
             let proprieta = offerta.proprieta2[p];
             
             let c = document.createElement('p');
-            c.innerHTML = proprieta;
+            c.innerHTML = proprieta.nome;
 
             prop.appendChild(c);
         }
@@ -1320,6 +1333,7 @@ function waitStart(){
     return new Promise((resolve) => {
         const roll = document.getElementById('roll');
         roll.innerHTML = 'Avvia il Gioco!';
+        roll.disabled = false;
         roll.addEventListener('click',() => { roll.disabled = true; roll.innerHTML = 'Lancia i dadi!'; resolve(); }, {once: true});
     });
 }
@@ -1383,104 +1397,305 @@ class Gioco{
         this.turno = 0;
     }
 
+    abilitaBottoni(){
+        const bancarotta = document.getElementById('bancarotta');
+        const nuovaOfferta = document.getElementById('nuova-offerta');
+
+        bancarotta.disabled = 0;
+        nuovaOfferta.disabled = 0;
+        bancarotta.innerHTML = 'Dichiara bancarotta';
+        bancarotta.onclick = () => {
+            if (confirm("Sei sicuro di voler dichiarare bancarotta?"))
+                giocatori[0].bancarotta = 1;
+        }
+    }
+
+    disabilitaBottoni(){
+        const bancarotta = document.getElementById('bancarotta');
+        const nuovaOfferta = document.getElementById('nuova-offerta');
+        nuovaOfferta.disabled = 1;
+
+        bancarotta.disabled = 0;
+        bancarotta.innerHTML = 'Torna alla homepage';
+        bancarotta.onclick = showHome;
+    }
+
+    // inizializzazione del gioco
+    init(){
+
+        // disabilito i bottoni
+        this.disabilitaBottoni();
+
+        this.turno = 0;
+
+        // inizializzo nomi
+        npc = shuffleArray(npc);
+        for (let i = 1; i < numPlayer; i++){
+            const name = document.getElementById('player-name-' + i);
+            name.innerHTML = npc[i];
+        }
+
+        // inizializzo i giocatori
+        for (let p of giocatori)
+            p.init();
+
+
+        // inizializzo le caselle
+        for (let c of scenario){
+            c.rimuoviProprieta();
+            c.init();
+        }
+
+        // inizializzo le offerte
+        // rimuovo le offerte a video
+        Offerta.id = 0;
+        offerte = [];
+        let offerContainers = document.querySelectorAll('.offer-container');
+        const offerDisplay = document.getElementById('offer-display');
+        for (let o of offerContainers){
+            offerDisplay.removeChild(o);
+        }
+
+
+
+    }
+
+    winCondition(){
+        // devo controllare che tutti i giocatori siano in bancarotta tranne il player
+        if (giocatori[1].bancarotta && giocatori[2].bancarotta && giocatori[3].bancarotta && giocatori[4].bancarotta)
+            return true;
+        
+        return false;
+    }
 
     async start(){
 
-        // mi metto in attesa che il giocatore prema su avvia gioco
-        await waitStart();
-
+        // codice di verifica
+        let v;
+        
         while (1){
+            // inizializzo il gioco
+            this.init();
+    
+            // mi metto in attesa che il giocatore prema su avvia gioco
+            await waitStart();
+            console.log('started');
+    
+            // ottengo il codice del gioco
+            v = await verificationCode();
 
-            // ottengo un riferimento al player che deve giocare
-            let id = this.turno%numPlayer;
-            console.log("turno " + this.turno + ' tocca a ' + giocatori[id].username);
-            
-            let player = giocatori[id];
 
-            // controllo se il giocatore e' in bancarotta
-            if (player.bancarotta){
-                this.turno++;
-                continue;
-            }
+            // abilito i bottoni
+            this.abilitaBottoni();
 
-            // controllo se il giocatore principale ha perso
-            if (id == 0 && player.bancarotta){
-                // allora fai in modo che possa salvare la partita, per il momento non lo consideriamo
-            }
-
-            let dice1, dice2;
-
-            let oldPosition = player.posizione;
-
-            // 0. lancio dei dadi
-            if (id == 0){
-                [dice1, dice2] = await waitForDice();
-            } else {
-                [dice1, dice2] = randomDice();
-            }
-
-            dice1 = Number(dice1);
-            dice2 = Number(dice2);
-
-            // 0. controllo che il giocatore non sia in prigione
-            if (player.prigione){
-                // se il giocatore ha fatto doppio esce normalmente
-                if (dice1 == dice2)
-                    player.prigione = 0;
-                else {
-                    // se il giocatore non ha fatto doppio allora salta il turno
-                    player.prigione++;
-
-                    // se ha gia' saltato 3 turni allora paga 50 ed esci
-                    if (player.prigione == 4){
-                        player.paga(50);
+            while (1){
+    
+                // controllo che il giocatore abbia vinto o che abbia dichiarato bancarotta
+                if (giocatori[0].bancarotta || this.winCondition()){
+                    break;
+                }
+    
+                // ottengo un riferimento al player che deve giocare
+                let id = this.turno%numPlayer;
+                console.log("turno " + this.turno + ' tocca a ' + giocatori[id].username);
+                
+                let player = giocatori[id];
+    
+                // controllo se il giocatore e' in bancarotta
+                if (player.bancarotta){
+                    this.turno++;
+                    continue;
+                }
+    
+                // controllo se il giocatore principale ha perso
+                if (id == 0 && player.bancarotta){
+                    // allora fai in modo che possa salvare la partita, per il momento non lo consideriamo
+                }
+    
+                let dice1, dice2;
+    
+                let oldPosition = player.posizione;
+    
+                // 0. lancio dei dadi
+                if (id == 0){
+                    [dice1, dice2] = await waitForDice();
+                } else {
+                    await waitASec(Math.floor(Math.random() * 200));
+                    [dice1, dice2] = randomDice();
+                }
+    
+                dice1 = Number(dice1);
+                dice2 = Number(dice2);
+    
+                // 0. controllo che il giocatore non sia in prigione
+                if (player.prigione){
+                    // se il giocatore ha fatto doppio esce normalmente
+                    if (dice1 == dice2){
                         player.prigione = 0;
+                        if (id == 0){
+                            alert("Hai fatto doppio e sei uscito di prigione!");
+                        }
                     } else {
-                        this.turno++;
-                    }
-
-                    if (id){
-                        await waitASec(1000);
-                        continue;
-                    } else {
-                        await waitForEndTurn();
-                        continue;
+                        // se il giocatore non ha fatto doppio allora salta il turno
+                        player.prigione++;
+    
+                        // se ha gia' saltato 3 turni allora paga 50 ed esci
+                        if (player.prigione == 4){
+                            player.paga(50);
+                            player.prigione = 0;
+                        } else {
+                            this.turno++;
+                        }
+    
+                        if (id){
+                            await waitASec(1000);
+                            continue;
+                        } else {
+                            await waitForEndTurn();
+                            continue;
+                        }
                     }
                 }
-            }
-
-            // 1. spostamento della casella
-            player.muoviGiocatore(dice1 + dice2);
-
-            // 2. controllo se sono passato dal via
-            let newPosition = player.posizione;
-
-            if (newPosition < oldPosition){
-                player.ricevi(200);
-                player.updateSaldo();
-            }
-
-
-            // 3. controllo su che casella mi trovo
-            let casella = scenario[newPosition];
-            let ritorno = casella.move(id);
-
-
-            // il turno non puo' terminare se il saldo e' negativo
-            if (!id){
-                while (1){
-                    let bool = await waitForEndTurn();
-                    if (bool)
-                        break;
-                    alert("Non puoi terminare il turno con saldo negativo");
+    
+                // 1. spostamento della casella
+                player.muoviGiocatore(dice1 + dice2);
+    
+                // 2. controllo se sono passato dal via
+                let newPosition = player.posizione;
+    
+                if (newPosition < oldPosition){
+                    player.ricevi(200);
+                    player.updateSaldo();
                 }
+    
+    
+                // 3. controllo su che casella mi trovo
+                let casella = scenario[newPosition];
+                let ritorno = casella.move(id);
+    
+    
+                // 4. se si tratta di un npc gli diamo la possibilita di fare altre mosse come acquistare case, vendere case, fare offerte ed accettare offerta
+                if (id){
+                    player.ai.compraCasa();
+                    player.ai.faiOfferta(this.turno);
+                    player.ai.accettaOfferta();
+                }
+    
+                // il turno non puo' terminare se il saldo e' negativo
+                if (!id){
+                    while (1){
+                        let bool = await waitForEndTurn();
+                        if (bool)
+                            break;
+                        alert("Non puoi terminare il turno con saldo negativo");
+                    }
+                } else {
+                    // neanche il turno degl npc puo' terminare con saldo negativo
+                    if (player.saldo < 0){
+                        // provo a vendere qualcosa
+                        let a = player.ai.sell(Math.abs(player.saldo));
+                        // se non riesce a vendere niente allora dichiara bancarotta
+                        if (a == -1)
+                            player.dichiaraBancarotta();
+                    }
+                    await waitASec(1000);
+                }
+    
+    
+                // se il giocatore ha fatto doppio allora ripeti il turno
+                if (dice1 != dice2)
+                    this.turno++;
+                else
+                    console.log(player.username + ' ha fatto doppio quindi lancia di nuovo');
+    
+    
+                // alla fine del turno controllo se il player e' andato in bancarotta
+                if (giocatori[0].bancarotta)
+                    break;
+            }
+
+            // disabilito i bottoni
+            this.disabilitaBottoni();
+
+    
+            let win = ''
+            // il gioco e' finito, dobbiamo verificare se il giocatore ha vinto oppure no
+            if (giocatori[0].bancarotta){
+                win = 'Hai perso';
             } else {
-                await waitASec(1000);
+                win = 'Hai vinto';
+
+                // se il giocatore ha vinto allora dobbiamo aggiornare il suo punteggio
+                let punteggio = calcolaValore();
+
+                // adesso inviamo il punteggio
+                inviaPunteggio(punteggio,v);
+            }
+
+            // chiediamo al giocatore se vuole tornare alla homepage
+            if (confirm(win + " vuoi tornare alla homepage?")){
+                showHome();
+            } else {
+                ;   // lascia che il giocatore giochi una nuova partita
             }
 
 
-            this.turno++;
         }
     }
+}
+
+
+function calcolaValore(){
+    // calcolo il valore accumulato dal giocatore
+    let valore = giocatori[0].saldo;
+
+    for (let p of giocatori[0].proprieta)
+        valore += Number(p.prezzo[0]);
+
+    return valore;
+}
+
+
+// funzione per avviare un gioco e ricevere un verification code
+async function verificationCode(){
+
+    return new Promise((resolve) => {
+
+        const data = 'username=' + giocatori[0].username;
+        console.log(data);
+
+        let request = new XMLHttpRequest();
+        
+        request.open("post", "../php/game.php");
+        request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        request.onload = () => {
+            const response = JSON.parse(request.response);
+            resolve(response['id']);
+        }
+        request.onerror = (error) => console.log(error);
+        request.send(data);
+    });
+
+
+}
+
+// funzione per inviare il punteggio
+function inviaPunteggio(p,id){
+
+    // caricamento del punteggio
+    const data = 'punteggio=' + p + '&id=' + id;
+    
+    let request = new XMLHttpRequest();
+    
+    request.open("post", "../php/punteggio.php");
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); 
+    request.onload = () => {
+        console.log(request.response);
+        const response = JSON.parse(request.response);
+        console.log(response);
+    };
+
+    request.onerror = (event) => console.log(event);
+    request.send(data);
 }
 

@@ -1,7 +1,5 @@
 
 let mainLogo;
-let singlePlayer;
-let multiPlayer;
 let homeConatiner;
 let loginButton;
 let registerButton;
@@ -59,11 +57,6 @@ function printHome(){
     }
     
     // inizializzo i bottoni
-    singlePlayer = document.getElementById('single-player-button');
-    singlePlayer.onclick = logged ? showGame : avviso;
-    
-    multiPlayer = document.getElementById('multi-player-button')
-    multiPlayer.onclick = logged ? showGame : avviso;
 
     loginButton.onclick = showLogin;
     registerButton.onclick = showRegister;
@@ -152,7 +145,7 @@ function avviso(){
 
 // funzione lanciata dai bottoni dopo il login
 function showGame(){
-    let gameContainer = document.getElementById('game-container')
+    const gameContainer = document.getElementById('game-container');
     gameContainer.style.display = 'flex';
     gameContainer.scrollIntoView({behavior: "smooth"});
     setTimeout(()=>{
@@ -160,3 +153,18 @@ function showGame(){
     },1000);
 }
 
+
+// funzione che e' possibile lanciare a fine partita
+function showHome(){
+    const gameContainer = document.getElementById('game-container');
+    const homeContainer = document.getElementById('home-container');
+    homeContainer.style.display = 'flex';
+    homeContainer.scrollIntoView({behavior: 'smooth'});
+    setTimeout(()=>{gameContainer.style.display = 'none'},1000);
+}
+
+
+// funzione per mostrare la classifica
+function showClassifica(e){
+    e.preventDefault();
+}

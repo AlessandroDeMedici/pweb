@@ -27,7 +27,7 @@
             <legend>Login</legend>
             <p>
                 <label>Username</label>
-                <input type="text" name="username" required/>
+                <input type="text" name="username" required pattern="[a-zA-Z0-9]+"/>
             </p>
             <p>
                 <label>Password</label>
@@ -46,7 +46,7 @@
             <legend>Register</legend>
             <p>
                 <label>Username</label>
-                <input type="text" name="username" required pattern="[a-zA-Z]+"/>
+                <input type="text" name="username" required pattern="[a-zA-Z0-9]+"/>
             </p>
             <p>
                 <label>Password</label>
@@ -83,7 +83,7 @@
             <legend>Recupera il tuo account</legend>
             <p>
                 <label>Username</label>
-                <input type="text" name="username" required pattern="[a-zA-Z]+"/>
+                <input type="text" name="username" required pattern="[a-zA-Z0-9]+"/>
             </p>
             <p>
                 <label>Domanda di recupero</label>
@@ -107,15 +107,7 @@
     </form>
 </div>
 
-<script>
-        // _                 _       
-        //| |               (_)      
-        //| |     ___   __ _ _ _ __  
-        //| |    / _ \ / _` | | '_ \ 
-        //| |___| (_) | (_| | | | | |
-        //|______\___/ \__, |_|_| |_|
-        //              __/ |        
-        //             |___/         
+<script> 
         const loginMenu = document.getElementById('login-menu');
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
@@ -142,7 +134,6 @@
             let request = new XMLHttpRequest();
             request.open("post", "../php/login.php");
             request.onload = () => {
-                console.log(request.response);
                 const response = JSON.parse(request.response);
                 success(response);
             };
@@ -172,7 +163,6 @@
             let request = new XMLHttpRequest();
             request.open("post","../php/register.php");
             request.onload = () =>{
-                console.log(request.response);
                 const response = JSON.parse(request.response);
                 success(response,true);
             }
@@ -230,8 +220,8 @@
             registerButton.style.display = 'block';
             recoverButton.style.display = 'block';
 
-            singlePlayer.onclick = avviso;
-            multiPlayer.onclick = avviso;
+            
+            Player.onclick = avviso;
 
             fetch('/php/logout.php',{
                 method: 'POST'
@@ -290,7 +280,6 @@
             recoverButton.style.display = 'none';
 
             // modifico i pulsanti della home
-            singlePlayer.onclick = showGame;
-            multiPlayer.onclick = showGame;
+            nuovaPartita.onclick = showGame;
         }
 </script>

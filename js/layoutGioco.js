@@ -14,35 +14,10 @@ let menu;
 let playerDisplay;
 let offerDisplay;
 
-// messaggio informativo
-let messaggio;
 
 // menu di gioco
 let chat;
 let bottone;
-
-// dimensione troppo piccola della finestra non si puo' continuare a giocare
-window.onresize = resize;
-
-// handler per gestire finestre troppo piccole per poter giocare
-function resize(e){
-    e.preventDefault();
-    let gameContainer = document.getElementById('game-container')
-    let altezza = window.innerHeight;
-    let larghezza = window.innerWidth;
-    let messaggio = document.getElementById('messaggio-informativo')
-    if (altezza < 800 && larghezza < 800){
-        gameContainer.style.filter = 'blur(8px)';
-        messaggio.style.visibility = 'visible';
-        window.onclick = (e) => {
-            e.preventDefault();
-        }
-    } else {
-        gameContainer.style.filter = 'none';
-        messaggio.style.visibility = 'hidden';
-        window.onclick = null;
-    }
-}
 
 
 // funzione per inizializzare il menu
@@ -67,10 +42,10 @@ function initMenu(menu){
 
     // bottone laterale
     let bottone = document.createElement('button');
-    bottone.id = 'gestisci-case';
+    bottone.id = 'bancarotta';
     bottone.className = 'bottone element';
     menu.appendChild(bottone);
-    bottone.innerHTML = 'Gestisci le tue case';
+    bottone.innerHTML = 'Dichiara bancarotta';
     bottone.disabled = 1;
 
     // bottone laterale
@@ -148,13 +123,6 @@ function initLayout(gameContainer){
 
     propertyContainer.appendChild(propertyHeader);
     propertyContainer.appendChild(property);
-
-    // messaggio informativo
-    messaggio = document.createElement('div');
-    messaggio.style.visibility = 'hidden';
-    messaggio.appendChild(document.createTextNode('per continuare a giocare aumenta la dimensione della finestra...'));
-    messaggio.id = "messaggio-informativo";
-    document.body.appendChild(messaggio);
 
     // menu laterale
     initMenu(menu);

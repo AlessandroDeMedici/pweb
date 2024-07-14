@@ -34,8 +34,10 @@ class Casella{
         this.ipoteca = ipoteca;
         this.immagine = immagine;
         this.acquistabile = acquistabile;
-        
-        // la proprieta e' inizialmente priva di case e di alberghi
+    }
+
+
+    init(){
         this.case = 0;
         this.albergo = 0;
         this.casella = null;
@@ -89,7 +91,6 @@ class Casella{
 
     rimuoviProprieta(){
         if (!this.casella){
-            console.log('impossibile rimuovere la casella');
             return;
         }
 
@@ -283,6 +284,10 @@ class Casella{
         let a = document.getElementById('make-offer');
         let b = document.getElementById('view-offer');
         let c = document.getElementById('message-container');
+
+        // azzero l'owner
+        const owner = document.getElementById('owner');
+        owner.innerHTML = '';
 
         if (a)
             a.style.display = 'none';
@@ -504,7 +509,6 @@ class Casella{
             }
             // altrimenti la pesco e basta
             console.log(player.username + ' ha pescato ' + carta.nome + ' : ' + carta.descrizione);
-
             carta.pesca(player);
 
             return 0;
@@ -519,7 +523,6 @@ class Casella{
             }
             // altrimenti pesca e basta la carta
             console.log(player.username + ' ha pescato ' + carta.nome + ' : ' + carta.descrizione);
-
             carta.pesca(player);
 
             
@@ -564,6 +567,11 @@ class Casella{
             player.updateSaldo();
             return;
         }
+
+
+        // controllo che il giocatore possieda la casella
+        if (this.owner == player.numId)
+            return;
 
         // stazione (sicuramente posseduta da qualcuno)
         if (this.nome.includes('Stazione')){
@@ -630,6 +638,26 @@ class Casella{
         // ritorno 1 se il giocatore ha pagato qualcosa
         return 1;
 
+    }
+
+
+    // funzione per liberare una proprieta
+    free(){
+        this.case = 0;
+        this.albergo = 0;
+        this.owner = null;
+    }
+
+
+    // funzione per controllare di avere tutte le proprieta di un gruppo
+    haveAll(player){
+        for (let p of scenario){
+            // se esiste una proprieta dello stesso gruppo con owner diverso allora ritorna false
+            if (p.gruppo = this.gruppo && p.owner != player.numId)
+                return false;
+        }
+
+        return true;
     }
 }
 

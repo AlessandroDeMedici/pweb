@@ -98,7 +98,7 @@
 
     try {
         
-        $query =    "INSERT 
+        $query ="   INSERT 
                     INTO Account 
                     VALUES (:username,:password,:domanda,:risposta)";
 

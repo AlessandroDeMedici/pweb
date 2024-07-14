@@ -19,3 +19,12 @@ CREATE TABLE `account` (
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+DROP TABLE IF EXISTS `game`;
+CREATE TABLE `game` (
+  `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  `username` varchar(255) NOT NULL,
+  `points` INT,
+  FOREIGN KEY (username) REFERENCES account(username)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

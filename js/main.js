@@ -25,15 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabellone();
 
     // inizializzo l'array dei giocatori
-    giocatori.push(new Giocatore(username));
-    giocatori.push(new Giocatore(npc[0]));
-    giocatori.push(new Giocatore(npc[1]));
-    giocatori.push(new Giocatore(npc[2]));
-    giocatori.push(new Giocatore(npc[3]));
+    initGiocatori();
 
-    
-
-    // viene fatto partire il gioco
+    // viene creato l'oggetto gioco
     let game = new Gioco();
     game.start();
 })
