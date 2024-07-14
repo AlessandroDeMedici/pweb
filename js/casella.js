@@ -33,7 +33,7 @@ class Casella{
         this.pedaggio = pedaggio;
         this.ipoteca = ipoteca;
         this.immagine = immagine;
-        this.acquistabie = acquistabile;
+        this.acquistabile = acquistabile;
         
         // la proprieta e' inizialmente priva di case e di alberghi
         this.case = 0;
@@ -59,7 +59,7 @@ class Casella{
             return this.nome;
         }
         else if (this.nome.includes('Società')){
-            let stringa = "Con 1 società $2*lancio\n";
+            let stringa = "Con 1 società $4*lancio\n";
             stringa += "Con 2 società $10*lancio\n";
             return stringa;
         }
@@ -81,7 +81,6 @@ class Casella{
             stringa += "Con " + i + ' case $' + this.pedaggio[i] + '\n';
         }
         stringa += "Con albergo $" + this.pedaggio[5] + '\n';
-        stringa += 'Valore ipotecario $' + this.ipoteca + '\n';
         stringa += "Le case costano $" + this.prezzo[1] + '\n';
         stringa += "L'albergo costa $" + this.prezzo[2] + '\n';
         return stringa;
@@ -275,7 +274,7 @@ class Casella{
         owner.innerHTML = '';
 
         if (this.owner){
-            owner.innerHTML = 'owner: ' + this.owner;
+            owner.innerHTML = 'owner: ' + giocatori[this.owner].username;
         }
     }
 
@@ -292,7 +291,7 @@ class Casella{
             b.style.display = 'none';
 
         if (c)
-            c.style.display = 'grid';
+            c.style.display = 'flex';
 
         Casella.messageBox.style.visibility = 'visible';
         Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
@@ -308,54 +307,31 @@ class Casella{
         vendiCasa.style.display = 'block';
         compra.style.display = 'none';
 
+        // se mi trovo sopra la casella posso acquistarla
+        let casella = scenario[giocatori[0].posizione];
+
+        if (casella == this && this.owner == null)
+            compra.style.display = 'block';
+
+        // se non e' acquistabile nascondi tutto
+        if (!this.acquistabile){
+            vendi.style.display = 'none';
+            compraCasa.style.display = 'none';
+            vendiCasa.style.display = 'none';
+            compra.style.display = 'none';
+            return;
+        }
+
 
         this.stampaOwner();
         this.stampaCase();
 
         // preparo i bottoni
+        console.log(this.nome);
         compra.dataset.nome = this.nome;
         vendi.dataset.nome = this.nome;
         compraCasa.dataset.nome = this.nome;
         vendiCasa.dataset.nome = this.nome;
-    }
-
-
-
-    // funzione per mostrare la casella per acquistarla
-    mostraAcquisto(){
-        let a = document.getElementById('make-offer');
-        let b = document.getElementById('view-offer');
-        let c = document.getElementById('message-container');
-
-        if (a)
-            a.style.display = 'none';
-
-        if (b)
-            b.style.display = 'none';
-
-        if (c)
-            c.style.display = 'grid';
-
-        Casella.messageBox.style.visibility = 'visible';
-        Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
-        Casella.titoloMessageBox.innerHTML = this.nome;
-
-        const vendi = document.getElementById('vendi');
-        const compraCasa = document.getElementById('compra-casa');
-        const vendiCasa = document.getElementById('vendi-casa');
-        const compra = document.getElementById('compra');
-
-        vendi.style.display = 'none';
-        compraCasa.style.display = 'none';
-        vendiCasa.style.display = 'none';
-        compra.style.display = '';
-
-        // preparo i bottoni
-        compra.dataset.nome = this.nome;
-        vendi.dataset.nome = this.nome;
-        compraCasa.dataset.nome = this.nome;
-        vendiCasa.dataset.nome = this.nome;
-
     }
 
 
@@ -510,6 +486,151 @@ class Casella{
         }
         return this;
     }
+
+
+    // funzione chiamata ogni volta che passo sopra una nuova casella
+    // prende come argomento l'id del giocatore
+    move(id,move){
+        let player = giocatori[id];
+
+        // casella imprevisto o probabilita
+        if (this.nome == 'probabilita'){
+            let carta = probabilita[indiceProbabilita];
+            indiceProbabilita = Math.floor(Math.random() * probabilita.length);
+
+            // se si tratta del giocatore allora stampa a video l'effetto della carta
+            if (!id){
+                alert(carta.descrizione);
+            }
+            // altrimenti la pesco e basta
+            console.log(player.username + ' ha pescato ' + carta.nome + ' : ' + carta.descrizione);
+
+            carta.pesca(player);
+
+            return 0;
+        }
+        if (this.nome == 'imprevisti'){
+            let carta = imprevisti[indiceImprevisti];
+            indiceImprevisti = Math.floor(Math.random() * imprevisti.length);
+
+            // se si tratta del giocatore allora stampa a video l'effetto della carta
+            if (!id){
+                alert(carta.descrizione);
+            }
+            // altrimenti pesca e basta la carta
+            console.log(player.username + ' ha pescato ' + carta.nome + ' : ' + carta.descrizione);
+
+            carta.pesca(player);
+
+            
+            return 0;
+        }
+
+        // uno dei 4 angoli
+        if (this.nome == 'Via!'){
+            return 0;
+        }
+        
+        if (this.nome == 'Prigione'){
+            return 0;
+        }
+
+        if (this.nome == 'parcheggio gratuito'){
+            return 0;
+        }
+
+        // ritorna -1 se il giocatore e' andato in prigione
+        if (this.nome == 'In prigione!'){
+            player.goToPrison();
+            player.prigione = 1;
+
+            console.log(player.username + " e' andato in prigione");
+            return -1;
+        }
+
+        // casella che e' possibile acquistare
+
+        if ((this.acquistabile == 1) && (this.owner == null)){
+            if (id == 0){
+                this.mostraMessageBox();
+            } else
+                player.ai.buy(this);
+            return 0;
+        }
+
+        // tassa
+        if (this.nome.includes('Tassa')){
+            player.paga(this.pedaggio[0]);
+            player.updateSaldo();
+            return;
+        }
+
+        // stazione (sicuramente posseduta da qualcuno)
+        if (this.nome.includes('Stazione')){
+
+            // controllo quante stazioni sono possedute dallo stesso giocatore
+            let i = -1;
+
+            if (scenario[5].owner == this.owner)
+                i++;
+
+            if (scenario[15].owner == this.owner)
+                i++;
+
+            if (scenario[25].owner == this.owner)
+                i++;
+
+            if (scenario[35].owner == this.owner)
+                i++;
+
+        
+            console.log(player.username + " ha pagato " + this.pedaggio[i] + ' a ' + giocatori[this.owner].username);
+            player.paga(this.pedaggio[i]);
+            giocatori[this.owner].ricevi(this.pedaggio[i]);
+            giocatori[this.owner].updateSaldo();
+            player.updateSaldo();
+            return;
+        }
+
+        // societa (sicuramente posseduta da qualcuno)
+        if (this.nome.includes('Societa')){
+
+            let i = -1;
+
+            if (scenario[12].owner == this.owner)
+                i++;
+
+            if (scenario[28].owner == this.owner)
+                i++;
+
+            
+            console.log(player.username + " ha pagato " + this.pedaggio[i] + ' a ' + giocatori[this.owner].username);
+            player.paga(this.pedaggio[i] * move);
+            giocatori[this.owner].ricevi(this.pedaggio[i]);
+            giocatori[this.owner].updateSaldo();
+            updateSaldo();
+            return;
+        }
+
+        // proprieta (sicuramente posseduta da qualcuno)
+        if (this.albergo){
+            // albergo
+            player.paga(this.pedaggio[5]);
+            giocatori[this.owner].ricevi(this.pedaggio[5]);
+            console.log(player.username + " ha pagato " + this.pedaggio[5] + ' a ' + giocatori[this.owner].username);
+        } else {
+            // case
+            player.paga(this.pedaggio[this.case]);
+            giocatori[this.owner].ricevi(this.pedaggio[this.case]);
+            console.log(player.username + " ha pagato " + this.pedaggio[this.case] + ' a ' + giocatori[this.owner].username);
+        }
+
+        player.updateSaldo();
+        giocatori[this.owner].updateSaldo();
+        // ritorno 1 se il giocatore ha pagato qualcosa
+        return 1;
+
+    }
 }
 
 
@@ -540,7 +661,7 @@ function initTabellone(){
     scenario.push(new Casella('Corso Ateneo',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));
     scenario.push(new Casella('Piazza Università',null,3,'pink',[160,100,100],[12,60,180,500,700,900],80,null,1));
     
-    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',null,1));
+    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
     scenario.push(new Casella('Via Verdi',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90,null,1));
     scenario.push(new Casella('probabilita'));
     scenario.push(new Casella('Corso Raffaello',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90,null,1));

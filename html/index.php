@@ -49,6 +49,12 @@
 
         <!-- login -->
         <link rel="stylesheet" href="/css/login.css" />
+
+        <!-- AI -->
+        <script type="text/JavaScript" src="/js/ai.js"></script>
+
+        <!-- message box -->
+        <link rel="stylesheet" href="/css/messageBox.css" />
     
     </head>
 

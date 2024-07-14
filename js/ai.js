@@ -18,3 +18,26 @@
 
 // velocita di "ragionamento"
 let speed = 1;
+
+
+// deve esistere una funzione di sell
+
+// se questa funzione ha ritorno negativo allora siamo in bancarotta
+
+// quando un giocatore va in bancarotta tutto va alla banca
+
+
+class IA{
+    constructor(){
+
+    }
+
+    sell(){
+        return 1;
+    }
+
+
+    buy(){
+        return 0;
+    }
+};

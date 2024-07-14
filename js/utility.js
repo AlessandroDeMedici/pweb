@@ -13,6 +13,12 @@ function inserisciImmagineAngolo(casella,immagine,angolo = 0){
     let img = document.createElement('img');
     img.src = immagine;
     img.style.transform = 'rotate(' + angolo + 'deg)';
+    img.style.position='absolute';
+    img.style.top = 0;
+    img.style.bottom = 0;
+    img.style.left = 0;
+    img.style.right = 0;
+    img.style.margin = 'auto';
     div.appendChild(img);
 }
 

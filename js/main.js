@@ -1,10 +1,6 @@
 
 
-document.addEventListener('DOMContentLoaded', () => { 
-
-    // ottengo lo username se presente dalla sessione
-    let account = document.getElementById('account');
-    username = account.dataset.username;
+document.addEventListener('DOMContentLoaded', () => {
 
     // inizializzo la home
     printHome();

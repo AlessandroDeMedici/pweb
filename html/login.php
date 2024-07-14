@@ -121,6 +121,9 @@
         const registerForm = document.getElementById('register-form');
         const recoverForm = document.getElementById('recover-form');
         const form = document.getElementById('form');
+        let username = '';
+        let logged = 0;
+
 
         loginForm.onsubmit = login;
         registerForm.onsubmit = register;
@@ -133,7 +136,7 @@
             // pulisco errore
             const errore = document.getElementById('errore-login');
             errore.innerHTML = '';
-
+            
             const data = new FormData(loginForm);
 
             let request = new XMLHttpRequest();
@@ -274,9 +277,9 @@
             logged = 1;
             const account = document.getElementById('account');
 
-            // variabile globale username
-            username = data['user'];
+            giocatori[0].username = data['user'];
 
+            account.dataset.username = data['user'];
             account.firstChild.nodeValue = data['user'][0];
             account.style.backgroundColor = '#bfdbae';
 

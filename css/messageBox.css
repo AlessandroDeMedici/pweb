@@ -1,0 +1,249 @@
+/* message-box */
+#message-box{
+    position: absolute;
+    width: 800px;
+    height: 600px;
+
+    top: calc(50% - 300px);
+    left: calc(50% - 400px);
+
+    background-color: white;
+    border: 5px solid lightgrey;
+    border-radius: 30px;
+    
+    box-shadow: grey 5px 5px;
+    z-index: 1;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#message-box button{
+    font-family: Minecraft-8-bit;
+    font-weight: 500;
+    color: white;
+    text-shadow: #555555 3px 3px;
+
+
+    font-size: 20px;
+    margin: 20px;
+    padding: 5px;
+    border-radius: 10px;
+    border: solid 5px black;
+    background-color: #AAAAAA;
+    box-shadow: black 5px 5px;
+}
+
+#message-box button:hover{
+    background-color: #555555;
+}
+
+#message-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin: 20px;
+    width: 90%;
+    height: 90%;
+}
+
+
+.message-sub-container{
+    width: 40%;
+    margin: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+#exit-message-box{
+    color: grey;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif;
+    
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+
+.exit{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    border: solid 2px lightgrey;
+    background-color: white;
+    border-radius: 6px;
+}
+
+#descrizione-message-box{
+    
+    padding-bottom: auto;
+    padding-top: auto;
+
+    margin-top: 0px;
+
+    color: grey;
+    font-weight: 500;
+    font-size: 15px;
+
+    text-align: center;
+    grid-row: 2;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#titolo-message-box{
+    margin: 20px;
+    color: grey;
+    font-weight: 800;
+    font-size: 40px;
+    
+    text-align: center;
+    grid-row: 1;
+
+    padding-top: auto;
+    padding-bottom: auto;
+} 
+
+
+/* parte relativa a make offer */
+#make-offer{
+    width: 100%;
+    height: 100%;
+}
+
+.container-make-offer{
+    display: flex;
+    justify-content: center;
+}
+
+.make-offer-player{
+    margin: 20px;
+}
+
+.player-list-offer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.radio-container{
+    width: 100px;
+    height: 100px;
+    border: solid 1px lightgray;
+    margin: 20px;
+
+    box-shadow: lightgray 5px 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.radio-container img {
+    width: 60px;
+    height: 60px;
+    margin: auto;
+}
+
+.make-offer-checklist{
+    width: 200px;
+    height: 100px;
+    color: black;
+
+    overflow: auto;
+}
+
+.vertical-line{
+    height: 200px;
+    width: 0px;
+    border: solid 1px lightgray;
+}
+
+#send-offer{
+
+    position: relative;
+
+    left: calc(50% - 100px);
+    
+    font-size: 50px;
+    font-weight: bold;
+    
+    height: fit-content;
+    width: 200px;
+    padding: 10px;
+    color: white;
+    text-shadow: lightgray 2px 2px;
+
+    background-color: #27ae60;
+    box-shadow: lightgray 5px 5px;
+    border: 0px;
+    font-family: 'Josefin Sans';
+
+    border-radius: 10px;
+}
+
+/* parte relativa a view offer */
+.view-offer-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-offer-player-container img{
+    width: 50px;
+    height: 50px;
+}
+
+.view-offer-player-container{
+    width: 250px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.view-offer-title{
+    text-align: center;
+    margin: 30px;
+}
+
+#accetta{
+    background-color: #27ae60;
+}
+
+#rifiuta{
+    background-color: #c0392b;
+}
+
+.view-offer-properties{
+    width: 90%;
+    height: 150px;
+    padding: 10px;
+    overflow: auto;
+}
+
+.view-offer-money{
+    margin: 50px;
+}
+
+button:disabled{
+    opacity: 50%;
+}
+

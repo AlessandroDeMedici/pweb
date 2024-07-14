@@ -14,6 +14,7 @@ class Giocatore{
 
         // do un id al giocatore
         this.id = 'giocatore-' + giocatori.length;
+        this.numId = giocatori.length;
 
         // inseririsco il giocatore nella prima casella
         let casella = document.getElementById('contenitore-giocatori-0');
@@ -28,7 +29,7 @@ class Giocatore{
         // caselle possedute dal giocatore
         this.proprieta = [];
 
-        // tengo traccia se il giocatore si trova in prigione
+        // tengo traccia se il giocatore si trova in prigione se si da quanti turni
         this.prigione = 0;
 
         // username casuale
@@ -38,6 +39,11 @@ class Giocatore{
         this.offerte = [];
 
         this.bancarotta = 0;
+
+        // campo significativo solo per gli npc
+        if (this.numId){
+            this.ai = new IA();
+        }
 
     }
 
@@ -49,6 +55,20 @@ class Giocatore{
         }
 
         i = (i + this.posizione) % 40;
+        console.log('contenitore-giocatori-' + i);
+        let newdiv = document.getElementById('contenitore-giocatori-' + i);
+        newdiv.appendChild(this.pedina);
+
+        this.posizione = i;
+
+        return i;
+    }
+
+    muoviGiocatoreAbs(i){
+        if (i < 0 || i > 39){
+            console.log('movimento errato');
+            return;
+        }
 
         let newdiv = document.getElementById('contenitore-giocatori-' + i);
         newdiv.appendChild(this.pedina);
@@ -97,9 +117,8 @@ class Giocatore{
         // turni passati in prigione
         let div = document.getElementById('prigione');
         div.appendChild(this.pedina);
-        this.posizione = 'prigione';
+        this.prigione = 1;
 
-        this.turni = 0;
     }
 
     // funzione per pagare la manutenzione sugli alberghi e sulle case possedute
@@ -113,6 +132,12 @@ class Giocatore{
         }
 
         this.paga(numeroCase * costoCasa + numeroAlberghi * costoAlbergo);
+    }
+
+
+    updateSaldo(){
+        const saldo = document.getElementById('saldo-giocatore-' + this.numId);
+        saldo.innerHTML = this.saldo;
     }
 }
 
@@ -144,25 +169,36 @@ class Carta{
         }
         
         if (this.effetto == 'MOVE_ABSOLUTE'){
-            giocatore.muoviGiocatore(this.valore);
-            return;
-        } else if (this.effetto == 'MOVE_RELATIVE'){
-            giocatore.muoviGiocatore(giocatore.posizione + this.valore);
+            let i = giocatore.muoviGiocatoreAbs(this.valore);
+
+            // bisogna fare la mossa corrispondente alla nuova posizione
+            let casella = scenario[i];
+            console.log(this.valore);
+            casella.move(giocatore.numId,Math.abs(this.valore));
+
+        } else if (this.effetto == 'MOVE'){
+            console.log(this.valore);
+            let i = giocatore.muoviGiocatore(this.valore);
+
+            // bisogna fare la mossa corrispondente alla nuova posizione
+            let casella = scenario[i];
+            casella.move(giocatore.numId,Math.abs(this.valore));
+
         } else if (this.effetto == 'PAY'){
             giocatore.paga(this.valore);
+            giocatore.updateSaldo();
             return;
         } else if (this.effetto == 'PRISON'){
             giocatore.goToPrison();
-        } else if (this.effetto == 'JOLLY'){
-            // conferisci al giocatore la carta jolly
         } else if (this.effetto == 'GIFT'){
             giocatore.ricevi(this.valore);
+            giocatore.updateSaldo();
         } else if (this.effetto == 'MANTEINANCE'){
             giocatore.manutenzione(this.valore,this.valore2);
-        } else if (this.effetto == 'TAKE'){
-            giocatore.riceviGiocatori(this.valore);
+            giocatore.updateSaldo();
         } else if (this.effetto == 'GIVE'){
             giocatore.pagaGiocatori(this.valore);
+            giocatore.updateSaldo();
         } else {
             ;
         }
@@ -176,22 +212,20 @@ imprevisti.push(new Carta('Imprevisti', 'Avanzate fino fino a Via Marco Polo, se
 imprevisti.push(new Carta('Imprevisti', 'Arretrate di 3 caselle', 'MOVE', -3));
 imprevisti.push(new Carta('Imprevisti', 'Avete preso una multa per eccesso di velocità, pagate $15', 'PAY', 15));
 imprevisti.push(new Carta('Imprevisti', 'Andate in prigione e senza passare dal via, non ritirate $200', 'PRISON'));
-imprevisti.push(new Carta('Imprevisti', 'Uscite ora di prigione. Questa carta può essere conservata quando ne avrete bisogno, oppure può essere scambiata o venduta', 'JOLLY'));
 imprevisti.push(new Carta('Imprevisti', 'Maturano i fondi sull\'assicurazione sulla vita: ritirate $50', 'GIFT', 50));
-imprevisti.push(new Carta('Imprevisti', 'Avanzate fino a Viale dei Giardini', 'MOVE'));
-imprevisti.push(new Carta('Imprevisti', 'Avanzate fino a Via Marco Polo, se passate dal via ritirate $200', 'MOVE', 200));
+imprevisti.push(new Carta('Imprevisti', 'Avanzate fino a Viale dei Giardini', 'MOVE_ABSOLUTE',37));
+imprevisti.push(new Carta('Imprevisti', 'Avanzate fino a Via Marco Polo, se passate dal via ritirate $200', 'MOVE_ABSOLUTE', 21));
 imprevisti.push(new Carta('Imprevisti', 'Siete stati eletti amministratore di condominio, pagate a ciascun giocatore $50', 'GIVE', 50));
-imprevisti.push(new Carta('Imprevisti', 'Avanzate fino alla prossima stazione. Se è ancora libera potete comprarla dalla banca. Se è già stata acquistata pagate il biglietto al proprietario il doppio che gli spetterebbe normalmente', 'NEXT_STATION'));
-imprevisti.push(new Carta('Imprevisti', 'Avanzate fino alla prossima stazione. Se è ancora libera potete comprarla dalla banca. Se è già stata acquistata pagate il biglietto al proprietario il doppio che gli spetterebbe normalmente', 'NEXT_STATION'));
-imprevisti.push(new Carta('Imprevisti', 'Eseguite lavori di manutenzione su tutte le vostre proprietà, per ogni casa pagate $25, per ogni albergo pagate $100', 'MAINTENANCE'));
-imprevisti.push(new Carta('Imprevisti', 'Avanzate fino alla società più vicina. Se è già acquistata lanciate i dadi e pagate al proprietario 10 volte il numero uscito', 'MOVE'));
-imprevisti.push(new Carta('Imprevisti', 'Avanzate fino al Via! Ritirate $200', 'MOVE', 200));
-imprevisti.push(new Carta('Imprevisti', 'Matura il vostro investimento sulla chiavetta delle macchinette, ritirate $150 di resto non restituito', 'GIFT', 150));
+imprevisti.push(new Carta('Imprevisti', 'Eseguite lavori di manutenzione su tutte le vostre proprietà, per ogni casa pagate $25, per ogni albergo pagate $100', 'MAINTENANCE',25,100));
+imprevisti.push(new Carta('Imprevisti', 'Avanzate fino al Via! Ritirate $200', 'MOVE_ABSOLUTE', 0));
+imprevisti.push(new Carta('Imprevisti', 'Maturano i vostri investimenti, ritirate $150', 'GIFT', 150));
+let indiceImprevisti = Math.floor(Math.random() * imprevisti.length);
+
+
 
 let probabilita = [];
-probabilita.push(new Carta('Probabilita','Uscite ora di prigione. Questa carta può essere conservata quando ne avrete bisogno, oppure può essere scambiata o venduta', 'JOLLY'));
 probabilita.push(new Carta('Probabilita','Ereditate delle proprietà da un lontano parente, ritirate $100', 'GIFT', 100));
-probabilita.push(new Carta('Probabilita','Avanzate fino al Via! Ritirate $200', 'MOVE_ABSOLUTE', 0)); // Assuming 0 is the position for 'Go'
+probabilita.push(new Carta('Probabilita','Avanzate fino al Via! Ritirate $200', 'MOVE_ABSOLUTE', 0));
 probabilita.push(new Carta('Probabilita','Avete vinto la lotteria! Ritirate $100', 'GIFT', 100));
 probabilita.push(new Carta('Probabilita','Ricevete le parcelle della tintoria, pagate $100', 'PAY', 100));
 probabilita.push(new Carta('Probabilita','La banca riconosce un errore nel vostro conto, ritirate $200', 'GIFT', 200));
@@ -200,6 +234,9 @@ probabilita.push(new Carta('Probabilita','Versate il rimanente delle rette unive
 probabilita.push(new Carta('Probabilita','Ricevete la parcella del dottore, pagate $50', 'PAY', 50));
 probabilita.push(new Carta('Probabilita','Maturano gli interessi della vostra assicurazione sulla vita. Ritirate $100', 'GIFT', 100));
 probabilita.push(new Carta('Probabilita','Andate in prigione senza passare dal via, non ritirate $200', 'PRISON'));
+let indiceProbabilita = Math.floor(Math.random() * probabilita.length);
+
+
 
 // funzione per inizializzare player e offer display
 // di fatto soltanto player display
@@ -892,12 +929,6 @@ function compraProprieta(e){
         return;
     }
 
-    // controllo che il giocatore si trovi sopra questa casella
-    let indice = scenario.indexOf(casella);
-    if (player.posizione != indice){
-        return;
-    }
-
     // controllo che la casella non abbia owner
     if (casella.owner){
         return;
@@ -911,13 +942,14 @@ function compraProprieta(e){
 
     // a questo punto il giocatore ha acquistato la proprieta
     player.proprieta.push(casella);
+
+    casella.owner = player.numId;
+    casella.case = 0;
+    casella.alberghi = 0;
     
     // aggiorno il saldo ed aggiorno il saldo a video
-    player.saldo -= Number(casella.prezzo[0]);
-    const saldo = document.getElementById('saldo-giocatore-0');
-    saldo.innerHTML = player.saldo;
-
-    // se ad acquistare e' stato il giocatore allora stampa anche la proprieta a video
+    player.paga(casella.prezzo[0]);
+    player.updateSaldo();
     casella.stampaProprieta();
 }
 
@@ -936,18 +968,21 @@ function vendiProprieta(e){
     }
 
     // controllo che l'owner sia il giocatore
-    if (!casella.owner){
+    if (casella.owner != 0){
+        alert("Non possiedi questa casella!");
         return;
     }
 
     // procedo a venderla
+
+    if (!confirm("Sei sicuro di voler vendere la proprieta?")){
+        return;
+    }
+
     casella.owner = null;
     let player = giocatori[0];
-    player.saldo += Number(casella.prezzo[0]);
-
-    // aggiorno il saldo a video
-    const saldo = document.getElementById('saldo-giocatore-0');
-    saldo.innerHTML = player.saldo;
+    player.ricevi(casella.prezzo[0]);
+    player.updateSaldo();
 
     // rimuovo la proprieta a video
     casella.rimuoviProprieta();
@@ -960,11 +995,13 @@ function compraCasa(e){
     // ottengo riferimento alla proprieta
     let nome = e;
     let bottone = e.target;
+    console.log(bottone.dataset.nome);
     nome = bottone.dataset.nome;
 
     // ottengo riferimento al giocatore
     let player = giocatori[0];
 
+    let casella = getCasella(nome);
 
     if (!casella){
         console.log('compraCasa - nessuna casella con questo nome');
@@ -973,6 +1010,7 @@ function compraCasa(e){
 
     // controllo che l'owner sia il giocatore
     if (casella.owner != 0){
+        alert("Non possiedi questa proprieta");
         return;
     }
 
@@ -1032,6 +1070,7 @@ function vendiCasa(e){
     e.preventDefault();
 
     let casella = null;
+    let nome = e.target.dataset.nome;
     casella = getCasella(nome);
 
     let player = giocatori[0];
@@ -1281,10 +1320,9 @@ function waitStart(){
     return new Promise((resolve) => {
         const roll = document.getElementById('roll');
         roll.innerHTML = 'Avvia il Gioco!';
-        roll.addEventListener('click',() => { roll.disabled = true; roll.innerHTML = 'lancia i dadi!'; resolve(); }, {once: true});
+        roll.addEventListener('click',() => { roll.disabled = true; roll.innerHTML = 'Lancia i dadi!'; resolve(); }, {once: true});
     });
 }
-
 
 // funzione per attendere che un player prema i dadi
 function waitForDice(){
@@ -1293,6 +1331,24 @@ function waitForDice(){
         roll.disabled = false;
         roll.addEventListener('click', () => { roll.disabled = true; resolve(randomDice());}, {once: true});
     })
+}
+
+function waitForEndTurn(){
+    return new Promise((resolve) => {
+        const roll = document.getElementById('roll');
+        roll.disabled = false;
+        roll.innerHTML = 'Passa il turno!';
+        roll.addEventListener('click', () => { 
+            // se il saldo e' negativo non posso terminare il turno
+            if (giocatori[0].saldo < 0){
+                resolve(false);
+            } else {
+                roll.disabled = true;
+                roll.innerHTML = 'Lancia i dadi!';
+                resolve(true);
+            }
+        }, {once: true} );
+    });
 }
 
 
@@ -1337,26 +1393,90 @@ class Gioco{
 
             // ottengo un riferimento al player che deve giocare
             let id = this.turno%numPlayer;
+            console.log("turno " + this.turno + ' tocca a ' + giocatori[id].username);
             
             let player = giocatori[id];
 
-            let dice1, dice2;
-
-            // se si tratta del giocatore attendo che questo prema i dadi
-            // magari aggiungere una funzione che evidenzia i dadi se non preme per troppo tempo
-            if (id == 0){
-                [dice1, dice2] = await waitForDice();
-                player.muoviGiocatore(dice1 + dice2);
-
-
-            } else {
-                [dice1, dice2] = randomDice();
-                player.muoviGiocatore(dice1 + dice2);
-                // attendiamo un secondo
-                await waitASec(1000);
-
+            // controllo se il giocatore e' in bancarotta
+            if (player.bancarotta){
+                this.turno++;
+                continue;
             }
 
+            // controllo se il giocatore principale ha perso
+            if (id == 0 && player.bancarotta){
+                // allora fai in modo che possa salvare la partita, per il momento non lo consideriamo
+            }
+
+            let dice1, dice2;
+
+            let oldPosition = player.posizione;
+
+            // 0. lancio dei dadi
+            if (id == 0){
+                [dice1, dice2] = await waitForDice();
+            } else {
+                [dice1, dice2] = randomDice();
+            }
+
+            dice1 = Number(dice1);
+            dice2 = Number(dice2);
+
+            // 0. controllo che il giocatore non sia in prigione
+            if (player.prigione){
+                // se il giocatore ha fatto doppio esce normalmente
+                if (dice1 == dice2)
+                    player.prigione = 0;
+                else {
+                    // se il giocatore non ha fatto doppio allora salta il turno
+                    player.prigione++;
+
+                    // se ha gia' saltato 3 turni allora paga 50 ed esci
+                    if (player.prigione == 4){
+                        player.paga(50);
+                        player.prigione = 0;
+                    } else {
+                        this.turno++;
+                    }
+
+                    if (id){
+                        await waitASec(1000);
+                        continue;
+                    } else {
+                        await waitForEndTurn();
+                        continue;
+                    }
+                }
+            }
+
+            // 1. spostamento della casella
+            player.muoviGiocatore(dice1 + dice2);
+
+            // 2. controllo se sono passato dal via
+            let newPosition = player.posizione;
+
+            if (newPosition < oldPosition){
+                player.ricevi(200);
+                player.updateSaldo();
+            }
+
+
+            // 3. controllo su che casella mi trovo
+            let casella = scenario[newPosition];
+            let ritorno = casella.move(id);
+
+
+            // il turno non puo' terminare se il saldo e' negativo
+            if (!id){
+                while (1){
+                    let bool = await waitForEndTurn();
+                    if (bool)
+                        break;
+                    alert("Non puoi terminare il turno con saldo negativo");
+                }
+            } else {
+                await waitASec(1000);
+            }
 
 
             this.turno++;

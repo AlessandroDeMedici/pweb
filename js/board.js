@@ -99,11 +99,11 @@ class Board{
 
                     // creo il layout della casella informativa
                     let messageSubContainer = document.createElement('div');
-                    messageSubContainer.id = 'message-sub-container';
+                    messageSubContainer.className = 'message-sub-container';
                     messageContainer.appendChild(messageSubContainer);
 
                     let buttonContainer = document.createElement('div');
-                    buttonContainer.className = 'message-button-container';
+                    buttonContainer.className = 'message-sub-container';
                     messageContainer.appendChild(buttonContainer);
 
                     // aggiungo i bottoni
@@ -155,17 +155,17 @@ class Board{
                         this.messageBox.style.visibility = 'hidden';
                     }
                     
-                    let descrizione = document.createElement('div');
-                    descrizione.id = 'descrizione-message-box';
-                    descrizione.appendChild(document.createTextNode(''));
-                    this.descrizioneMessageBox = descrizione;
-                    messageSubContainer.appendChild(descrizione);
-                    
                     let titolo = document.createElement('div');
                     titolo.id = 'titolo-message-box';
                     titolo.appendChild(document.createTextNode(''));
                     this.titoloMessageBox = titolo;
                     messageSubContainer.appendChild(titolo);
+                    
+                    let descrizione = document.createElement('div');
+                    descrizione.id = 'descrizione-message-box';
+                    descrizione.appendChild(document.createTextNode(''));
+                    this.descrizioneMessageBox = descrizione;
+                    messageSubContainer.appendChild(descrizione);
                     
                     // si chiude quando premi esc
                     document.addEventListener('keydown', (e)=>{

@@ -1,5 +1,4 @@
-let logged = 0;
-let username = '';
+
 let mainLogo;
 let singlePlayer;
 let multiPlayer;
@@ -45,7 +44,6 @@ function printHome(){
 
     // inizializzo iconcina account
     let account = document.getElementById('account');
-    username = account.dataset.username;
     account.onclick = showForm;
 
     // devo inizializzare il form se l'utente ha gia fatto login oppure no
