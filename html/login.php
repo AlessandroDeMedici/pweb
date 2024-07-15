@@ -11,6 +11,9 @@
                 // stampo un ? al posto dell'utente
                 echo '<button id="account" data-username="" class="account">?</button>';
             }
+        } else {
+            // stampo un ? al posto dell'utente
+            echo '<button id="account" data-username="" class="account">?</button>';
         }
 
     ?> 
@@ -127,6 +130,7 @@
         recoverForm.onsubmit = recover;
         form.onsubmit = (e) => e.preventDefault();
 
+        // login handler
         function login(e) {
             e.preventDefault();
 
@@ -147,7 +151,7 @@
         }
 
 
-        // handler register
+        // register handler
         function register(event) {
             event.preventDefault();
 
@@ -175,7 +179,7 @@
             request.send(data);
         }
 
-
+        // recover handler
         function recover(e){
             e.preventDefault();
 
@@ -197,6 +201,7 @@
             let request = new XMLHttpRequest();
             request.open("post","../php/recover.php");
             request.onload = () =>{
+                console.log(request.response);
                 const response = JSON.parse(request.response);
                 let errore = document.getElementById('errore-recover');
                 errore.innerHTML = response['message'];

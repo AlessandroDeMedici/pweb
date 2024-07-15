@@ -43,15 +43,17 @@ function printHome(){
     // inizializzo iconcina account
     let account = document.getElementById('account');
     account.onclick = showForm;
-
-    // devo inizializzare il form se l'utente ha gia fatto login oppure no
-    if (logged){
+    
+    //debug
+    //console.log(account.innerHTML);
+    if (account.innerHTML == '?'){
         // utente non logged
         logoutButton.style.display = 'none';
     } else {
         // utente logged
         loginButton.style.display = 'none';
         registerButton.style.display = 'none';
+        recoverButton.style.display = 'none';
     }
     
     // inizializzo i bottoni

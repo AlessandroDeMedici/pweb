@@ -95,6 +95,10 @@
 
         $account = $statement->fetch();
 
+        if (!$account){
+            throw new Exception("account non trovato...");
+        }
+
         // controllo che la domanda sia corretta
         if (strcmp($account['domanda'],$domanda) || strcmp($account['risposta'],$risposta)){
             $result = [
