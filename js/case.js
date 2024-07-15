@@ -12,7 +12,8 @@ function compraProprieta(e){
     casella = getCasella(nome);
 
     if (!casella){
-        console.log('compraProprieta - nesssuna casella con questo nome');
+        //debug
+        //console.log('compraProprieta - nesssuna casella con questo nome');
         return;
     }
 
@@ -47,6 +48,8 @@ function compraProprieta(e){
     player.updateSaldo();
     casella.stampaProprieta();
 
+    // stampo a log
+    printMessage(giocatori[0].username + ' ha acquistato ' + casella.nome);
 
     // nascondo la message box
     const messageBox = document.getElementById('message-box');
@@ -63,7 +66,8 @@ function vendiProprieta(e){
     casella = getCasella(nome);
 
     if (!casella){
-        console.log('vendiProprieta - nessuna casella con questo nome');
+        //debug
+        //console.log('vendiProprieta - nessuna casella con questo nome');
         return;
     }
 
@@ -93,9 +97,16 @@ function vendiProprieta(e){
     // rimuovo la proprieta dall'array delle proprieta
     let indice = player.proprieta.indexOf(casella);
     player.proprieta.splice(indice,1);
+    
+    // stampo a log
+    printMessage(giocatori[0].username + ' venduto ' + casella.nome);
 
     // rimuovo la proprieta a video
     casella.rimuoviProprieta();
+
+    // nascondo la message box
+    const messageBox = document.getElementById('message-box');
+    messageBox.style.visibility = 'hidden';
 }
 
 // funzione chiamata per comprare una casa
@@ -105,7 +116,8 @@ function compraCasa(e){
     // ottengo riferimento alla proprieta
     let nome = e;
     let bottone = e.target;
-    console.log(bottone.dataset.nome);
+    //debug
+    //console.log(bottone.dataset.nome);
     nome = bottone.dataset.nome;
 
     // ottengo riferimento al giocatore
@@ -114,7 +126,8 @@ function compraCasa(e){
     let casella = getCasella(nome);
 
     if (!casella){
-        console.log('compraCasa - nessuna casella con questo nome');
+        //debug
+        //console.log('compraCasa - nessuna casella con questo nome');
         return;
     }
 
@@ -125,11 +138,8 @@ function compraCasa(e){
     }
 
     // controllo che il giocatore possieda l'intera serie
-    for (let p of scenario){
-        if ( p.acquistabile == 1 && p.gruppo == casella.gruppo && p.owner != 0){
-            alert("per comprare una casa devi prima possedere l'intera serie");
-            return;
-        }
+    if (!interaSerie(player.numId,casella.gruppo)){
+        alert("Devi prima possedere l'intera serie per acquistare case!");
     }
 
     // controllo che si possano acquistare case
@@ -168,8 +178,10 @@ function compraCasa(e){
     }
 
     // aggiorno il saldo a video
-    const saldo = document.getElementById('saldo-giocatore-0');
-    saldo.innerHTML = player.saldo;
+    player.updateSaldo();
+    
+    // stampo a log
+    printMessage(giocatori[0].username + ' ha comprato una casa su ' + casella.nome);
 
     // aggiorno le case a video
     casella.stampaCase();
@@ -186,7 +198,8 @@ function vendiCasa(e){
     let player = giocatori[0];
 
     if (!casella){
-        console.log('vendiCasa - nessuna casella con questo nome');
+        //debug
+        //console.log('vendiCasa - nessuna casella con questo nome');
         return;
     }
 
@@ -215,6 +228,12 @@ function vendiCasa(e){
 
     // aggiorno le case a video
     // aggiorno il saldo a video
-    const saldo = document.getElementById('saldo-giocatore-0');
-    saldo.innerHTML = player.saldo;
+    player.updateSaldo();
+
+    
+    // stampo a log
+    printMessage(giocatori[0].username + ' ha venduto una casa su ' + casella.nome);
+
+    // aggiorno le case a video
+    casella.stampaCase();
 }

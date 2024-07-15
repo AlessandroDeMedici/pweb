@@ -62,7 +62,8 @@ class Giocatore{
     // sposto il giocatore nella casella i caselle avanti e ritorniamo l'indice della casella
     muoviGiocatore(i){
         if (i > 12){
-            console.log('movimento errato');
+            //debug
+            //console.log('movimento errato');
             return;
         }
 
@@ -78,7 +79,8 @@ class Giocatore{
     // funzione per spostare il giocatore in una casella specifica
     muoviGiocatoreAbs(i){
         if (i < 0 || i > 39){
-            console.log('movimento errato');
+            //debug
+            //console.log('movimento errato');
             return;
         }
 
@@ -130,6 +132,7 @@ class Giocatore{
         let div = document.getElementById('prigione');
         div.appendChild(this.pedina);
         this.prigione = 1;
+        this.posizione = 10;
 
     }
 
@@ -154,7 +157,7 @@ class Giocatore{
 
     // funzione per dichiarare bancarotta ed aggiornare a video il saldo
     dichiaraBancarotta(){
-        console.log(this.username + ' ha dichiarato bancarotta');
+        printMessage(this.username + ' ha dichiarato bancarotta');
         this.bancarotta = 1;
         const saldo = document.getElementById('saldo-giocatore-' + this.numId);
         saldo.innerHTML = "BANCAROTTA";

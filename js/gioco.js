@@ -129,6 +129,9 @@ class Gioco{
         // inizializzo make offerr
         nomeMakeOffer();
 
+        // inizializzo log
+        const log = document.getElementById('log');
+        log.innerHTML = '';
 
     }
 
@@ -151,7 +154,6 @@ class Gioco{
     
             // mi metto in attesa che il giocatore prema su avvia gioco
             await waitStart();
-            console.log('started');
     
             // ottengo il codice del gioco
             v = await verificationCode();
@@ -169,7 +171,8 @@ class Gioco{
     
                 // ottengo un riferimento al player che deve giocare
                 let id = this.turno%numPlayer;
-                console.log("turno " + this.turno + ' tocca a ' + giocatori[id].username);
+                //debug
+                //console.log("turno " + this.turno + ' tocca a ' + giocatori[id].username);
                 
                 let player = giocatori[id];
     
@@ -179,13 +182,8 @@ class Gioco{
                     continue;
                 }
     
-                // controllo se il giocatore principale ha perso
-                if (id == 0 && player.bancarotta){
-                    // allora fai in modo che possa salvare la partita, per il momento non lo consideriamo
-                }
-    
                 let dice1, dice2;
-    
+
                 let oldPosition = player.posizione;
     
                 // 0. lancio dei dadi
@@ -201,27 +199,26 @@ class Gioco{
     
                 // 0. controllo che il giocatore non sia in prigione
                 if (player.prigione){
-                    // se il giocatore ha fatto doppio esce normalmente
-                    if (dice1 == dice2){
+
+                    // se ho gia' fatto 3 turni in prigione esci
+                    if (player.prigione == 4){
                         player.prigione = 0;
                     } else {
-                        // se il giocatore non ha fatto doppio allora salta il turno
-                        player.prigione++;
-    
-                        // se ha gia' saltato 3 turni allora paga 50 ed esci
-                        if (player.prigione == 4){
-                            player.paga(50);
+                        // se il giocatore ha fatto doppio esce normalmente
+                        if (dice1 == dice2){
                             player.prigione = 0;
                         } else {
+                            // se il giocatore non ha fatto doppio allora salta il turno
+                            player.prigione++;
                             this.turno++;
-                        }
-    
-                        if (id){
-                            await waitASec(1000);
-                            continue;
-                        } else {
-                            await waitForEndTurn();
-                            continue;
+        
+                            if (id){
+                                await waitASec(1000);
+                                continue;
+                            } else {
+                                await waitForEndTurn();
+                                continue;
+                            }
                         }
                     }
                 }
@@ -231,6 +228,8 @@ class Gioco{
     
                 // 2. controllo se sono passato dal via
                 let newPosition = player.posizione;
+                //debug
+                //console.log(oldPosition + ' + ' + (dice1 + dice2) + ' % 40 = ' + newPosition);
     
                 if (newPosition < oldPosition){
                     player.ricevi(200);
@@ -274,8 +273,9 @@ class Gioco{
                 // se il giocatore ha fatto doppio allora ripeti il turno
                 if (dice1 != dice2)
                     this.turno++;
-                else
-                    console.log(player.username + ' ha fatto doppio quindi lancia di nuovo');
+                else{
+                    printMessage(player.username + ' ha fatto doppio quindi lancia di nuovo');
+                }
     
     
                 // alla fine del turno controllo se il player e' andato in bancarotta
@@ -327,7 +327,6 @@ async function verificationCode(){
     return new Promise((resolve) => {
 
         const data = 'username=' + giocatori[0].username;
-        console.log(data);
 
         let request = new XMLHttpRequest();
         
@@ -353,9 +352,7 @@ function inviaPunteggio(p,id){
     request.open("post", "../php/punteggio.php");
     request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); 
     request.onload = () => {
-        console.log(request.response);
         const response = JSON.parse(request.response);
-        console.log(response);
     };
 
     request.onerror = (event) => console.log(event);

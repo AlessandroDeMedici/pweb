@@ -135,7 +135,40 @@
     text-align: center;
 }
 
+#log {
+    width: 70%;
+    max-height: 80px;
+    overflow-y: auto;
 
+    position: absolute;
+    top: calc(50% - 40px);
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+
+/* chrome */
+#log:-webkit-scrollbar{
+    display: none;
+}
+
+.log-row{
+    text-align: center;
+    background-color: rgb(100,200,100,0.3);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-top: 10px;
+}
 
 
 

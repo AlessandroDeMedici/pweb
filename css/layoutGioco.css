@@ -114,6 +114,8 @@
     overflow: auto;
     max-height: 40%;
     scrollbar-width: none;
+
+    scroll-behavior: smooth;
 }
 
 /* chrome */

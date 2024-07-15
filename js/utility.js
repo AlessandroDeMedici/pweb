@@ -35,3 +35,18 @@ function shuffleArray(array){
 function isChrome(){
     return navigator.userAgent.toLowerCase().includes('chrome');
 }
+
+
+// funzione per stampare un messaggio nel log
+function printMessage(a){
+    const log = document.getElementById('log');
+    if (log){
+        let p = document.createElement('div');
+        p.className = 'log-row';
+
+        p.innerHTML = a;
+        log.appendChild(p);
+    }
+
+    log.scrollTop = log.scrollHeight;
+}

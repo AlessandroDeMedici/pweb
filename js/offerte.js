@@ -19,12 +19,19 @@ class Offerta{
             if (offer.id1 == id1 && offer.id2 == id2 && 
                 offer.soldi1 == soldi1 && offer.soldi2 == soldi2
             ){
+                // offerta duplicata
+                // segnalo soltanto al giocatore
+                // in caso di npc e' ammissibile che venga generata, semplicemente non creo l'offerta
+
                 if (!id1)
                     alert('E\' gia\' stata fatta un\'offerta identica');
                 return;
             }
 
         }
+
+        // stampo messaggio relativo all'offerta
+        printMessage(giocatori[id1].username + " sta inviando un'offerta a " + giocatori[id2].username);
 
         this.id1 = id1;
         this.id2 = id2;
@@ -42,6 +49,9 @@ class Offerta{
 
         // aggiungo all'array delle offerte
         offerte.push(this);
+
+        // aggiungo all'array delle offerte del giocatore
+        giocatori[id2].offerte.push(this);
 
         // mostra a video l'offerta
         let offerDisplay = document.getElementById('offer-display');
@@ -81,6 +91,7 @@ class Offerta{
         button.dataset.id = this.id;
 
         offerDisplay.appendChild(this.container);
+        offerDisplay.scrollTop = offerDisplay.scrollHeight;
     }
 
     // bisogna aggiungere il controllo che a chiamare sia il player che deve accettare l'offerta
@@ -242,15 +253,23 @@ function inviaOfferta(id1, id2, proprieta1, proprieta2, soldi1, soldi2){
         proprieta1 = [];
         let checkboxes1 = document.querySelectorAll('input[type="checkbox"][name^="proprieta-1-"]:checked');
 
-        for (let p of checkboxes1){
-            proprieta1.push(getCasella(p.value));
+        if (checkboxes1){
+            for (let p of checkboxes1){
+                if (getCasella(p.value)){
+                    proprieta1.push(getCasella(p.value));
+                }
+            }
         }
 
         proprieta2 = [];
         let checkboxes2 = document.querySelectorAll('input[type="checkbox"][name^="proprieta-2-"]:checked');
 
-        for (let p of checkboxes2){
-            proprieta2.push(getCasella(p.value));
+        if (checkboxes2){
+            for (let p of checkboxes2){
+                if (getCasella(p.value)){
+                    proprieta2.push(getCasella(p.value));
+                }
+            }
         }
 
         soldi1 = document.querySelector('#slider-1');
@@ -262,24 +281,7 @@ function inviaOfferta(id1, id2, proprieta1, proprieta2, soldi1, soldi2){
     // altrimenti si tratta di una normale chiamata a funzione, in questo caso
     // un bot ha mandato un'offerta
 
-    // DEBUG
-    let stringa1 = '';
-    for (let p of proprieta1){
-        stringa1 += ' ' + p.nome;
-    }
-
-    let stringa2 = '';
-    for (let p of proprieta2){
-        stringa2 += ' ' + p.nome;
-    }
-
-    console.log(giocatori[id1].username + " sta inviando un'offerta a " + giocatori[id2].username + '; p1 = ' + stringa1 + '; p2 = ' + stringa2);
-
     let offerta = new Offerta(id1,id2,proprieta1,proprieta2,soldi1,soldi2);
-
-    if (id1 == 0){
-        giocatori[id2].offerte.push(offerta);
-    }
 }
 
 // funzione associata al bottone per accettare le offerte
@@ -300,7 +302,6 @@ function accettaOfferta(e){
         offerta.acceptOffer();
     } else {
         // situazione che non dovrebbe capitare
-        console.log("L'utente ha tentato di accettare un'offerta inesistente")
     }
 }
 
@@ -322,6 +323,5 @@ function rifiutaOfferta(e){
         offerta.rifiutaOffer();
     } else {
         // situazione che non dovrebbe capitare
-        console.log("L'utente ha tentato di accettare un'offerta inesistente")
     }
 }

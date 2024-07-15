@@ -33,7 +33,7 @@
 }
 
 /*bottoni all'interno della message box*/
-#message-box button, #owner{
+#message-box button, #owner, #house-container{
 
     margin: 20px;
     padding: 10px;
@@ -50,8 +50,14 @@
 
 }
 
-#message-box button:hover, #owner{
+#message-box button:hover, #owner:hover, #house-container:hover{
     box-shadow: 0 0 25px rgba(17, 1,68, 0.5);
+}
+
+/* case ed alberghi */
+.casa{
+    height: 40px;
+    margin: 5px;
 }
 
 /* contenitori di message box */
@@ -253,9 +259,3 @@
 .view-offer-money{
     margin: 50px;
 }
-
-/* CASE ED ALBERGHI */
-.casa {
-    height: 20px;
-}
-

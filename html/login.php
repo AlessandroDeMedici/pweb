@@ -313,13 +313,14 @@
             recoverButton.style.display = 'block';
 
             
-            Player.onclick = avviso;
+            const newGame = document.getElementById('bottone-nuova-partita');
+            newGame.onclick = avviso;
 
             fetch('/php/logout.php',{
                 method: 'POST'
             })
             .catch(error => {
-                console.log('errore in fase di logout');
+                console.log(error);
             });
             showForm();
         }
@@ -337,7 +338,6 @@
                 errore = document.getElementById('errore-login');
 
             if (!data['logged']){
-                console.log(data['message']);
                 let string = new String(data['message']);
                 if (string.includes('SQLSTATE[23000]'))
                     data['message'] = 'Username gia in uso...';

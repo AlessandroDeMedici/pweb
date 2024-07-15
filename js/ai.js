@@ -1,8 +1,4 @@
 
-// velocita di "ragionamento"
-const speed = 1;
-
-
 // piu' alto e' il rischio piu' l'atteggiamento del giocatore sara' aggressivo e rischioso
 const rischio = 3;
 
@@ -13,6 +9,7 @@ const generosity = 1.2;
 
 
 class IA{
+
     constructor(giocatore){
         this.player = giocatore;
     }
@@ -71,7 +68,8 @@ class IA{
         // le ordino per importanza
         this.sortImportanza();
 
-        console.log(this.player.proprieta);
+        //debug
+        //console.log(this.player.proprieta);
         // vendo o solo le case o le proprieta meno importanti
 
         for (let p of this.player.proprieta){
@@ -81,25 +79,24 @@ class IA{
                 // allora vendo la proprieta
                 p.free();
                 this.player.ricevi(p.prezzo[0]);
-                console.log(this.player.username + ' ha venduto ' + p.nome + " per " + p.prezzo[0]);
+                printMessage(this.player.username + ' ha venduto ' + p.nome + " per " + p.prezzo[0]);
             } else {
                 // altrimenti parto dall'albergo
                 if (p.albergo){
                     p.albergo--;
                     p.case =  4;
                     this.player.ricevi(p.prezzo[2]);
-                    console.log(this.player.username + ' ha venduto un albergo su ' + p.nome + " per " + p.prezzo[2]);
+                    printMessage(this.player.username + ' ha venduto un albergo su ' + p.nome + " per " + p.prezzo[2]);
 
                     // posso uscire
                     if (this.player.saldo >= soldi)
                         break;
-            
                 }
                 // poi continuo con le case
                 while (p.case >= 1){
                     p.case--;
                     this.player.ricevi(p.prezzo[1]);
-                    console.log(this.player.username + ' ha venduto una casa su ' + p.nome + ' per ' + p.prezzo[1]);
+                    printMessage(this.player.username + ' ha venduto una casa su ' + p.nome + ' per ' + p.prezzo[1]);
 
                     // controllo di poter uscire
                     if (this.player.saldo >=  soldi)
@@ -152,7 +149,7 @@ class IA{
                 this.player.paga(casella.prezzo[0]);
                 this.player.updateSaldo();
 
-                console.log(this.player.username + ' ha acquistato ' + casella.nome);
+                printMessage(this.player.username + ' ha acquistato ' + casella.nome);
             }
             // altrimenti non la acquistare
         }
@@ -169,67 +166,57 @@ class IA{
         // a questo punto compro un massimo di richio case
         let i = 0;
 
-        for (let p of this.player.proprieta){
+        if (this.player.proprieta){
+            // se il giocatore possiede proprieta
+            for (let p of this.player.proprieta){
+                // se per questa casella si possono acquistare case allora le prendo
+                if (p.immagine)
+                    continue;
 
-            // controllo che per questa proprieta si possano comprare case
-            if (p.immagine)
-                continue;
+                // se ho gia' un albergo non posso fare niente
+                if (p.albergo)
+                    continue;
 
-            if (p.albergo){
-                // ha gia' un albergo
-                // non posso fare niente
-            } else if (p.case){
-                // acquisto un'altra casa se posso
+                // sto acquistando la prima casa, devo controllare di possedere l'intera serie
+                if (p.case == 0){
+                    if (!interaSerie(this.player.numId,p.gruppo))
+                        continue;
+                }
+
+                // passo ad acquistare un albergo
                 if (p.case == 4){
-                    // devo acquistare un albergo
                     if (this.player.saldo >= p.prezzo[2]){
                         p.case = 0;
                         p.albergo = 1;
-                        p.paga(p.prezzo[2]);
-                        console.log(this.player.username + ' ha acquistato un albergo su ' + p.nome);
-                        
-
+                        this.player.paga(p.prezzo[2]);
+                        this.player.updateSaldo();
+                        printMessage(this.player.username + ' ha acquistato un albergo su ' + p.nome);
                         i++;
+
+                        // non posso piu' acquistare case su questa proprieta
+                        continue;
                     }
-                } else {
-                    // devo acquistare una casa
+                }
+
+                // acquisto normalmente una casa
+                for (; i < rischio && p.case < 4 ; ){
+                    // se non ho credito per acquistare la casa allora ignoro
                     if (this.player.saldo >= p.prezzo[1]){
+                        // acquisto la casa
                         p.case++;
-                        p.paga(p.prezzo[1]);
-                        console.log(this.player.username + ' ha acquistato una casa su ' + p.nome);
-
-
+                        this.player.paga(p.prezzo[1]);
+                        this.player.updateSaldo();
+                        printMessage(this.player.username + ' ha acquistato una casa su ' + p.nome);
+                        
+                        // ho acquistato un'altra casa
                         i++;
+                    } else {
+                        break;
                     }
                 }
-            } else if (p.case == 0){
-                // acquisto la prima casa se posso
-                
-                // controllo di possedere tutte le case di questo gruppo
-                if (p.haveAll(this.player)){
-                    // allora posso acquistare una casa
-                    p.case++;
-                    p.paga(p.prezzo[1]);
-                    console.log(this.player.username + ' ha acquistato una casa su ' + p.nome);
 
-                    i++;
-                } else {
-                    // altrimenti non posso acquistare la casa
-                    ;
-                }
-
-            } else {
-                //
-                ;
             }
-
-            // ho acquistato un massimo di rischio case per questo turno
-            if (i == rischio)
-                break;
         }
-
-        // aggiorno il saldo a video
-        this.player.updateSaldo();
     }
 
     // facciamo un'offerta ad un giocatore
@@ -272,18 +259,11 @@ class IA{
                             soldi1 = Math.floor(pp.prezzo[0] * generosity);
                         } else {
                             // altrimenti non faccio l'offerta per ora
-                            return;
+                            continue;
                         }
 
                         // invio l'offerta
                         inviaOfferta(id1,id2,proprieta1,proprieta2,soldi1,soldi2);
-
-                        // aggiungo l'offerta all'array delle offerte se il giocatore destinatario e' diverso da 0
-                        if (id2){
-                            let offerta = offerte[offerte.length - 1];
-                            giocatori[id2].offerte.push(offerta);
-                        }
-
                         return;
                     }
                  }
@@ -294,7 +274,7 @@ class IA{
     // accetto un'offerta tra le offerte che possiedo
     accettaOfferta(){
 
-        let offerta = this.player.offerte.shift();
+        let offerta = this.player.offerte.pop();
 
         if (offerta){
             // devo valutare la bonta' dell'offerta
@@ -306,51 +286,72 @@ class IA{
             valoreRicevuto += offerta.soldi1;
             valoreInviato += offerta.soldi2;
 
-            for (let p of offerta.proprieta1){
-                valoreRicevuto += p.prezzo[0];
+            if (offerta.proprieta1){
+                for (let p of offerta.proprieta1){
+                    valoreRicevuto += p.prezzo[0];
+                }
             }
 
-            for (let p of offerta.proprieta2){
-                valoreInviato += p.prezzo[0];
+            if (offerta.proprieta2){
+                for (let p of offerta.proprieta2){
+                    valoreInviato += p.prezzo[0];
+                }
             }
 
+            // se e' un'offerta svantaggiosa la rifiuta
             if (valoreRicevuto < valoreInviato){
+                if (!offerta.id1){
+                    alert(giocatori[offerta.id2].username + ' Ha rifiutato la tua offerta!');
+                }
                 offerta.rifiutaOffer();
+                return;
             }
 
             // assengo un valore da 0 a 0.5 alla bonta' del valore dell'offerta
-            let p1 = (valoreRicevuto / (valoreRicevuto + valoreInviato)) * 0.5;
+            let p1 =  (valoreRicevuto + valoreInviato) == 0 ? 0 : (valoreRicevuto / (valoreRicevuto + valoreInviato)) * 0.5;
 
             // assegno un valore da 0 a 0.5 a quanto questa offerta e' vantaggiosa per me e svantaggiosa per l'altro
             let p2 = 0;
 
+
+            // vantaggiosa per me
             let finish = 0;
             // se sto ricevendo caselle di gruppi che gia' possiedo allora aggiungi 0.25
-            for (let p of this.player.proprieta){
-                for (let pp of offerta.proprieta1){
-                    if (pp.gruppo == p.gruppo){
-                        p2 += 0.25;
-                        finish = 1;
+            if (this.player.proprieta){
+                for (let p of this.player.proprieta){
+                    if (offerta.proprieta1){
+                        for (let pp of offerta.proprieta1){
+                            if (pp.gruppo == p.gruppo){
+                                p2 += 0.25;
+                                finish = 1;
+                            }
+                            if (finish)
+                                break;
+                        }
+                        if (finish)
+                            break;
                     }
-                    if (finish)
-                        break;
                 }
-                if (finish)
-                    break;
             }
 
+
+            // svantaggiosa per l'altro
             finish = 0;
             // se sto inviando caselle di gruppi che l'altro giocatore non possiede allora aggiungi 0.25
-            for (let p of giocatori[offerta.id1].proprieta){
-                for (let pp of offerta.proprieta2){
-                    if (pp.gruppo == p.gruppo){
-                        finish = 1;
+            if (giocatori[offerta.id1].proprieta){
+                for (let p of giocatori[offerta.id1].proprieta){
+                    if (offerta.proprieta2){
+                        for (let pp of offerta.proprieta2){
+                            if (pp.gruppo == p.gruppo){
+                                finish = 1;
+                            }
+                            if (finish)
+                                break;
+                        }
+                        if (finish)
+                            break;
                     }
-                    if (finish)
-                        break;
                 }
-                if (finish)
-                    break;
             }
 
             if (!finish){
@@ -360,14 +361,14 @@ class IA{
             // adesso accetto l'offerta con probabilita' p
             if (Math.random() < (p1 + p2)){
                 offerta.acceptOffer();
-                console.log(giocatori[offerta.id2].username + " ha accettato l'offerta di " + giocatori[offerta.id1].username);
+                printMessage(giocatori[offerta.id2].username + " ha accettato l'offerta di " + giocatori[offerta.id1].username);
                 if (!offerta.id1){
                     alert(giocatori[offerta.id2].username + ' Ha accettato la tua offerta!');
                 }
                 return;
             } else {
                 offerta.rifiutaOffer();
-                console.log(giocatori[offerta.id2].username + " ha rifiutato l'offerta di " + giocatori[offerta.id1].username);
+                printMessage(giocatori[offerta.id2].username + " ha rifiutato l'offerta di " + giocatori[offerta.id1].username);
                 if (!offerta.id1){
                     alert(giocatori[offerta.id2].username + ' Ha rifiutato la tua offerta!');
                 }

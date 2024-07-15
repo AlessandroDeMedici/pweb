@@ -9,6 +9,7 @@ let erroreRegistrazione;
 let confirmLogin;
 let confirmRegister;
 let recoverButton;
+let messageOnce = 0;
 
 let frasi = [
             "Oggi sciopero dei treni!",
@@ -56,7 +57,6 @@ function printHome(){
     }
     
     // inizializzo i bottoni
-
     loginButton.onclick = showLogin;
     registerButton.onclick = showRegister;
 
@@ -67,6 +67,7 @@ function printHome(){
     recoverButton.onclick = showRecover;
 
     mainLogo = document.getElementById('main-logo');
+
 }
 
 // funzione per mostrare il menu di bottoni
@@ -148,6 +149,22 @@ function showGame(){
     const homeConatiner = document.getElementById('home-container');
     gameContainer.style.display = 'flex';
     homeConatiner.style.display = 'none';
+
+    // inizializzo la finestra
+    window.onresize = () => {
+        const width = window.innerWidth;
+        const gameContainer = document.getElementById('game-container');
+        if (width < 900){
+            gameContainer.style.filter = 'blur(5px)';
+            if (messageOnce){
+                alert("Aumenta la dimensione della finestra per giocare");
+                messageOnce = 0;
+            }
+        } else {
+            gameContainer.style.removeProperty('filter');
+            messageOnce = 1;
+        }
+    }
 }
 
 
@@ -157,6 +174,8 @@ function showHome(){
     const homeContainer = document.getElementById('home-container');
     homeContainer.style.display = 'flex';
     gameContainer.style.display = 'none';
+
+    window.onresize = null;
 }
 
 

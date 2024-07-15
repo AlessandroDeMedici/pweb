@@ -52,7 +52,21 @@ summary{
     list-style: none;
 }
 
-/* per nasconderlo anche su safari */
+.carta {
+    width: 100px;
+    height: fit-content;
+    max-height: 400px; 
+    border: 1px solid #222;
+    box-sizing: border-box;
+    padding: 4px;
+    text-align: center;
+    font-weight: bold;
+    margin: 5px;
+    box-shadow: 0 0 2px rgba(43,47,62,.1);
+    transition: 1s all ease;
+    background-color: #eeeeee;
+}
+
 summary::-webkit-details-marker, summary::marker {
     display: none;
 }

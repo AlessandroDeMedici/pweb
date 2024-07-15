@@ -314,6 +314,11 @@ class Board{
         div.appendChild(probabilita);
         this.imprevisti = imprevisti;
         this.probabilita = probabilita;
+
+        // log al centro
+        let log = document.createElement('div');
+        log.id = 'log';
+        div.appendChild(log);
     
         // inserisco le immagini nei 4 angoli
         inserisciImmagineAngolo(0,'/media/via.svg',-45);

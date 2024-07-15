@@ -103,19 +103,17 @@ class Casella{
 
         // controllo che la casella non sia gia inserita
         if (this.casella){
-            console.log("casella gia' presente");
+            // debug
+            //console.log("casella gia' presente");
             return;
         }
 
         // controllo che sia effettivamente una casella che si puo inserire
         if (!this.prezzo){
-            console.log("non e' possibile acquistare questa casella");
+            // debug
+            //console.log("non e' possibile acquistare questa casella");
             return;
         }
-
-        // devo controllare che la casella non sia una stazione o una mensa (societa)
-        // DA AGGIUNGERE
-
 
         let casella = document.createElement('div');
         this.casella = casella;
@@ -268,7 +266,7 @@ class Casella{
         if (this.albergo){
             let img = document.createElement('img');
             img.className = 'casa';
-            img.src = 'media/albergo.svg';
+            img.src = '/media/albergo.svg';
             img.alt = 'Albergo';
             houseContainer.appendChild(img);
         }
@@ -351,7 +349,8 @@ class Casella{
         this.stampaCase();
 
         // preparo i bottoni
-        console.log(this.nome);
+        // debug
+        //console.log(this.nome);
         compra.dataset.nome = this.nome;
         vendi.dataset.nome = this.nome;
         compraCasa.dataset.nome = this.nome;
@@ -528,7 +527,7 @@ class Casella{
                 alert(carta.descrizione);
             }
             // altrimenti la pesco e basta
-            console.log(player.username + ' ha pescato ' + carta.nome + ' : ' + carta.descrizione);
+            printMessage(player.username + ' ha pescato ' + carta.nome);
             carta.pesca(player);
 
             return 0;
@@ -542,7 +541,7 @@ class Casella{
                 alert(carta.descrizione);
             }
             // altrimenti pesca e basta la carta
-            console.log(player.username + ' ha pescato ' + carta.nome + ' : ' + carta.descrizione);
+            printMessage(player.username + ' ha pescato ' + carta.nome);
             carta.pesca(player);
 
             
@@ -567,12 +566,11 @@ class Casella{
             player.goToPrison();
             player.prigione = 1;
 
-            console.log(player.username + " e' andato in prigione");
+            printMessage(player.username + " e' andato in prigione");
             return -1;
         }
 
         // casella che e' possibile acquistare
-
         if ((this.acquistabile == 1) && (this.owner == null)){
             if (id == 0){
                 this.mostraMessageBox();
@@ -612,7 +610,7 @@ class Casella{
                 i++;
 
         
-            console.log(player.username + " ha pagato " + this.pedaggio[i] + ' a ' + giocatori[this.owner].username);
+            printMessage(player.username + " ha pagato " + this.pedaggio[i] + ' a ' + giocatori[this.owner].username);
             player.paga(this.pedaggio[i]);
             giocatori[this.owner].ricevi(this.pedaggio[i]);
             giocatori[this.owner].updateSaldo();
@@ -631,8 +629,7 @@ class Casella{
             if (scenario[28].owner == this.owner)
                 i++;
 
-            
-            console.log(player.username + " ha pagato " + this.pedaggio[i] + ' a ' + giocatori[this.owner].username);
+            printMessage(player.username + " ha pagato " + this.pedaggio[i] + ' a ' + giocatori[this.owner].username);
             player.paga(this.pedaggio[i] * move);
             giocatori[this.owner].ricevi(this.pedaggio[i]);
             giocatori[this.owner].updateSaldo();
@@ -645,12 +642,12 @@ class Casella{
             // albergo
             player.paga(this.pedaggio[5]);
             giocatori[this.owner].ricevi(this.pedaggio[5]);
-            console.log(player.username + " ha pagato " + this.pedaggio[5] + ' a ' + giocatori[this.owner].username);
+            printMessage(player.username + " ha pagato " + this.pedaggio[5] + ' a ' + giocatori[this.owner].username);
         } else {
             // case
             player.paga(this.pedaggio[this.case]);
             giocatori[this.owner].ricevi(this.pedaggio[this.case]);
-            console.log(player.username + " ha pagato " + this.pedaggio[this.case] + ' a ' + giocatori[this.owner].username);
+            printMessage(player.username + " ha pagato " + this.pedaggio[this.case] + ' a ' + giocatori[this.owner].username);
         }
 
         player.updateSaldo();
@@ -666,18 +663,6 @@ class Casella{
         this.case = 0;
         this.albergo = 0;
         this.owner = null;
-    }
-
-
-    // funzione per controllare di avere tutte le proprieta di un gruppo
-    haveAll(player){
-        for (let p of scenario){
-            // se esiste una proprieta dello stesso gruppo con owner diverso allora ritorna false
-            if (p.gruppo = this.gruppo && p.owner != player.numId)
-                return false;
-        }
-
-        return true;
     }
 }
 
@@ -746,11 +731,22 @@ function initTabellone(){
 
 
 
+// funzione che ritorna un riferimento alla casella soltanto dal nome
 function getCasella(nome){
-    // funzione che ritorna un riferimento alla casella soltanto dal nome
     for (let p in scenario){
         let casella = scenario[p];
         if (casella.nome == nome)
             return casella;
     }
+    return 0;
+}
+
+// funzione che ritorna true se un giocatore contiene l'intera serie false altrimenti
+function interaSerie(id,gruppo){
+    for (let c of scenario){
+        if (c.gruppo == gruppo && c.owner != id)
+            return false;
+    }
+
+    return true;
 }

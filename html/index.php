@@ -4,6 +4,7 @@
         
         <meta charset="utf-8"/>
         <title>MonopolING</title>
+        <link rel="icon" type="image/x-icon" href="/media/icon/icon.png">
         
         <?php
             if (session_status() == PHP_SESSION_NONE){

@@ -13,13 +13,15 @@ class Carta{
     pesca(giocatore){
         // controllo sugli input
         if (!giocatore){
-            console.log('giocatore non valido');
+            //debug
+            //console.log('giocatore non valido');
             return;
         }
 
         // controllo sull'effetto della carta
         if (!this.effetto || this.effetto == ''){
-            console.log('effetto della carta non valido');
+            //debug
+            //console.log('effetto della carta non valido');
             return;
         }
         
@@ -34,7 +36,8 @@ class Carta{
 
             // bisogna fare la mossa corrispondente alla nuova posizione
             let casella = scenario[i];
-            console.log(this.valore);
+            //debug
+            //console.log(this.valore);
             casella.move(giocatore.numId,Math.abs(this.valore));
 
         } else if (this.effetto == 'MOVE'){
