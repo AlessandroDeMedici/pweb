@@ -36,7 +36,6 @@
 
 /* contenitore tabellone */
 #board-container{
-    width: fit-content;
     flex-direction: column;
     justify-content: center;
 }

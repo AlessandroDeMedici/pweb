@@ -30,3 +30,8 @@ function shuffleArray(array){
     }
     return array;
 }
+
+// funzionoe che ritorna true se lo user agent e' chrome
+function isChrome(){
+    return navigator.userAgent.toLowerCase().includes('chrome');
+}

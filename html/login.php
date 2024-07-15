@@ -9,7 +9,6 @@
         right: 0;
         margin: 20px;
 
-        height: fit-content;
         width: 200px;
 
         display: flex;
@@ -45,7 +44,6 @@
 
 
     .home-form {
-        height: fit-content;
         width: 230px;
         z-index: 1;
         
@@ -67,7 +65,6 @@
     .form-button{
         display: block;
         width: 200px;
-        height: fit-content;
         padding: 5px;
         margin: 15px;
 

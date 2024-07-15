@@ -3,7 +3,6 @@
 #board {
     display: table;
     border-collapse: collapse;
-    width: fit-content;
     border-radius: 0px;
 }
 

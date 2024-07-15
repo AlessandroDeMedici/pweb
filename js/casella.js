@@ -124,59 +124,64 @@ class Casella{
         casella.ondragover = (e) => {
             e.preventDefault();
         }
-        casella.ondragend = (e) => {
-            // scambio l'elemento corrente con quello nel quale il mouse si trova
-            let dragDiv = e.target;
-            e.preventDefault();
-        
-            let parentRect = Casella.property.getBoundingClientRect();
-            // DEBUG
-            //console.log('Il padre ha posizione: ' + parentRect.left + ' ' + parentRect.top);
-        
-            let x = e.clientX;
-            let y = e.clientY;
-        
-            // cerco se il puntatore si trova dentro una div
-            for (let c in Casella.property.children){
-                let div = Casella.property.children[c];
-        
-        
-                if (!div.getBoundingClientRect)
-                    continue;
-                
-                let dropRect = div.getBoundingClientRect();
-                // devo sistemarlo in base alla dimensione dell'oggetto
-                // dropRect.left -= parentRect.left;
-                // dropRect.top -= parentRect.top;
-        
+
+        // funzionalita' aggiunta solo nel caso in cui lo user agent sia chrome
+        if (isChrome()){
+            casella.ondragend = (e) => {
+                // scambio l'elemento corrente con quello nel quale il mouse si trova
+                let dragDiv = e.target;
+                e.preventDefault();
+            
+                let parentRect = Casella.property.getBoundingClientRect();
                 // DEBUG
-                //console.log("posizione mouse: " + x + ' ' + y);
-                //console.log('left right top bottom ' + c + ': ' + (Math.floor(dropRect.left)) + ' ' + (Math.floor(dropRect.right)) + ' ' + (Math.floor(dropRect.top)) + ' ' + (Math.floor(dropRect.bottom)));        
-                if ((x >= Math.floor(dropRect.left)) && (x <= Math.floor(dropRect.right)) && (y >= Math.floor(dropRect.top)) && (y <= Math.floor(dropRect.bottom))){
-                        //console.log("faccio lo switch con la " + c);
-                        // allora posso effettuare lo scambio e fare return
-                        if (div == dragDiv){
-                            //console.log("stessa posizione di prima");
-                            return;
-                        }
-                        else {
-                            // faccio lo switch delle div
-                            let next1 = div.nextSibling;
-                            let next2 = dragDiv.nextSibling;
-                            if (next1){
-                                // esiste una casella dopo
-                                Casella.property.insertBefore(dragDiv,next1);
-                            } else {
-                                Casella.property.appendChild(dragDiv);
+                //console.log('Il padre ha posizione: ' + parentRect.left + ' ' + parentRect.top);
+            
+                let x = e.clientX;
+                let y = e.clientY;
+            
+                // cerco se il puntatore si trova dentro una div
+                for (let c in Casella.property.children){
+                    let div = Casella.property.children[c];
+            
+            
+                    if (!div.getBoundingClientRect)
+                        continue;
+                    
+                    let dropRect = div.getBoundingClientRect();
+                    // devo sistemarlo in base alla dimensione dell'oggetto
+                    // dropRect.left -= parentRect.left;
+                    // dropRect.top -= parentRect.top;
+            
+                    // DEBUG
+                    //console.log("posizione mouse: " + x + ' ' + y);
+                    //console.log('left right top bottom ' + c + ': ' + (Math.floor(dropRect.left)) + ' ' + (Math.floor(dropRect.right)) + ' ' + (Math.floor(dropRect.top)) + ' ' + (Math.floor(dropRect.bottom)));        
+                    if ((x >= Math.floor(dropRect.left)) && (x <= Math.floor(dropRect.right)) && (y >= Math.floor(dropRect.top)) && (y <= Math.floor(dropRect.bottom))){
+                            //console.log("faccio lo switch con la " + c);
+                            // allora posso effettuare lo scambio e fare return
+                            if (div == dragDiv){
+                                //console.log("stessa posizione di prima");
+                                return;
                             }
-                            // adesso devo spostare il secondo
-                            Casella.property.insertBefore(div,next2);
-                        }
-                        return;
+                            else {
+                                // faccio lo switch delle div
+                                let next1 = div.nextSibling;
+                                let next2 = dragDiv.nextSibling;
+                                if (next1){
+                                    // esiste una casella dopo
+                                    Casella.property.insertBefore(dragDiv,next1);
+                                } else {
+                                    Casella.property.appendChild(dragDiv);
+                                }
+                                // adesso devo spostare il secondo
+                                Casella.property.insertBefore(div,next2);
+                            }
+                            return;
+                    }
                 }
-            }
-            // a questo punto non ero dentro nessuna
-        };
+                // a questo punto non ero dentro nessuna
+            };
+        }
+
 
 
         let proprieta = document.createElement('details');
