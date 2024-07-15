@@ -77,7 +77,7 @@
         $result = [
             'message'    => $e->getMessage()
         ];
-        echo json_encode($risultato);
+        echo json_encode($result);
         die();
 
     }

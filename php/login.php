@@ -135,11 +135,4 @@
         die();
     }
 
-    // 
-    $pdo = null;
-
-    // ritorno la risposta
-    echo json_encode($risultato);
-
-
 ?>

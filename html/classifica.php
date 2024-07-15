@@ -32,13 +32,19 @@
             // pulisci la classifica
             classifica.innerHTML = '<tr><td>Username</td><td>Punti</td></tr>';
 
-
-            // carica la classifica
-            for (let a of response){
-                let tr = document.createElement('tr');
-                tr.innerHTML = '<tr><td>' + a['username'] + "</td><td>" + a['points'] + "</td></tr>";
-
-                classifica.appendChild(tr);
+            if (response){
+                // carica la classifica
+                for (let i in response){
+                    let a = response[i];
+                    let tr = document.createElement('tr');
+                    if (a['username'] && a['points']){
+                        tr.innerHTML = '<tr><td>' + a['username'] + "</td><td>" + a['points'] + "</td></tr>";
+                    } else {
+                        tr.innerHTML = '';
+                    }
+    
+                    classifica.appendChild(tr);
+                }
             }
 
 
