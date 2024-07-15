@@ -2,13 +2,8 @@
 <?php
 
     header('Content-Type: application/json');
-
-    // controllo se la sessione era attiva altrimenti la attivo
-    if (session_status() == PHP_SESSION_NONE){
-        session_start();
-        $_SESSION['logged'] = false;
-        $_SESSION['username'] = '';
-    }
+    
+    session_start();
 
     // a questo punto posso procedere a connettermi con il databse
     $string = "mysql:host=127.0.0.1;dbname=pweb";

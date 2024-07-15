@@ -3,6 +3,8 @@
 
     header('Content-Type: application/json');
 
+    session_start();
+
     $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -65,11 +67,6 @@
         die();
     }
 
-
-    // se la sessione non era attiva la attivo
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
 
 
     // stabilisco la connessione

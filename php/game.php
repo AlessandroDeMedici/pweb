@@ -2,12 +2,7 @@
 
     header('Content-Type: application/json');
 
-    // controllo se la sessione era attiva altrimenti la attivo
-    if (session_status() == PHP_SESSION_NONE){
-        session_start();
-        $_SESSION['logged'] = false;
-        $_SESSION['username'] = '';
-    }
+    session_start();
     
     $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
     $username = $_POST['username'];

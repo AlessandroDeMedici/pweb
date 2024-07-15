@@ -2,13 +2,17 @@
 <div id="login-menu">
 
     <?php
-        if ($_SESSION['logged']){
-            // stampo l'icona dell'utente
-            echo '<button id="account" class="account" data-username="'.$_SESSION['username']. '" style="background-color: #bfdbae">' . $_SESSION['username'][0] . '</button>';
-        } else {
-            // stampo un ? al posto dell'utente
-            echo '<button id="account" class="account">?</button>';
+
+        if (isset($_SESSION['logged']) && isset($_SESSION['username'])){
+            if ($_SESSION['logged']){
+                // stampo l'icona dell'utente
+                echo '<button id="account" class="account" data-username="'.$_SESSION['username']. '" style="background-color: #bfdbae">' . $_SESSION['username'][0] . '</button>';
+            } else {
+                // stampo un ? al posto dell'utente
+                echo '<button id="account" data-username="" class="account">?</button>';
+            }
         }
+
     ?> 
 
     <!-- BOTTONI PER SELEZIONARE MENU -->
@@ -113,8 +117,9 @@
         const registerForm = document.getElementById('register-form');
         const recoverForm = document.getElementById('recover-form');
         const form = document.getElementById('form');
-        let username = '';
-        let logged = 0;
+        const account = document.getElementById('account');
+        let username = account.dataset.username;
+        let logged = account.dataset.username == '' ? 0 : 1;
 
 
         loginForm.onsubmit = login;

@@ -3,6 +3,8 @@
 
     header('Content-Type: application/json');
 
+    session_start();
+
     $notValidCharacter = ['&','=','_',"'",'-','+',',','<','>',';'];
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -10,12 +12,6 @@
     $domanda = $_POST['domanda'];
     $risposta = $_POST['risposta'];
 
-    // controllo se la sessione era attiva altrimenti la attivo
-    if (session_status() == PHP_SESSION_NONE){
-        session_start();
-        $_SESSION['logged'] = false;
-        $_SESSION['username'] = '';
-    }
 
     try {
         // validazione degli input
@@ -62,10 +58,6 @@
     }
 
 
-    // se la sessione non era attiva la attivo
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
 
 
     // stabilisco la connessione

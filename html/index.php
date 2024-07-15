@@ -7,11 +7,7 @@
         <link rel="icon" type="image/x-icon" href="/media/icon/icon.png">
         
         <?php
-            if (session_status() == PHP_SESSION_NONE){
-                session_start();
-                $_SESSION['logged'] = false;
-                $_SESSION['username'] = '';
-            }
+            session_start();
         ?>
 
 

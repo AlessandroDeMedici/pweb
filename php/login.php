@@ -2,12 +2,7 @@
 
     header('Content-Type: application/json');
 
-    // controllo se la sessione era attiva altrimenti la attivo
-    if (session_status() == PHP_SESSION_NONE){
-        session_start();
-        $_SESSION['logged'] = false;
-        $_SESSION['username'] = '';
-    }
+    session_start();
     
     // validazione degli input
     try {
@@ -111,8 +106,10 @@
             ];
         } else {
 
+            // inizializzo sessione
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $username;
+
             $result = [
                 'logged' => true,
                 'user' => $username,

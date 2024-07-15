@@ -45,13 +45,11 @@ function printHome(){
     account.onclick = showForm;
 
     // devo inizializzare il form se l'utente ha gia fatto login oppure no
-    if (account.innerHTML == '?'){
+    if (logged){
         // utente non logged
-        logged = 0;
         logoutButton.style.display = 'none';
     } else {
         // utente logged
-        logged = 1;
         loginButton.style.display = 'none';
         registerButton.style.display = 'none';
     }
@@ -59,13 +57,10 @@ function printHome(){
     // inizializzo i bottoni
     loginButton.onclick = showLogin;
     registerButton.onclick = showRegister;
-
     confirmLogin.onclick = login;
     confirmRegister.onclick = register;
     logoutButton.onclick = logout;
-
     recoverButton.onclick = showRecover;
-
     mainLogo = document.getElementById('main-logo');
 
 }

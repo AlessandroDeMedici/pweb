@@ -16,7 +16,7 @@
     const exitClassifica = document.getElementById('exit-classifica');
     const classifica = document.getElementById('classifica');
     bottoneClassifica.onclick = richiediClassifica;
-    nuovaPartita.onclick = avviso;
+    nuovaPartita.onclick = logged ? showGame : avviso;
     exitClassifica.onclick = hideClassifica;
 
 
