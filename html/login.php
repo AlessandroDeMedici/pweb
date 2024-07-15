@@ -14,10 +14,10 @@
     <!-- BOTTONI PER SELEZIONARE MENU -->
     <form id="form" style="display: none" class="home-form">
         <fieldset>
-            <button id="login-button" type="button" class="form-button">Login</button>
-            <button id="register-button" type="button" class="form-button">Register</button>
-            <button id="logout-button" type="button" class="form-button">Logout</button>
-            <button id="recover-button" type="button" class="form-button">Recupera account</button>
+            <button id="login-button" class="form-button">Login</button>
+            <button id="register-button" class="form-button">Register</button>
+            <button id="logout-button"  class="form-button">Logout</button>
+            <button id="recover-button"  class="form-button">Recupera account</button>
         </fieldset>
     </form>
 

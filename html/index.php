@@ -83,6 +83,9 @@
             <button id="bottone-nuova-partita" class="homepage-button">Nuova partita</button>
             <button id="bottone-classifica" class="homepage-button">Classifica</button>
 
+            <!-- documentazione -->
+            <a href="documentazione.html">Documentazione</a>
+
             <!-- Classifica -->
             <?php include './classifica.php' ?>
 
