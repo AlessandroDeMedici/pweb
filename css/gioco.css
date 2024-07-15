@@ -1,4 +1,4 @@
-/* questo file si potrebbe anche chiamare chat senza problemi per ora */
+
 /* contenitore dei giocatori */
 .contenitore-giocatori{
     position: absolute;
@@ -31,81 +31,3 @@
 }
 
 
-.message-box-title{
-    text-align: center;
-    font-size: 40px;
-    color: grey;
-    margin: 30px;
-}
-
-
-
-/* parte relativa ai giocatori */
-#player-display{
-    flex: 1 1 auto;
-}
-
-.player-list{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin: 10px;
-}
-
-.player-list-image{
-    width: 30px;
-    height: 30px;
-}
-
-.player-list-name{
-    padding-left: 10px;
-    flex: 1 1 auto;
-}
-
-.saldo{
-    text-align: right;
-    flex: 4 4 auto;
-}
-
-/* parte relativa alle offerte */
-#offer-display{
-    display: flex;
-    flex-direction: column;
-
-    overflow: auto;
-    max-height: 45%;
-}
-
-.offer-image{
-    
-}
-
-.offer-button{
-
-}
-
-.offer-container{
-    flex: 1 1 auto;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.offer-container img{
-    width: 30px;
-    height: 30px;
-    margin: 5px;
-}
-
-.offer-container button{
-    margin: 5px;
-    color: white;
-
-    background-color: #2980b9;
-    box-shadow: lightgray 2px 2px;
-    border: solid 1px black;
-    font-family: 'Josefin Sans';
-
-    border-radius: 3px;
-}

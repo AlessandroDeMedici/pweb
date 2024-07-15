@@ -120,7 +120,6 @@ class Casella{
         let casella = document.createElement('div');
         this.casella = casella;
         casella.className = 'carta';
-        casella.id = this.nome;
         casella.draggable = true;
         casella.ondragover = (e) => {
             e.preventDefault();
@@ -256,6 +255,7 @@ class Casella{
                 let img = document.createElement('img');
                 img.className = 'casa';
                 img.src = '/media/casa.svg';
+                img.alt = 'Casa';
                 houseContainer.appendChild(img);
             }
         }
@@ -264,18 +264,21 @@ class Casella{
             let img = document.createElement('img');
             img.className = 'casa';
             img.src = 'media/albergo.svg';
+            img.alt = 'Albergo';
             houseContainer.appendChild(img);
         }
     }
 
     // funzione per stampare su owner l'owner
     stampaOwner(){
-        // pulisco il 
+        // pulisco l'owner
         const owner = document.getElementById('owner');
-        owner.innerHTML = '';
+        owner.innerHTML = 'OWNER: nessuno';
 
         if (this.owner){
-            owner.innerHTML = 'owner: ' + giocatori[this.owner].username;
+            owner.innerHTML = 'OWNER: ' + giocatori[this.owner].username;
+        } else if (this.owner == 0){
+            owner.innerHTML = 'OWNER: YOU';
         }
     }
 
@@ -301,6 +304,15 @@ class Casella{
         Casella.messageBox.style.visibility = 'visible';
         Casella.descrizioneMessageBox.innerHTML = this.makeDescrizione();
         Casella.titoloMessageBox.firstChild.nodeValue = this.nome;
+        Casella.titoloMessageBox.style.color = '';
+        Casella.titoloMessageBox.style.backgroundColor = '';
+        Casella.titoloMessageBox.style.textShadow = '';
+        // se la casella ha un colore allora colorala
+        if (this.colore){
+            Casella.titoloMessageBox.style.backgroundColor = this.colore;
+            Casella.titoloMessageBox.style.color = 'white';
+            Casella.titoloMessageBox.style.textShadow = '2px 2px black';
+        }
 
         const vendi = document.getElementById('vendi');
         const compraCasa = document.getElementById('compra-casa');
@@ -311,6 +323,7 @@ class Casella{
         compraCasa.style.display = 'block';
         vendiCasa.style.display = 'block';
         compra.style.display = 'none';
+        owner.style.display = 'block';
 
         // se mi trovo sopra la casella posso acquistarla
         let casella = scenario[giocatori[0].posizione];
@@ -324,6 +337,7 @@ class Casella{
             compraCasa.style.display = 'none';
             vendiCasa.style.display = 'none';
             compra.style.display = 'none';
+            owner.style.display = 'none';
             return;
         }
 
@@ -418,6 +432,7 @@ class Casella{
             let img = document.createElement('img');
             img.className = 'immagine-casella';
             img.src = this.immagine;
+            img.alt = 'immagine_casella';
             text.appendChild(img);
             
             // la casella va inserita con l'orientamento corretto
@@ -439,7 +454,7 @@ class Casella{
             } else if (i > 20 && i < 30) {
                 casella.style.display = 'none';
                 barra.id = casella.id;
-                casella.id = '';
+                casella.removeAttribute('id');
                 text.style.width = '40px';
                 text.style.height = '60px';
                 barra.rowSpan = 2;
@@ -671,7 +686,7 @@ function initTabellone(){
     Casella.init(property);
 
     // inizializzazione scenario
-    scenario.push(new Casella('Via!','Ogni volta che passi dal via ritira $200 dalla banca'));
+    scenario.push(new Casella('Via!','Ogni volta che passi dal via ritira $200 dalla banca',null));
     scenario.push(new Casella('Vicolo Corto',null,1,'brown',[60,50,50],[2,10,30,90,160,250],30,null,1));
     scenario.push(new Casella('probabilita'));
     scenario.push(new Casella('Vicolo Stretto',null,1,'brown',[60,50,50],[4,20,60,180,320,450],30,null,1));
@@ -683,7 +698,7 @@ function initTabellone(){
     scenario.push(new Casella('Viale Monterosa',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50,null,1));
     scenario.push(new Casella('Viale Vesuvio',null,2,'lightblue',[120,50,50],[8,40,100,300,450,600],60,null,1));
     
-    scenario.push(new Casella('Prigione'));
+    scenario.push(new Casella('Prigione',null,null));
     scenario.push(new Casella('Via Accademia',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));
     scenario.push(new Casella('Società elettrica',null,10,null,[150],[4,10],75,'/media/lampadina.svg',1));
     scenario.push(new Casella('Corso Ateneo',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));

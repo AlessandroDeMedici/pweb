@@ -1,4 +1,4 @@
-
+// done
 let mainLogo;
 let homeConatiner;
 let loginButton;
@@ -11,10 +11,9 @@ let confirmRegister;
 let recoverButton;
 
 let frasi = [
-            "ingegneria deve essere difficile!","Oggi sciopero dei treni!",
-            "18 a tutti!","Le cose sono o non sono!",
-            "Buongiorno a tutti!","Polo F allagato, riprendiamo domani...",
-            "Alta impedenza non e' un valore logico...","...e come tale non si propaga",
+            "Oggi sciopero dei treni!",
+            "Polo F allagato, riprendiamo domani...",
+            "Benvenuto su MonopolING"
         ];
 
 
@@ -146,11 +145,9 @@ function avviso(){
 // funzione lanciata dai bottoni dopo il login
 function showGame(){
     const gameContainer = document.getElementById('game-container');
+    const homeConatiner = document.getElementById('home-container');
     gameContainer.style.display = 'flex';
-    gameContainer.scrollIntoView({behavior: "smooth"});
-    setTimeout(()=>{
-        homeContainer.style.display = 'none';
-    },1000);
+    homeConatiner.style.display = 'none';
 }
 
 
@@ -159,8 +156,7 @@ function showHome(){
     const gameContainer = document.getElementById('game-container');
     const homeContainer = document.getElementById('home-container');
     homeContainer.style.display = 'flex';
-    homeContainer.scrollIntoView({behavior: 'smooth'});
-    setTimeout(()=>{gameContainer.style.display = 'none'},1000);
+    gameContainer.style.display = 'none';
 }
 
 

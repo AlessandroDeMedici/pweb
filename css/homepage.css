@@ -1,5 +1,5 @@
 
-
+/*done*/
 @keyframes testo {
     50%{
         font-size: 25px;
@@ -20,7 +20,6 @@
 #main-logo{
     width: 60%;
     margin-top: 100px;
-    height: fit-content;
     background-color: black;
     box-shadow: grey 0px 10px 5px;
     margin-bottom: 100px;
@@ -83,4 +82,8 @@ body {
 .container {
     display: flex;
     justify-content: center;
+}
+
+button:disabled{
+    opacity: 50%;
 }

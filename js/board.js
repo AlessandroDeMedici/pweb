@@ -100,10 +100,12 @@ class Board{
                     // creo il layout della casella informativa
                     let messageSubContainer = document.createElement('div');
                     messageSubContainer.className = 'message-sub-container';
+                    messageSubContainer.id = 'message-sub-container';
                     messageContainer.appendChild(messageSubContainer);
 
                     let buttonContainer = document.createElement('div');
                     buttonContainer.className = 'message-sub-container';
+                    buttonContainer.id = 'view-button-container';
                     messageContainer.appendChild(buttonContainer);
 
                     // aggiungo i bottoni

@@ -14,8 +14,8 @@
         background-color: white;
         box-shadow: 0 0 25px rgba(17, 1,68, 0.5);
 
-        width: 50%;
-        height: 50%;
+        width: 60%;
+        height: 60%;
         border: 3px solid lightgray;
         border-radius: 10px;
 
@@ -29,6 +29,20 @@
         top: 10px;
         right: 10px;
         margin: 10px;
+
+        font-size: 20px;
+        font-weight: bold;
+        background-color: lightgray;
+        border: 3px solid black;
+        box-shadow: 1px 1px black;
+        border-radius: 15px;
+        width: 50px;
+        height: 50px;
+
+    }
+
+    #exit-classifica:hover{
+        background-color: #AAAAAA;
     }
 
     #contenitore-classifica h2{
@@ -52,7 +66,7 @@
     .box-classifica{
         overflow: auto;
 
-        height: 300px;
+        height: 70%;
     }
 
 

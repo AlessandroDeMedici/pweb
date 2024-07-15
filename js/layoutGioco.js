@@ -80,7 +80,7 @@ function initLayout(gameContainer){
 
     // layout singole colonne
     //board
-    let board = document.createElement('div');
+    let board = document.createElement('table');
     board.id = 'board';
     board.className = 'element';
     let boardHeader = document.createElement('div');
@@ -89,6 +89,7 @@ function initLayout(gameContainer){
     let img = document.createElement('img');
     img.style.width = '400px';
     img.src = '/media/logo.svg';
+    img.alt = 'logo';
     boardHeader.appendChild(img);
 
     boardContainer.appendChild(boardHeader);
@@ -104,6 +105,7 @@ function initLayout(gameContainer){
     img = document.createElement('img');
     img.src = '/media/menu.svg';
     img.style.width = '200px';
+    img.alt = 'menu';
     menuHeader.appendChild(img);
 
     menuContainer.appendChild(menuHeader);
@@ -119,6 +121,7 @@ function initLayout(gameContainer){
     img = document.createElement('img');
     img.style.width = '200px';
     img.src = '/media/proprieta.svg';
+    img.alt = 'proprieta';
     propertyHeader.appendChild(img);
 
     propertyContainer.appendChild(propertyHeader);
@@ -130,4 +133,67 @@ function initLayout(gameContainer){
     return board;
 }
 
+// funzione per inizializzare player e offer display
+function initChat(){
+
+    let playerDisplay = document.getElementById('player-display');
+
+    // inizializzazione di playerDisplay
+    {
+        let element = document.createElement('div');
+        element.className = 'player-list';
+        let name = document.createElement('div');
+        name.className = 'player-list-name';
+        name.innerHTML = "Giocatori:";
+        element.appendChild(name);
+        let saldo = document.createElement('div');
+        saldo.className = 'saldo';
+        saldo.innerHTML = 'Saldo:';
+        element.appendChild(saldo);
+        playerDisplay.appendChild(element);
+    }
+
+    for (let ind in giocatori){
+        let player = giocatori[ind];
+
+        let element = document.createElement('div');
+        element.className = 'player-list';
+
+        let img = document.createElement('img');
+        img.src = player.pedina.src;
+        img.className = 'player-list-image';
+        img.alt = 'player-image';
+        element.appendChild(img);
+
+        let name = document.createElement('div');
+        name.className = 'player-list-name';
+        name.id = 'player-name-' + ind;
+
+        if (player.id == 'giocatore-0'){
+            name.innerHTML = 'You';
+        } else {
+            name.innerHTML = player.username;
+        }
+        element.appendChild(name);
+
+        let saldo = document.createElement('div');
+        saldo.id = 'saldo-' + player.id;
+        saldo.classname = 'saldo';
+        saldo.innerHTML = player.saldo;
+        element.appendChild(saldo);
+
+        playerDisplay.appendChild(element);
+    }
+
+    playerDisplay.appendChild(document.createElement('hr'));
+
+
+
+    // inizializzazione offer display
+    const offerDisplay = document.getElementById('offer-display');
+    const titleOfferDisplay = document.createElement('div');
+    titleOfferDisplay.innerHTML = 'Offerte:';
+    titleOfferDisplay.className = 'titolo-offer-display';
+    offerDisplay.appendChild(titleOfferDisplay);
+}
 

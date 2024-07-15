@@ -1,5 +1,11 @@
 /* LAYOUT DI GIOCO */
 
+/* contenitori varie parti del gioco */
+#game-container{
+    display: flex;
+    justify-content: center;
+}
+
 .sub-container{
     margin: 10px;
     height: 700px;
@@ -28,8 +34,7 @@
     bottom: 10px;
 }
 
-
-/* board */
+/* contenitore tabellone */
 #board-container{
     width: fit-content;
     flex-direction: column;
@@ -37,7 +42,7 @@
 }
 
 
-/* property */
+/* contenitore proprieta */
 #property-container{
     width: 25%;
     display: flex;
@@ -51,8 +56,7 @@
     margin: 10px;
 }
 
-
-/* menu */
+/* contenitore del menu */
 #menu-container{
     width: 25%;
 }
@@ -69,6 +73,99 @@
     margin: 10px;
     width: 90%;
     height: 450px;
+}
+
+/* parte relativa ai giocatori */
+#player-display{
+    flex: 1 1 auto;
+}
+
+.player-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 10px;
+    border-radius: 10px;
+    border: 2px;
+
+    transition: border 0.1s ease-in-out;
+}
+
+.player-list-image{
+    width: 30px;
+    height: 30px;
+}
+
+.player-list-name{
+    padding-left: 10px;
+    flex: 1 1 auto;
+}
+
+.saldo{
+    text-align: right;
+    flex: 4 4 auto;
+}
+
+/* parte relativa alle offerte */
+/* contenitore delle offerte */
+#offer-display{
+    display: flex;
+    flex-direction: column;
+
+    overflow: auto;
+    max-height: 40%;
+    scrollbar-width: none;
+}
+
+/* chrome */
+#offer-display:-webkit-scrollbar{
+    display: none;
+}
+
+
+
+/* titolo offerte */
+.titolo-offer-display{
+    padding-left: 20px;
+}
+
+/* singola offerta */
+.offer-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+/* testo nella singola offerta */
+.offer-container p, .offer-container img, .offer-container button{
+    flex: 1 1 80px;
+}
+
+/* immagini della singola offerta */
+.offer-container img{
+    height: 20px;
+}
+
+/* bottone della singola offerta */
+.offer-container button{
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(17, 1,68, 0.08);
+
+    font-size: 15px;
+    font-weight: bold;
+
+    background-color: white;
+    font-family: 'Josefin Sans';
+
+    transition: box-shadow 0.1s ease-in-out;
+}
+
+#message-box button:hover, #owner{
+    box-shadow: 0 0 25px rgba(17, 1,68, 0.5);
 }
 
 
@@ -94,29 +191,6 @@
 #roll:disabled {
     color:  white;
     background-color: #bfdbae;
-}
-
-
-/* messaggio informativo */
-#messaggio-informativo{
-    width: 50%;
-    /* posizione */
-    position: absolute;
-    left: 25%;
-    right: 25%;
-    top: 20%;
-
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-    color: black;
-}
-
-#game-container{
-    width: 100%;
-    height: 100vh;
-    transition: 0.5s ease;
-    justify-content: center;
 }
 
 

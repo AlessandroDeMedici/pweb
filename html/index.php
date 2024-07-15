@@ -17,44 +17,54 @@
         <!-- Include -->
         <link rel="stylesheet" href="/css/include.css" />
 
+        <!-- Utilita -->
+        <script src="/js/utility.js"></script>
+
         <!-- HomePage -->
-        <script type="text/JavaScript" src="/js/homepage.js"></script>
+        <script src="/js/homepage.js"></script>
         <link rel="stylesheet" href="/css/homepage.css"/>
 
-        <!-- Utilita -->
-        <script type="text/JavaScript" src="/js/utility.js"></script>
-
         <!-- Layout di gioco -->
-        <script type="text/JavaScript" src="/js/layoutGioco.js"></script>
+        <script src="/js/layoutGioco.js"></script>
         <link rel="stylesheet" href="/css/layoutGioco.css"/>
 
         <!-- Stampa ed inizializzazione della tavola -->
         <link rel="stylesheet" href="/css/board.css"/>
-        <script type="text/JavaScript" src="/js/board.js"></script>
+        <script src="/js/board.js"></script>
     
         <!-- Gestione dei dadi -->
         <link rel="stylesheet" href="/css/dadi.css"/>
-        <script type="text/JavaScript" src="/js/dadi.js"></script>
+        <script src="/js/dadi.js"></script>
 
         <!-- Gestione delle proprieta -->
         <link rel="stylesheet" href="/css/casella.css"/>
-        <script type="text/JavaScript" src="/js/casella.js"></script>
+        <script src="/js/casella.js"></script>
+
+        <!-- Gestione dei giocatori -->
+        <script src="/js/giocatori.js"></script>
+
+        <!-- Gestione dei mazzi di probabilita ed imprevisti -->
+        <script src="/js/carte.js"></script>
+
+        <!-- Gestione delle offerte -->
+        <script src="/js/offerte.js"></script>
+
+        <!-- Gestione delle case -->
+        <script src="/js/case.js"></script>
+
+        <!-- Gestione della messageBox -->
+        <link rel="stylesheet" href="/css/messageBox.css" />
+        <script src="/js/messageBox.js"></script>
 
         <!-- Gestione del gioco -->
         <link rel="stylesheet" href="/css/gioco.css"/>
-        <script type="text/JavaScript" src="/js/gioco.js"></script>
+        <script src="/js/gioco.js"></script>
+        
+        <!-- Gestione dell'AI degli npc -->
+        <script src="/js/ai.js"></script>
 
         <!-- INIT -->
-        <script type="text/JavaScript" src="/js/main.js"></script>
-
-        <!-- login -->
-        <link rel="stylesheet" href="/css/login.css" />
-
-        <!-- AI -->
-        <script type="text/JavaScript" src="/js/ai.js"></script>
-
-        <!-- message box -->
-        <link rel="stylesheet" href="/css/messageBox.css" />
+        <script src="/js/main.js"></script>
     
     </head>
 
@@ -66,7 +76,7 @@
             <!-- Login -->
             <?php include './login.php' ?>
 
-            <img id="main-logo" src="/media/logo.svg"></img>
+            <img id="main-logo" src="/media/logo.svg" alt="Logo Principale"/>
             <div id="scritta-home"></div>
 
             <button id="bottone-nuova-partita" class="homepage-button">Nuova partita</button>

@@ -1,3 +1,5 @@
+
+/* done */
 /* message-box */
 #message-box{
     position: absolute;
@@ -12,32 +14,12 @@
     border-radius: 30px;
     
     box-shadow: grey 5px 5px;
-    z-index: 1;
+    z-index: 3;
 
 
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-#message-box button{
-    font-family: Minecraft-8-bit;
-    font-weight: 500;
-    color: white;
-    text-shadow: #555555 3px 3px;
-
-
-    font-size: 20px;
-    margin: 20px;
-    padding: 5px;
-    border-radius: 10px;
-    border: solid 5px black;
-    background-color: #AAAAAA;
-    box-shadow: black 5px 5px;
-}
-
-#message-box button:hover{
-    background-color: #555555;
 }
 
 #message-container{
@@ -50,10 +32,33 @@
     height: 90%;
 }
 
+/*bottoni all'interno della message box*/
+#message-box button, #owner{
 
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(17, 1,68, 0.08);
+
+    font-size: 20px;
+    font-weight: bold;
+
+    background-color: white;
+    font-family: 'Josefin Sans';
+
+    transition: box-shadow 0.1s ease-in-out;
+
+}
+
+#message-box button:hover, #owner{
+    box-shadow: 0 0 25px rgba(17, 1,68, 0.5);
+}
+
+/* contenitori di message box */
 .message-sub-container{
     width: 40%;
     margin: 10px;
+    padding: 10px;
 
     display: flex;
     justify-content: center;
@@ -61,62 +66,73 @@
     flex-direction: column;
 }
 
-
-
-#exit-message-box{
-    color: grey;
-    font-weight: 700;
-    font-family: 'Times New Roman', Times, serif;
-    
-    position: absolute;
-    right: 30px;
-    top: 20px;
-}
-
-.exit{
-    width: 40px;
-    height: 40px;
+/* contenitore della carta */
+#message-sub-container {
     text-align: center;
-    border: solid 2px lightgrey;
-    background-color: white;
-    border-radius: 6px;
+    height: 80%;
+    width: 40%;
+
+    border: solid 1px black;
+    box-shadow: 0 0 25px rgba(17, 1,68, 0.5);
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-#descrizione-message-box{
-    
-    padding-bottom: auto;
-    padding-top: auto;
-
-    margin-top: 0px;
-
-    color: grey;
-    font-weight: 500;
-    font-size: 15px;
-
-    text-align: center;
-    grid-row: 2;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-#titolo-message-box{
+/* titolo della carta */
+#titolo-message-box {
+    font-size: 30px;
+    width: 80%;
+    padding: 20px;
     margin: 20px;
-    color: grey;
-    font-weight: 800;
-    font-size: 40px;
-    
-    text-align: center;
-    grid-row: 1;
+    margin-bottom: 0px;
 
-    padding-top: auto;
-    padding-bottom: auto;
-} 
+    border: solid 1px black;
+}
+
+
+/* descrizione della carta */
+#descrizione-message-box {
+    text-align: center;
+    padding: 20px;
+}
+
+
+/* contenitore dei pulsanti */
+#view-button-container{
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    height: 80%;
+}
+
+
+/* pulsante per uscire dalla messageBox */
+#exit-message-box{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    width: 50px;
+    height: 50px;
+    font-size: 15px;
+    text-align: center;
+}
+
 
 
 /* parte relativa a make offer */
 #make-offer{
     width: 100%;
     height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
 }
 
 .container-make-offer{
@@ -128,29 +144,47 @@
     margin: 20px;
 }
 
+
+/* contenitore dei giocatori */
 .player-list-offer{
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.radio-container{
-    width: 100px;
-    height: 100px;
-    border: solid 1px lightgray;
+.player-list-offer label{
+    position: relative;
+   
+    width: 120px;
+    height: 120px;
     margin: 20px;
 
-    box-shadow: lightgray 5px 5px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(17, 1,68, 0.08);
+    text-align: center;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+
+    transition: box-shadow 0.1s ease-in-out;
 }
 
-.radio-container img {
-    width: 60px;
-    height: 60px;
+.nome-radio{
+    display: inline-block;
+    margin: 10px;
+}
+
+.player-list-offer label img{
+    height: 50%;
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin: auto;
+    
+}
+
+.player-list-offer label:hover {
+    box-shadow: 0px 0px 24px rgba(17, 1,68, 0.5);
 }
 
 .make-offer-checklist{
@@ -167,35 +201,28 @@
     border: solid 1px lightgray;
 }
 
-#send-offer{
 
-    position: relative;
-
-    left: calc(50% - 100px);
-    
-    font-size: 50px;
-    font-weight: bold;
-    
-    height: fit-content;
-    width: 200px;
-    padding: 10px;
-    color: white;
-    text-shadow: lightgray 2px 2px;
-
-    background-color: #27ae60;
-    box-shadow: lightgray 5px 5px;
-    border: 0px;
-    font-family: 'Josefin Sans';
-
-    border-radius: 10px;
-}
 
 /* parte relativa a view offer */
+#view-offer{
+    width: 100%;
+    height: 100%;
+}
+
 .view-offer-container{
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.view-offer-properties{
+    width: 300px;
+    height: 150px;
+}
+
+.view-offer-properties p{
+    text-align: center;
 }
 
 .view-offer-player-container img{
@@ -215,38 +242,17 @@
 .button-container{
     display: flex;
     justify-content: center;
+    align-items: flex-start;
 }
-
-
 
 .view-offer-title{
     text-align: center;
     margin: 30px;
 }
 
-#accetta{
-    background-color: #27ae60;
-}
-
-#rifiuta{
-    background-color: #c0392b;
-}
-
-.view-offer-properties{
-    width: 90%;
-    height: 150px;
-    padding: 10px;
-    overflow: auto;
-}
-
 .view-offer-money{
     margin: 50px;
 }
-
-button:disabled{
-    opacity: 50%;
-}
-
 
 /* CASE ED ALBERGHI */
 .casa {

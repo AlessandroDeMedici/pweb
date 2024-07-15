@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // stampo i dadi
     printDadi();
 
-    // inizializzo il tabellone di gioco
+    // inizializzo scenario e tabellone
     initTabellone();
 
     // inizializzo l'array dei giocatori
@@ -29,5 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // viene creato l'oggetto gioco
     let game = new Gioco();
+
+    // viene avviato il gioco
     game.start();
 })

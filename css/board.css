@@ -1,15 +1,10 @@
-
-
+/* done */
+/* STILI DELLA TABELLA */
 #board {
     display: table;
     border-collapse: collapse;
     width: fit-content;
     border-radius: 0px;
-}
-
-
-td{
-    border: solid 2px black;
 }
 
 .casella {
