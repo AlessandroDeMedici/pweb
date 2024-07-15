@@ -166,6 +166,7 @@
             const confirm = data.get('confirm');
             if (password != confirm){
                 errore.innerHTML = 'Le password non coincidono';
+                errore.hidden = false;
                 return;
             }
 
@@ -201,7 +202,6 @@
             let request = new XMLHttpRequest();
             request.open("post","../php/recover.php");
             request.onload = () =>{
-                console.log(request.response);
                 const response = JSON.parse(request.response);
                 let errore = document.getElementById('errore-recover');
                 errore.innerHTML = response['message'];
@@ -234,7 +234,7 @@
             const newGame = document.getElementById('bottone-nuova-partita');
             newGame.onclick = avviso;
 
-            fetch('/php/logout.php',{
+            fetch('../php/logout.php',{
                 method: 'POST'
             })
             .catch(error => {

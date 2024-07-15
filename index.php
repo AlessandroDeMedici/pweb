@@ -39,10 +39,18 @@
 
     4. Il gioco termina quando il giocatore principale riesce a far finire in bancarotta tutti gli altri giocatori oppure quando lui finisce in bancarotta, in tal caso ha perso
 
-    
+
+    PICCOLA NOTA: vengono generati warn di 2 tipi dal validatore HTML
+        1.  il primo tipo riguarda gli elementi nella tabellone di gioco
+            per semplicita' questo e' ottenuto prima da una tabella densa e successivamente vengono selezionate solo le caselle utili
+            le caselle inutili non vengono eliminate ma gli viene messo display: none
+
+        2.  Immagini senza attributo src
+            Queste immagini fanno parte di campi interattivi che vengono inizializzati dinamicamente
+
     */
 
 
-    header('Location: /html/index.php');
+    header('Location: ./html/index.php');
 
 ?>

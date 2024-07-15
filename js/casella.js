@@ -257,7 +257,7 @@ class Casella{
             for (let i = 0; i < this.case; i++){
                 let img = document.createElement('img');
                 img.className = 'casa';
-                img.src = '/media/casa.svg';
+                img.src = '../media/casa.svg';
                 img.alt = 'Casa';
                 houseContainer.appendChild(img);
             }
@@ -266,7 +266,7 @@ class Casella{
         if (this.albergo){
             let img = document.createElement('img');
             img.className = 'casa';
-            img.src = '/media/albergo.svg';
+            img.src = '../media/albergo.svg';
             img.alt = 'Albergo';
             houseContainer.appendChild(img);
         }
@@ -680,8 +680,8 @@ function initTabellone(){
     scenario.push(new Casella('Vicolo Corto',null,1,'brown',[60,50,50],[2,10,30,90,160,250],30,null,1));
     scenario.push(new Casella('probabilita'));
     scenario.push(new Casella('Vicolo Stretto',null,1,'brown',[60,50,50],[4,20,60,180,320,450],30,null,1));
-    scenario.push(new Casella('Tassa patrimoniale',null,null,null,null,[200],[100],'/media/patrimoniale.svg'));
-    scenario.push(new Casella('Stazione Sud',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
+    scenario.push(new Casella('Tassa patrimoniale',null,null,null,null,[200],[100],'../media/patrimoniale.svg'));
+    scenario.push(new Casella('Stazione Sud',null,9,null,[200],[25,50,100,200],100,'../media/treno.svg',1));
     
     scenario.push(new Casella('Bastioni Gran Sasso',null,2,'lightblue',[100,50,50],[6,30,90,270,400,550],50,null,1));
     scenario.push(new Casella('imprevisti'));
@@ -690,11 +690,11 @@ function initTabellone(){
     
     scenario.push(new Casella('Prigione',null,null));
     scenario.push(new Casella('Via Accademia',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));
-    scenario.push(new Casella('Società elettrica',null,10,null,[150],[4,10],75,'/media/lampadina.svg',1));
+    scenario.push(new Casella('Società elettrica',null,10,null,[150],[4,10],75,'../media/lampadina.svg',1));
     scenario.push(new Casella('Corso Ateneo',null,3,'pink',[140,100,100],[10,50,150,450,625,750],70,null,1));
     scenario.push(new Casella('Piazza Università',null,3,'pink',[160,100,100],[12,60,180,500,700,900],80,null,1));
     
-    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
+    scenario.push(new Casella('Stazione Ovest',null,9,null,[200],[25,50,100,200],100,'../media/treno.svg',1));
     scenario.push(new Casella('Via Verdi',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90,null,1));
     scenario.push(new Casella('probabilita'));
     scenario.push(new Casella('Corso Raffaello',null,4,'orange',[180,100,100],[14,70,200,550,750,950],90,null,1));
@@ -706,10 +706,10 @@ function initTabellone(){
     scenario.push(new Casella('Corso Magellano',null,5,'red',[220,150,150],[18,90,250,700,875,1050],110,null,1));
     scenario.push(new Casella('Largo Colombo',null,5,'red',[240,150,150],[20,100,300,750,925,1100],120,null,1));
 
-    scenario.push(new Casella('Stazione Nord',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
+    scenario.push(new Casella('Stazione Nord',null,9,null,[200],[25,50,100,200],100,'../media/treno.svg',1));
     scenario.push(new Casella('Viale Costantino',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130,null,1));
     scenario.push(new Casella('Viale Traiano',null,6,'yellow',[260,150,150],[22,110,330,800,975,1150],130,null,1));
-    scenario.push(new Casella('Società acqua potabile',null,10,null,[150],[4,10],75,'/media/rubinetto.svg',1));
+    scenario.push(new Casella('Società acqua potabile',null,10,null,[150],[4,10],75,'../media/rubinetto.svg',1));
     scenario.push(new Casella('Piazza Giulio Cesare',null,6,'yellow',[280,150,150],[24,120,360,850,1025,1200],140,null,1));
     
     scenario.push(new Casella('In prigione!'));
@@ -718,10 +718,10 @@ function initTabellone(){
     scenario.push(new Casella('probabilita'));
     scenario.push(new Casella('Largo Augusto',null,7,'green',[320,200,200],[28,150,450,1000,1200,1400],160,null,1));
 
-    scenario.push(new Casella('Stazione Est',null,9,null,[200],[25,50,100,200],100,'/media/treno.svg',1));
+    scenario.push(new Casella('Stazione Est',null,9,null,[200],[25,50,100,200],100,'../media/treno.svg',1));
     scenario.push(new Casella('imprevisti'));
     scenario.push(new Casella('Viale dei Giardini',null,8,'blue',[350,200,200],[35,175,500,1100,1300,1500],175,null,1));
-    scenario.push(new Casella('Tassa di lusso',null,null,null,null,[100],[100],'/media/anello.svg'));
+    scenario.push(new Casella('Tassa di lusso',null,null,null,null,[100],[100],'../media/anello.svg'));
     scenario.push(new Casella('Parco della Vittoria',null,8,'blue',[400,200,200],[50,100,200,600,1400,1700,2000],200,null,1));
 
     for (let i in scenario){

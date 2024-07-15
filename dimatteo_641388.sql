@@ -1,10 +1,10 @@
 -- Progettazione Web 
-DROP DATABASE if exists pweb; 
-CREATE DATABASE pweb; 
-USE pweb; 
+DROP DATABASE if exists dimatteo_641388; 
+CREATE DATABASE dimatteo_641388; 
+USE dimatteo_641388; 
 -- MySQL dump 10.13  Distrib 5.7.28, for Win64 (x86_64)
 --
--- Host: localhost    Database: pweb
+-- Host: localhost    Database: dimatteo_641388
 -- ------------------------------------------------------
 -- Server version	5.7.28
 
@@ -68,7 +68,7 @@ CREATE TABLE `game` (
 
 LOCK TABLES `game` WRITE;
 /*!40000 ALTER TABLE `game` DISABLE KEYS */;
-INSERT INTO `game` VALUES (1,'admin',10220),(2,'admin',1300),(3,'andrea',1500),(4,'silvia',0),(5,'silvia',0),(6,'silvia',0);
+INSERT INTO `game` VALUES (1,'admin',10220),(2,'admin',1300),(3,'andrea',2000),(4,'silvia',1600),(5,'silvia',1000),(6,'silvia',0);
 /*!40000 ALTER TABLE `game` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -81,4 +81,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-15 16:29:19
+-- Dump completed on 2024-07-15 20:11:02

@@ -48,7 +48,7 @@
 
 
     // a questo punto posso procedere a verificare il login
-    $string = "mysql:host=127.0.0.1;dbname=pweb";
+    $string = "mysql:host=127.0.0.1;dbname=dimatteo_641388";
     $user = "root";
     $pass = "";
     $pdo;

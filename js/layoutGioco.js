@@ -88,7 +88,7 @@ function initLayout(gameContainer){
     boardHeader.className = 'header';
     let img = document.createElement('img');
     img.style.width = '400px';
-    img.src = '/media/logo.svg';
+    img.src = '../media/logo.svg';
     img.alt = 'logo';
     boardHeader.appendChild(img);
 
@@ -103,7 +103,7 @@ function initLayout(gameContainer){
     menuHeader.id = 'menu-header';
     menuHeader.className = 'header';
     img = document.createElement('img');
-    img.src = '/media/menu.svg';
+    img.src = '../media/menu.svg';
     img.style.width = '200px';
     img.alt = 'menu';
     menuHeader.appendChild(img);
@@ -120,7 +120,7 @@ function initLayout(gameContainer){
     propertyHeader.className = 'header';
     img = document.createElement('img');
     img.style.width = '200px';
-    img.src = '/media/proprieta.svg';
+    img.src = '../media/proprieta.svg';
     img.alt = 'proprieta';
     propertyHeader.appendChild(img);
 

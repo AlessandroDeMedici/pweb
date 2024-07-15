@@ -11,7 +11,7 @@ class Giocatore{
         // sistemo la pedina
         this.pedina = document.createElement('img');
         this.pedina.className = 'giocatore';
-        this.pedina.src = '/media/player/pedina_' + giocatori.length + '.svg';
+        this.pedina.src = '../media/player/pedina_' + giocatori.length + '.svg';
         this.pedina.alt = 'pedina_' + giocatori.length;
 
         // do un id al giocatore

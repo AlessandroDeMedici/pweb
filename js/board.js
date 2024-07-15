@@ -321,9 +321,9 @@ class Board{
         div.appendChild(log);
     
         // inserisco le immagini nei 4 angoli
-        inserisciImmagineAngolo(0,'/media/via.svg',-45);
-        inserisciImmagineAngolo(10,'/media/prigione.svg',180);
-        inserisciImmagineAngolo(20,'/media/parcheggio_libero.svg',-45);
-        inserisciImmagineAngolo(30,'/media/vai_in_prigione.svg',45);
+        inserisciImmagineAngolo(0,'../media/via.svg',-45);
+        inserisciImmagineAngolo(10,'../media/prigione.svg',180);
+        inserisciImmagineAngolo(20,'../media/parcheggio_libero.svg',-45);
+        inserisciImmagineAngolo(30,'../media/vai_in_prigione.svg',45);
     }
 }
