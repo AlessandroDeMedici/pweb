@@ -119,34 +119,39 @@ class Offerta{
 
         // controllo che tutte le proprieta del primo giocatore siano presenti
         // e che non abbiano case o alberghi
-        for (let p of this.proprieta1){
-            if (!player1.proprieta.includes(p)){
-                // se anche solo una proprieta non e' contenuta l'offerta cade
-                if (!this.id1)
-                    alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
-                this.status = 0;
-                return;
-            }
-            if (p.case > 0 || p.albergo > 0){
-                if (!this.id1)
-                    alert("Non si possono vendere proprieta con case...");
-                this.status = 0;
-                return;
+        if (this.proprieta1){
+            for (let p of this.proprieta1){
+                if (!player1.proprieta.includes(p)){
+                    // se anche solo una proprieta non e' contenuta l'offerta cade
+                    if (this.id2 == 0)
+                        alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
+                    this.status = 0;
+                    return;
+                }
+                if (p.case > 0 || p.albergo > 0){
+                    if (this.id2 == 0)
+                        alert("Non si possono vendere proprieta con case...");
+                    this.status = 0;
+                    return;
+                }
             }
         }
 
-        // controllo che tutte le proprieta del secondo giocatore siano presenti
-        for (let p of this.proprieta2){
-            if (!player2.proprieta.includes(p)){
-                // se anche solo una proprieta non e' contenuta l'offerta cade
-                alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
-                this.status = 0;
-                return;
-            }
-            if (p.case > 0 || p.albergo > 0){
-                alert("Non si possono vendere proprieta con case...");
-                this.status = 0;
-                return;
+        if (this.proprieta2){
+            // controllo che tutte le proprieta del secondo giocatore siano presenti
+            for (let p of this.proprieta2){
+                if (!player2.proprieta.includes(p)){
+                    // se anche solo una proprieta non e' contenuta l'offerta cade
+                    if (this.id == 0)
+                        alert("L'offerta non puo' essere accettata per proprieta' mancanti...");
+                    this.status = 0;
+                    return;
+                }
+                if (p.case > 0 || p.albergo > 0){
+                    alert("Non si possono vendere proprieta con case...");
+                    this.status = 0;
+                    return;
+                }
             }
         }
 

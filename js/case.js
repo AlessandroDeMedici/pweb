@@ -99,7 +99,7 @@ function vendiProprieta(e){
     player.proprieta.splice(indice,1);
     
     // stampo a log
-    printMessage(giocatori[0].username + ' venduto ' + casella.nome);
+    printMessage(giocatori[0].username + ' ha venduto ' + casella.nome);
 
     // rimuovo la proprieta a video
     casella.rimuoviProprieta();
@@ -140,6 +140,12 @@ function compraCasa(e){
     // controllo che il giocatore possieda l'intera serie
     if (!interaSerie(player.numId,casella.gruppo)){
         alert("Devi prima possedere l'intera serie per acquistare case!");
+        return;
+    }
+
+    if (casella.albergo){
+        alert("Non puoi acquistare altre case per questa proprieta");
+        return;
     }
 
     // controllo che si possano acquistare case

@@ -4,7 +4,7 @@
 
     /* Questa applicazione web implementa il gioco del Monopoli
 
-    Questa applicazione e' composta da una homepage in cui e' possibile fare login ed una pagina di gioco, accedibile solo dopo
+    Questa applicazione e' composta dalla documentazione, una homepage ed una pagina di gioco, accedibile solo dopo
     che il login e' avvenuto con successo
     
     1. Home page
@@ -40,7 +40,7 @@
     4. Il gioco termina quando il giocatore principale riesce a far finire in bancarotta tutti gli altri giocatori oppure quando lui finisce in bancarotta, in tal caso ha perso
 
 
-    PICCOLA NOTA: vengono generati warn di 2 tipi dal validatore HTML
+    NOTA PER IL PROFESSORE: vengono generati warn di 2 tipi dal validatore HTML da index quando il tabellone di gioco e' stato inizializzato
         1.  il primo tipo riguarda gli elementi nella tabellone di gioco
             per semplicita' questo e' ottenuto prima da una tabella densa e successivamente vengono selezionate solo le caselle utili
             le caselle inutili non vengono eliminate ma gli viene messo display: none

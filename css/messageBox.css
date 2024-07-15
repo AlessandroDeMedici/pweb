@@ -75,7 +75,7 @@
 /* contenitore della carta */
 #message-sub-container {
     text-align: center;
-    height: 80%;
+    height: 90%;
     width: 40%;
 
     border: solid 1px black;
@@ -101,7 +101,7 @@
 /* descrizione della carta */
 #descrizione-message-box {
     text-align: center;
-    padding: 20px;
+    margin: 10px;
 }
 
 

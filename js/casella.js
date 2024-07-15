@@ -51,7 +51,7 @@ class Casella{
         else if (this.nome == 'imprevisti')
             return null
         else if (this.nome.includes('Stazione')){
-            let stringa = "AFFITTO $" + this.pedaggio[0] + "\n";
+            let stringa = "COSTO $"+ this.prezzo[0] + '\n' + "AFFITTO $" + this.pedaggio[0] + "\n";
             stringa += 'Con 2 stazioni $' + this.pedaggio[1] + '\n';
             stringa += 'Con 3 stazioni $' + this.pedaggio[2] + '\n';
             stringa += 'Con 4 stazioni $' + this.pedaggio[3] + '\n';
@@ -61,7 +61,7 @@ class Casella{
             return this.nome;
         }
         else if (this.nome.includes('Società')){
-            let stringa = "Con 1 società $4*lancio\n";
+            let stringa = "COSTO $"+ this.prezzo[0] + '\n' + "Con 1 società $4*lancio\n";
             stringa += "Con 2 società $10*lancio\n";
             return stringa;
         }
@@ -77,7 +77,7 @@ class Casella{
         else if (this.nome.includes('parcheggio gratuito')){
             return "Riposati, parcheggio gratuito";
         }
-        let stringa = "AFFITTO $" + this.pedaggio[0] + '\n';
+        let stringa = "COSTO $"+ this.prezzo[0] + '\n' + "AFFITTO $" + this.pedaggio[0] + '\n';
         stringa += "Con 1 casa $" + this.pedaggio[1] + '\n';
         for (let i = 2; i <= 4; i++){
             stringa += "Con " + i + ' case $' + this.pedaggio[i] + '\n';

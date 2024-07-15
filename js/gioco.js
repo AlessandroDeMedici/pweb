@@ -76,7 +76,7 @@ class Gioco{
         bancarotta.innerHTML = 'Dichiara bancarotta';
         bancarotta.onclick = () => {
             if (confirm("Sei sicuro di voler dichiarare bancarotta?"))
-                giocatori[0].bancarotta = 1;
+                giocatori[0].dichiaraBancarotta();
         }
     }
 

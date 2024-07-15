@@ -12,13 +12,6 @@
     $domanda = $_POST['domanda'];
     $risposta = $_POST['risposta'];
 
-    // controllo se la sessione era attiva altrimenti la attivo
-    if (session_status() == PHP_SESSION_NONE){
-        session_start();
-        $_SESSION['logged'] = false;
-        $_SESSION['username'] = '';
-    }
-
     try {
 
 
