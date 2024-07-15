@@ -72,7 +72,7 @@ class Casella{
             return "Quando passi da questa casella vai in prigione senza passare dal via!";
         }
         else if (this.nome.includes('Prigione')){
-            return "Quando passi da questa casella non sei in prigione. Se invece sei finito in prigione, all'inizio del turno lancia i dadi, se fai doppio allora esci di prigione altrimenti salta il turno. Rimani in prigione per un massimo di 3 turni, se non fai doppio entro 3 turni paga $50. Puoi sempre pagare $50 all'inizio del turno per uscire di prigione"
+            return "Quando passi da questa casella non sei in prigione. Se invece sei finito in prigione, all'inizio del turno lancia i dadi, se fai doppio allora esci di prigione altrimenti salta il turno."
         }
         else if (this.nome.includes('parcheggio gratuito')){
             return "Riposati, parcheggio gratuito";

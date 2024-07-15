@@ -159,6 +159,7 @@ class Giocatore{
     dichiaraBancarotta(){
         printMessage(this.username + ' ha dichiarato bancarotta');
         this.bancarotta = 1;
+        this.saldo = 0;
         const saldo = document.getElementById('saldo-giocatore-' + this.numId);
         saldo.innerHTML = "BANCAROTTA";
 

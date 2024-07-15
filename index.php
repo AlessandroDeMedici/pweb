@@ -1,7 +1,11 @@
 <?php 
 
     /* BREVE SPIEGAZIONE DEL SERVIZIO */
-    /*
+
+    /* Questa applicazione web implementa il gioco del Monopoli
+
+    Questa applicazione e' composta da una homepage in cui e' possibile fare login ed una pagina di gioco, accedibile solo dopo
+    che il login e' avvenuto con successo
     
     1. Home page
         E' possibile fare login, registrazione, recover dell'account dal menu in alto a destra. per aprirlo e' sufficiente cliccarci sopra
@@ -13,7 +17,7 @@
     
     2. Schermata di gioco
         L'interfaccia per giocare a monopolING si compone di 3 sezioni: (partendo da sinistra)
-            a. Una schermata dove vengono mostrare tutte le proprieta che si possiedono
+            a. Una schermata dove vengono mostrate tutte le proprieta che si possiedono
 
             b. Il tabellone di gioco
 
@@ -21,19 +25,19 @@
 
         Per poter avviare la partita e' sufficiente cliccare il pulsante al centro del tabellone
 
-    3. durante il proprio turno il giocatore, come nel famoso gioco del Monopoli puo' lanciare i dadi acquistare proprieta, fare ed accettare offerte
+    3. durante il proprio turno il giocatore, come nel famoso gioco del Monopoli puo' lanciare i dadi, acquistare proprieta, inviare ed accettare offerte
 
         a. per lanciare i dadi premere il bottone al centro dello schermo
         
         b. per terminare il turno premere il bottone al centro dello schermo
 
-        c. per acquistare una casella o visualizzarla, dal tabellone, con il mouse, premere sulla casella
+        c. per acquistare una casella o visualizzarla premere sulla casella con il mouse
 
-        d. per accettare un'offerta visualizzarla dal menu apposito sulla destra
+        d. per accettare offerte bisogna prima selezionare l'offerta dal menu sulla destra e premere sul bottone VIEW
 
         e. per inviare un'offerta crearla dal bottone "nuova offerta" in basso a destra
 
-    4. Il gioco termina quando il giocatore principale riesce a far finire in bancarotta tutti gli altri giocatori oppure quando lui finisce in bancarotta
+    4. Il gioco termina quando il giocatore principale riesce a far finire in bancarotta tutti gli altri giocatori oppure quando lui finisce in bancarotta, in tal caso ha perso
 
     
     */
